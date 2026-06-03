@@ -1,0 +1,594 @@
+/* ==========================================================================
+   HERO SECTION
+   ========================================================================== */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 120px 0 80px;
+  position: relative;
+  perspective: 1000px;
+}
+
+.hero-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background:
+    radial-gradient(
+      ellipse at 30% 20%,
+      rgba(212, 175, 55, 0.15) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse at 70% 80%,
+      rgba(212, 175, 55, 0.1) 0%,
+      transparent 50%
+    );
+  z-index: -1;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+.hero-content {
+  animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
+}
+
+.hero-content h1 {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 6vw, 4.5rem);
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 1.5rem;
+}
+
+.hero-description {
+  font-size: 1.125rem;
+  color: var(--color-text-muted);
+  margin-bottom: 2.5rem;
+  line-height: 1.8;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+/* Hero 3D Card */
+.hero-visual {
+  perspective: 1000px;
+  animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both;
+}
+
+.card-3d {
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  animation: float3D 6s ease-in-out infinite;
+}
+
+.card-3d:hover {
+  transform: rotateY(-5deg) rotateX(5deg);
+}
+
+.card-3d-inner {
+  padding: 2.5rem;
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.05) 50%,
+    rgba(0, 0, 0, 0.1) 100%
+  );
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 16px;
+  box-shadow:
+    0 25px 50px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.card-3d-inner::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(212, 175, 55, 0.5),
+    transparent
+  );
+}
+
+.card-image {
+  width: 100%;
+  aspect-ratio: 4/3;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 2rem;
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.4),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-title {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.card-badge {
+  padding: 0.5rem 1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-bg);
+  background: linear-gradient(
+    135deg,
+    var(--color-gold-dark),
+    var(--color-gold-light)
+  );
+  border-radius: 100px;
+}
+
+/* ==========================================================================
+   PRODUCTS SECTION
+   ========================================================================== */
+.products {
+  padding: 100px 0;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.section-tag {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+  border: 1px solid var(--color-gold);
+  border-radius: 100px;
+  margin-bottom: 1.5rem;
+  animation: fadeInUp 0.6s ease-out both;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+}
+
+.product-card {
+  perspective: 1000px;
+  cursor: pointer;
+  animation: fadeInUp 0.6s ease-out both;
+  transition:
+    transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.5s ease;
+}
+
+.product-card:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.product-card:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.product-card:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.product-card:hover {
+  transform: translateY(-12px);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+}
+
+.product-card:active {
+  transform: translateY(-6px) scale(0.98);
+}
+
+.product-card-inner {
+  padding: 2rem;
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.08),
+    rgba(255, 255, 255, 0.02)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  transform-style: preserve-3d;
+  transition:
+    all 0.5s cubic-bezier(0.23, 1, 0.32, 1),
+    box-shadow 0.5s ease;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+}
+
+.product-card:hover .product-card-inner {
+  transform: translateY(-10px) rotateX(5deg);
+  border-color: rgba(212, 175, 55, 0.3);
+  box-shadow:
+    0 25px 50px rgba(0, 0, 0, 0.4),
+    0 0 50px rgba(212, 175, 55, 0.15);
+}
+
+.product-image {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(145deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.4));
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.product-image img {
+  width: 100%;
+  height: 120%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.product-card:hover .product-image img {
+  transform: scale(1.05);
+}
+
+.product-title {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.product-price {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--color-gold);
+  transition:
+    transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+    color 0.3s ease;
+}
+
+.product-card:hover .product-price {
+  transform: scale(1.1);
+}
+
+/* ==========================================================================
+   MATERIALS SECTION
+   ========================================================================== */
+.materials {
+  padding: 100px 0;
+  background: var(--color-bg-alt);
+}
+
+.materials-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
+.material-card {
+  aspect-ratio: 1;
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  animation: fadeInUp 0.5s ease-out both;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.material-card:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.material-card:nth-child(2) {
+  animation-delay: 0.15s;
+}
+.material-card:nth-child(3) {
+  animation-delay: 0.2s;
+}
+.material-card:nth-child(4) {
+  animation-delay: 0.25s;
+}
+
+.material-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.material-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.material-card:hover::after {
+  left: 150%;
+}
+
+.material-card:active {
+  transform: scale(0.98);
+}
+
+.material-gold {
+  background: linear-gradient(
+    135deg,
+    #b8860b 0%,
+    #ffd700 25%,
+    #daa520 50%,
+    #ffd700 75%,
+    #b8860b 100%
+  );
+}
+.material-silver {
+  background: linear-gradient(
+    135deg,
+    #696969 0%,
+    #e0e0e0 25%,
+    #c0c0c0 50%,
+    #e0e0e0 75%,
+    #696969 100%
+  );
+}
+.material-bronze {
+  background: linear-gradient(
+    135deg,
+    #8b4513 0%,
+    #cd853f 25%,
+    #b87333 50%,
+    #cd853f 75%,
+    #8b4513 100%
+  );
+}
+.material-platinum {
+  background: linear-gradient(
+    135deg,
+    #8e8e8e 0%,
+    #f5f5f5 25%,
+    #e5e4e2 50%,
+    #f5f5f5 75%,
+    #8e8e8e 100%
+  );
+}
+
+.material-label {
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+/* ==========================================================================
+   CTA SECTION
+   ========================================================================== */
+.cta {
+  padding: 100px 0;
+}
+
+.cta-card {
+  padding: 5rem 3rem;
+  text-align: center;
+  background: linear-gradient(
+    145deg,
+    rgba(212, 175, 55, 0.1),
+    rgba(212, 175, 55, 0.05)
+  );
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 24px;
+  box-shadow:
+    0 30px 60px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+
+.cta-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.cta-description {
+  font-size: 1.125rem;
+  color: var(--color-text-muted);
+  max-width: 500px;
+  margin: 0 auto 2rem;
+}
+
+/* ==========================================================================
+   INDEX RESPONSIVE & KEYFRAMES
+   ========================================================================== */
+@media (max-width: 1024px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+  }
+  .hero-visual {
+    margin-top: 3rem;
+  }
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .materials-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 1024px) {
+  .products-grid {
+    grid-template-columns: 1fr;
+  }
+  .hero-buttons {
+    flex-direction: column;
+  }
+  .cta-card {
+    padding: 3rem 1.5rem;
+  }
+}
+
+@keyframes float3D {
+  0%,
+  100% {
+    transform: translateZ(0) rotateX(0);
+  }
+  50% {
+    transform: translateZ(20px) rotateX(2deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-content,
+  .hero-visual,
+  .card-3d,
+  .product-card,
+  .material-card,
+  .cta-card {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+  }
+}
+
+/* ==========================================================================
+   CAROUSEL SYSTEM (Thay thế cho .products-grid cũ)
+   ========================================================================== */
+.carousel-container {
+  position: relative;
+  padding: 0 4rem; /* Tạo khoảng trống 2 bên cho nút bấm */
+}
+
+.carousel-viewport {
+  overflow: hidden; /* Giấu các thẻ bài nằm ngoài khung */
+  width: 100%;
+}
+
+.carousel-track {
+  display: flex;
+  gap: 2rem;
+  /* Đây là mấu chốt cho chuyển động mượt mà: Dùng cubic-bezier giống hiệu ứng 3D */
+  transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  will-change: transform; /* Tối ưu hóa hiệu năng render cho trình duyệt */
+}
+
+.carousel-track .product-card {
+  /* Hiển thị 3 cột trên desktop, trừ đi khoảng cách gap */
+  flex: 0 0 calc(33.333% - 1.333rem);
+  min-width: 0;
+}
+
+/* Nút chuyển Slide phong cách Luxury */
+.carousel-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(26, 26, 46, 0.8);
+  border: 1px solid var(--color-gold);
+  color: var(--color-gold);
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(10px);
+}
+
+.carousel-nav:hover {
+  background: linear-gradient(
+    135deg,
+    var(--color-gold-dark),
+    var(--color-gold-light)
+  );
+  color: var(--color-bg);
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.carousel-nav:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.carousel-nav.prev {
+  left: 0;
+}
+
+.carousel-nav.next {
+  right: 0;
+}
+
+/* Style cho nút Borrow bên trong Card */
+.btn-block {
+  width: 100%;
+  justify-content: center;
+  padding: 0.75rem 1rem;
+}
+.card-action {
+  margin-top: 1.5rem;
+}
+
+/* Carousel Responsive */
+@media (max-width: 1024px) {
+  .carousel-track .product-card {
+    flex: 0 0 calc(50% - 1rem); /* Hiển thị 2 cột trên Tablet */
+  }
+}
+
+@media (max-width: 768px) {
+  .carousel-container {
+    padding: 0 3rem;
+  }
+  .carousel-track .product-card {
+    flex: 0 0 100%; /* Hiển thị 1 cột trên Mobile */
+  }
+}

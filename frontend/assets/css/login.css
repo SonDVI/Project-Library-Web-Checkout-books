@@ -1,0 +1,318 @@
+/* ==========================================================================
+   LOGIN / REGISTER PAGE STYLES
+   ========================================================================== */
+
+.auth-main {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding: 120px 0 60px;
+}
+
+/* Background ánh sáng sân khấu mờ ảo */
+.auth-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background:
+    radial-gradient(
+      ellipse at 50% 50%,
+      rgba(212, 175, 55, 0.1) 0%,
+      transparent 60%
+    ),
+    var(--color-bg);
+  z-index: -1;
+}
+
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+/* Card 3D Setup */
+.auth-card {
+  width: 100%;
+  max-width: 480px;
+  perspective: 1000px;
+}
+
+.auth-card-inner {
+  padding: 3rem 2.5rem;
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(0, 0, 0, 0.2) 100%
+  );
+  backdrop-filter: blur(20px);
+}
+
+/* Tabs: Sign In / Sign Up */
+.auth-tabs {
+  display: flex;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 100px;
+  padding: 0.3rem;
+  margin-bottom: 2.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 0.75rem;
+  background: transparent;
+  border: none;
+  border-radius: 100px;
+  color: var(--color-text-muted);
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.tab-btn.active {
+  background: linear-gradient(
+    135deg,
+    rgba(212, 175, 55, 0.2),
+    rgba(212, 175, 55, 0.05)
+  );
+  color: var(--color-gold);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Forms */
+.auth-form {
+  display: none;
+  animation: fadeIn 0.5s ease;
+}
+
+.auth-form.active {
+  display: block;
+}
+
+.form-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.form-header h2 {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.form-header p {
+  color: var(--color-text-muted);
+  font-size: 0.9375rem;
+}
+
+/* Input Fields */
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: var(--color-text);
+}
+
+.label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.forgot-link {
+  font-size: 0.8125rem;
+  color: var(--color-gold);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.forgot-link:hover {
+  color: var(--color-gold-light);
+  text-decoration: underline;
+}
+
+.form-input {
+  width: 100%;
+  padding: 1rem 1.25rem;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: var(--color-text);
+  font-family: inherit;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.form-input::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--color-gold);
+  box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
+  background: rgba(0, 0, 0, 0.4);
+}
+
+/* Nút Submit */
+.btn-block {
+  width: 100%;
+  justify-content: center;
+  padding: 1.1rem;
+  font-size: 1rem;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 480px) {
+  .auth-card-inner {
+    padding: 2.5rem 1.5rem;
+  }
+}
+/* ==========================================================================
+   PASSWORD REQUIREMENTS (REAL-TIME)
+   ========================================================================== */
+.password-requirements {
+  list-style: none;
+  margin-top: 0.8rem;
+  padding: 0;
+  font-size: 0.8125rem;
+  transition: all 0.3s ease;
+}
+
+.password-requirements li {
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.4rem;
+  transition: color 0.3s ease;
+}
+
+/* Biểu tượng trạng thái chưa đạt (dấu tròn mờ) */
+.password-requirements li::before {
+  content: "○";
+  font-size: 0.7rem;
+  transition: all 0.3s ease;
+}
+
+/* Trạng thái đã đạt: Sáng lên màu Vàng Kim và đổi thành dấu tích */
+.password-requirements li.valid {
+  color: var(--color-gold);
+}
+
+.password-requirements li.valid::before {
+  content: "✓";
+  font-weight: bold;
+  font-size: 0.8rem;
+  text-shadow: 0 0 8px rgba(212, 175, 55, 0.5);
+}
+/* ==========================================================================
+   SUCCESS MODAL UI
+   ========================================================================== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(10, 10, 20, 0.85); /* Nền tối */
+  backdrop-filter: blur(15px); /* Hiệu ứng kính mờ mạnh */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+
+  /* Ẩn mặc định */
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.4s ease;
+}
+
+/* Kích hoạt hiển thị modal */
+.modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-content {
+  width: 90%;
+  max-width: 420px;
+  text-align: center;
+  padding: 3.5rem 2.5rem;
+
+  /* Trạng thái ẩn: bị đẩy nhẹ xuống và thu nhỏ */
+  transform: translateY(30px) scale(0.95);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-overlay.active .modal-content {
+  /* Trạng thái hiện: bay lên vị trí gốc và phóng to */
+  transform: translateY(0) scale(1);
+}
+
+.success-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 1.5rem;
+  border-radius: 50%;
+  background: rgba(212, 175, 55, 0.1);
+  border: 2px solid var(--color-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-gold);
+  box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
+  animation: pulseGold 2s infinite; /* Hiệu ứng phát sáng */
+}
+
+.success-icon svg {
+  width: 36px;
+  height: 36px;
+}
+
+.modal-content h2 {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  margin-bottom: 0.75rem;
+}
+
+.modal-content p {
+  color: var(--color-text-muted);
+  margin-bottom: 2.5rem;
+  font-size: 1.05rem;
+}
+
+@keyframes pulseGold {
+  0% {
+    box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 20px rgba(212, 175, 55, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(212, 175, 55, 0);
+  }
+}

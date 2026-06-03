@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Catalog | HUST LBC</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet" />
+
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="stylesheet" href="assets/css/catalog.css" />
+  </head>
+  <body>
+    <nav>
+      <div class="container">
+        <a href="index.html" class="logo metallic-gold">HUST LBC</a>
+        <ul class="nav-links">
+          <li><a href="catalog.html" class="active">Catalog</a></li>
+          <li><a href="dashboard.html">Dashboard</a></li>
+          <li><a href="login.html">Login</a></li>
+          <li><a href="setting.html">Setting</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main>
+      <section class="page-header">
+        <div class="container">
+          <h1 class="page-title">
+            Book <span class="metallic-gold">Catalog</span>
+          </h1>
+          <p class="page-description">
+            Browse our extensive collection of books available for checkout
+          </p>
+        </div>
+      </section>
+
+      <section class="search-filter">
+        <div class="container">
+          <div class="search-bar">
+            <input
+              type="text"
+              id="search-input"
+              placeholder="Search books, authors..."
+              class="search-input" />
+          </div>
+          <div class="filter-options">
+            <select id="category-filter" class="filter-select">
+              <option value="all">All Categories</option>
+              <option value="Fiction">Fiction</option>
+              <option value="Classic">Classic</option>
+              <option value="Mystery">Mystery</option>
+              <option value="Fantasy">Fantasy</option>
+            </select>
+            <select id="sort-filter" class="filter-select">
+              <option value="newest">Sort by Newest</option>
+              <option value="oldest">Sort by Oldest</option>
+              <option value="title">Sort by Title (A-Z)</option>
+              <option value="author">Sort by Author (A-Z)</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <section class="books-catalog">
+        <div class="container" id="catalog-container"></div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container">
+        <div class="footer-logo metallic-gold reveal">HUST LBC</div>
+        <p class="reveal stagger-1">
+          &copy; 2026 HUST LBC. Crafted with hyperrealistic precision.
+        </p>
+      </div>
+    </footer>
+
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/catalog/catalog.js"></script>
+  </body>
+</html>
