@@ -1,0 +1,439 @@
+/* ==========================================================================
+   SETTING SECTION (Kế thừa dữ liệu từ Index Luxury)
+   ========================================================================== */
+.setting-container {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 2.5rem;
+  max-width: 1200px;
+  margin: 120px auto 80px;
+  padding: 0 2rem;
+  perspective: 1000px;
+}
+
+/* --- Thanh Sidebar Bên Trái --- */
+.setting-sidebar {
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(0, 0, 0, 0.2) 100%
+  );
+  border: 1px solid rgba(212, 175, 55, 0.15);
+  border-radius: 20px;
+  padding: 2rem 1.5rem;
+  backdrop-filter: blur(10px);
+  animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.sidebar-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.avatar-luxury {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(
+    135deg,
+    var(--color-gold-dark, #b8860b),
+    var(--color-gold-light, #ffd700)
+  );
+  margin: 0 auto 1rem;
+  box-shadow: 0 8px 20px rgba(212, 175, 55, 0.3);
+}
+
+.sidebar-header .username {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.sidebar-header .user-role {
+  font-size: 0.75rem;
+  color: var(--color-gold, #daa520);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.sidebar-menu {
+  list-style: none;
+  padding: 0;
+}
+
+.menu-item {
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 0.5rem;
+  transition: all 0.3s ease;
+  color: var(--color-text-muted, #a0a0a0);
+}
+
+.menu-item:hover,
+.menu-item.active {
+  background: rgba(212, 175, 55, 0.1);
+  color: #ffffff;
+  border-left: 3px solid var(--color-gold, #daa520);
+  padding-left: calc(1rem - 3px);
+}
+
+/* --- Khung Nội Dung Cài Đặt Bên Phải --- */
+.setting-content {
+  animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+}
+
+.setting-card {
+  padding: 3rem;
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.08) 0%,
+    rgba(0, 0, 0, 0.1) 100%
+  );
+  border: 1px solid rgba(212, 175, 55, 0.3); /* Viền gold mờ giống card-3d */
+  border-radius: 24px;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+}
+
+.setting-title {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.setting-description {
+  color: var(--color-text-muted, #a0a0a0);
+  margin-bottom: 2.5rem;
+  font-size: 0.95rem;
+}
+
+/* --- Form nhập liệu chỉn chu --- */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+  color: var(--color-gold, #daa520);
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"] {
+  width: 100%;
+  padding: 0.85rem 1.25rem;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  color: #fff;
+  font-size: 0.95rem;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--color-gold, #daa520);
+  background: rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.15);
+}
+
+/* --- Nút bật/tắt (Toggle Switch) custom ẩn hiện --- */
+.toggle-switch-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 48px;
+  height: 24px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider-toggle {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.1);
+  transition: 0.4s;
+  border-radius: 34px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.slider-toggle:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 3px;
+  bottom: 3px;
+  background-color: #a0a0a0;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider-toggle {
+  background: linear-gradient(
+    135deg,
+    var(--color-gold-dark, #b8860b),
+    var(--color-gold-light, #ffd700)
+  );
+}
+
+input:checked + .slider-toggle:before {
+  transform: translateX(24px);
+  background-color: #000;
+}
+
+.toggle-label {
+  font-size: 0.95rem;
+  color: var(--color-text-muted, #a0a0a0);
+}
+
+/* --- Nhóm nút bấm Action cuối trang --- */
+.setting-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-cancel {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-cancel:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.btn-save-gold {
+  background: linear-gradient(
+    135deg,
+    var(--color-gold-dark, #b8860b),
+    var(--color-gold-light, #ffd700)
+  );
+  border: none;
+  color: #000;
+  font-weight: 600;
+  padding: 0.75rem 2rem;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
+}
+
+.btn-save-gold:hover {
+  transform: scale(1.03);
+  box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
+}
+
+/* --- Responsive thiết bị di động --- */
+@media (max-width: 1024px) {
+  .setting-container {
+    grid-template-columns: 1fr;
+    margin-top: 80px;
+  }
+}
+
+@media (max-width: 768px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+  .setting-card {
+    padding: 1.5rem;
+  }
+}
+/* ==========================================================================
+   LANGUAGE SELECT & THEME TOGGLE (LUXURY STYLE)
+   ========================================================================== */
+
+/* --- Custom Dropdown Ngôn ngữ --- */
+.select-luxury-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.select-luxury-wrapper::after {
+  content: "▼";
+  font-size: 0.7rem;
+  color: var(--color-gold, #daa520);
+  position: absolute;
+  right: 1.25rem;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  transition: transform 0.3s ease;
+}
+
+.select-luxury {
+  width: 100%;
+  padding: 0.85rem 1.25rem;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  color: #fff;
+  font-size: 0.95rem;
+  appearance: none; /* Ẩn mũi tên mặc định nguy hiểm của trình duyệt */
+  -webkit-appearance: none;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.select-luxury:focus {
+  outline: none;
+  border-color: var(--color-gold, #daa520);
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.15);
+}
+
+/* Custom các option bên trong bảng chọn */
+.select-luxury option {
+  background-color: #1a1a2e; /* Trùng với màu nền tối Luxury của index */
+  color: #fff;
+  padding: 10px;
+}
+
+/* --- Công tắc Sáng/Tối Phong cách Digital --- */
+.theme-switch-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.25rem;
+}
+
+.switch-luxury-track {
+  position: relative;
+  width: 70px;
+  height: 36px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: 100px;
+  overflow: hidden;
+}
+
+.switch-luxury-track input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.switch-luxury-handle {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 30px;
+  height: 30px;
+  background: linear-gradient(
+    135deg,
+    var(--color-gold-dark, #b8860b),
+    var(--color-gold-light, #ffd700)
+  );
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+/* Các icon mặt trời/mặt trăng bên trong nút */
+.switch-luxury-handle .icon-sun,
+.switch-luxury-handle .icon-moon {
+  font-size: 0.9rem;
+  position: absolute;
+  transition: opacity 0.3s ease;
+}
+
+/* Mặc định hiển thị mặt trăng (vì index đang là nền tối) */
+.switch-luxury-handle .icon-sun {
+  opacity: 0;
+}
+.switch-luxury-handle .icon-moon {
+  opacity: 1;
+}
+
+/* --- Trạng thái khi kích hoạt (Bật Sáng) --- */
+.switch-luxury-track input:checked + .switch-luxury-handle {
+  transform: translateX(34px);
+  background: linear-gradient(
+    135deg,
+    #ff9e22,
+    #ffd700
+  ); /* Chuyển sang tone cam mặt trời ấm áp */
+}
+
+.switch-luxury-track input:checked + .switch-luxury-handle .icon-sun {
+  opacity: 1;
+}
+.switch-luxury-track input:checked + .switch-luxury-handle .icon-moon {
+  opacity: 0;
+}
+
+/* Đổi viền hộp track khi bật sáng */
+.switch-luxury-track:has(input:checked) {
+  border-color: #ff9e22;
+  background: rgba(255, 255, 255, 0.1);
+}
+/* ==========================================================================
+   LIGHT THEME STYLE (Kích hoạt khi gạt công tắc bằng JS)
+   ========================================================================== */
+body.light-theme {
+  background-color: #f5f5f7 !important; /* Đổi nền trang thành màu trắng xám cao cấp */
+  color: #1d1d1f !important; /* Đổi toàn bộ chữ thành màu xám đen */
+}
+
+body.light-theme nav {
+  background: rgba(255, 255, 255, 0.8) !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+body.light-theme .setting-card-luxury {
+  background: rgba(0, 0, 0, 0.02); /* Đổi màu khung cài đặt sang nền sáng mờ */
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+body.light-theme .setting-sub-text,
+body.light-theme .toggle-label {
+  color: #6e6e73; /* Chữ mô tả chuyển màu xám nhạt hơn */
+}
+
+body.light-theme .select-luxury,
+body.light-theme .switch-luxury-track {
+  background: #e8e8ed; /* Ô chọn đổi thành màu xám sáng */
+  color: #1d1d1f;
+  border-color: rgba(0, 0, 0, 0.1);
+}

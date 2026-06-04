@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hust | Dashboard - Library Statistics</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Outfit:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet" />
+
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="stylesheet" href="assets/css/index.css" />
+
+    <style>
+      /* --- CSS DASHBOARD LUXURY --- */
+      .filter-bar {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 3rem;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .filter-btn {
+        padding: 0.8rem 1.8rem;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(212, 175, 55, 0.2);
+        color: #a0a0a0;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-family: "Outfit", sans-serif;
+      }
+
+      .filter-btn.active {
+        background: linear-gradient(135deg, #b8860b, #ffd700);
+        color: #000;
+        border-color: #ffd700;
+        font-weight: 600;
+      }
+
+      .filter-btn:hover {
+        border-color: #ffd700;
+        color: #fff;
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 2rem;
+      }
+
+      .stat-card {
+        padding: 2.5rem;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(212, 175, 55, 0.15);
+        border-radius: 16px;
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+      }
+
+      .rating-badge {
+        display: inline-block;
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        padding: 0.3rem 1rem;
+        border-radius: 20px;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .card-title {
+        font-family: "Playfair Display";
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+        display: block;
+        transition: 0.3s;
+      }
+
+      .card-title:hover {
+        color: #ffd700;
+        transform: translateX(5px);
+      }
+
+      /* Metallic Colors */
+      .metallic-gold {
+        background: linear-gradient(135deg, #b8860b, #ffd700);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      .metallic-silver {
+        background: linear-gradient(135deg, #c0c0c0, #e0e0e0);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      .metallic-bronze {
+        background: linear-gradient(135deg, #cd7f32, #d2b48c);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .card-desc {
+        color: #a0a0a0;
+        font-size: 1rem;
+        line-height: 1.6;
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <div class="container">
+        <a href="index.html" class="logo metallic-gold">HUST LBC</a>
+        <ul class="nav-links">
+          <li><a href="catalog.html">Catalog</a></li>
+          <li><a href="dashboard.html" class="active">Dashboard</a></li>
+          <li><a href="login.html">Login</a></li>
+          <li><a href="setting.html">Setting</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main style="padding-top: 120px; padding-bottom: 80px">
+      <div class="container">
+        <div class="section-header" style="text-align: center">
+          <span class="section-tag">Library Statistics</span>
+          <h2 class="section-title">
+            Top Rated <span class="metallic-gold">Content</span>
+          </h2>
+        </div>
+
+        <div class="filter-bar">
+          <button class="filter-btn active" data-filter="engineering">
+            Engineering
+          </button>
+          <button class="filter-btn" data-filter="literature">
+            Literature
+          </button>
+          <button class="filter-btn" data-filter="customer">Customers</button>
+        </div>
+
+        <div class="stats-grid">
+          <!-- Engineering -->
+          <div class="stat-card" data-category="engineering">
+            <div class="rating-badge">★ 4.8/5</div>
+            <a
+              href="https://vi.wikipedia.org/wiki/Nguyễn_Văn_A"
+              target="_blank"
+              class="card-title metallic-gold"
+              style="text-decoration: none"
+              >Top Rated Author</a
+            >
+            <p class="card-desc">
+              <strong>Prof. Nguyen Van A</strong> - Chuyên gia CNTT.
+            </p>
+          </div>
+
+          <div class="stat-card" data-category="engineering">
+            <div class="rating-badge">★ 4.8/5</div>
+            <a
+              href="https://vi.wikipedia.org/wiki/Cấu_trúc_dữ_liệu"
+              target="_blank"
+              class="card-title metallic-gold"
+              style="text-decoration: none"
+              >Top Rated Work</a
+            >
+            <p class="card-desc">
+              <strong>"Cấu trúc dữ liệu hiện đại"</strong> - Tác phẩm được đánh
+              giá cao nhất về độ thực tiễn.
+            </p>
+          </div>
+
+          <!-- Literature -->
+          <div
+            class="stat-card"
+            data-category="literature"
+            style="display: none">
+            <div class="rating-badge">★ 4.5/5</div>
+            <div class="card-title metallic-gold">Top Rated Author</div>
+            <p class="card-desc">
+              <strong>Nguyễn Văn B</strong> - Tác giả giàu cảm xúc.
+            </p>
+          </div>
+
+          <!-- Customer of the Week -->
+          <div class="stat-card" data-category="customer" style="display: none">
+            <div class="rating-badge">100 Points</div>
+            <div class="card-title metallic-gold">Nguyen Huy Dung</div>
+            <p class="card-desc">
+              Sách yêu thích: <strong>Giải tích 1</strong>
+            </p>
+          </div>
+
+          <div class="stat-card" data-category="customer" style="display: none">
+            <div class="rating-badge">98 Points</div>
+            <div class="card-title metallic-silver">Kendrick Lamar</div>
+            <p class="card-desc">Sách yêu thích: <strong>Đại số</strong></p>
+          </div>
+
+          <div class="stat-card" data-category="customer" style="display: none">
+            <div class="rating-badge">96 Points</div>
+            <div class="card-title metallic-bronze">Drake</div>
+            <p class="card-desc">
+              Sách yêu thích: <strong>Giải tích 2</strong>
+            </p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const filterBtns = document.querySelectorAll(".filter-btn");
+        const cards = document.querySelectorAll(".stat-card");
+
+        filterBtns.forEach((btn) => {
+          btn.addEventListener("click", () => {
+            document
+              .querySelector(".filter-btn.active")
+              ?.classList.remove("active");
+            btn.classList.add("active");
+
+            const filter = btn.getAttribute("data-filter");
+            cards.forEach((card) => {
+              if (card.getAttribute("data-category") === filter) {
+                card.style.display = "block";
+              } else {
+                card.style.display = "none";
+              }
+            });
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
