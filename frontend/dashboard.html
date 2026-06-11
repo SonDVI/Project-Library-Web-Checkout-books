@@ -120,7 +120,20 @@
         <ul class="nav-links">
           <li><a href="catalog.html">Catalog</a></li>
           <li><a href="dashboard.html" class="active">Dashboard</a></li>
-          <li><a href="login.html">Login</a></li>
+
+          <li id="nav-login-wrapper"><a href="login.html">Login</a></li>
+
+          <li
+            class="user-nav-wrapper"
+            id="nav-user-profile"
+            style="display: none">
+            <div class="user-info-box">
+              <span class="user-icon">👤</span>
+              <span id="user-display-name">Tên User</span>
+            </div>
+            <button id="logout-btn" class="btn-logout">Đăng xuất</button>
+          </li>
+
           <li><a href="setting.html">Setting</a></li>
         </ul>
       </div>
@@ -146,7 +159,6 @@
         </div>
 
         <div class="stats-grid">
-          <!-- Engineering -->
           <div class="stat-card" data-category="engineering">
             <div class="rating-badge">★ 4.8/5</div>
             <a
@@ -176,7 +188,6 @@
             </p>
           </div>
 
-          <!-- Literature -->
           <div
             class="stat-card"
             data-category="literature"
@@ -188,7 +199,6 @@
             </p>
           </div>
 
-          <!-- Customer of the Week -->
           <div class="stat-card" data-category="customer" style="display: none">
             <div class="rating-badge">100 Points</div>
             <div class="card-title metallic-gold">Nguyen Huy Dung</div>
@@ -215,6 +225,7 @@
     </main>
 
     <script>
+      // Kịch bản điều khiển bộ lọc Dashboard
       document.addEventListener("DOMContentLoaded", () => {
         const filterBtns = document.querySelectorAll(".filter-btn");
         const cards = document.querySelectorAll(".stat-card");
@@ -238,5 +249,7 @@
         });
       });
     </script>
+
+    <script src="assets/js/main.js"></script>
   </body>
 </html>

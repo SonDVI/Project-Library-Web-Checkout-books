@@ -19,10 +19,29 @@
       <div class="container">
         <a href="index.html" class="logo metallic-gold">HUST LBC</a>
         <ul class="nav-links">
-          <li><a href="catalog.html">Catalog</a></li>
-          <li><a href="dashboard.html">Dashboard</a></li>
-          <li><a href="login.html">Login</a></li>
-          <li><a href="setting.html">Setting</a></li>
+          <li><a href="catalog.html" data-i18n="navCatalog">Catalog</a></li>
+          <li>
+            <a href="dashboard.html" data-i18n="navDashboard">Dashboard</a>
+          </li>
+
+          <li id="nav-login-wrapper">
+            <a href="login.html" data-i18n="navLogin">Login</a>
+          </li>
+
+          <li
+            class="user-nav-wrapper"
+            id="nav-user-profile"
+            style="display: none">
+            <div class="user-info-box">
+              <span class="user-icon">👤</span>
+              <span id="user-display-name">Tên User</span>
+            </div>
+            <button id="logout-btn" class="btn-logout" data-i18n="navLogout">
+              Đăng xuất
+            </button>
+          </li>
+
+          <li><a href="setting.html" data-i18n="navSetting">Setting</a></li>
         </ul>
       </div>
     </nav>
@@ -33,16 +52,21 @@
         <div class="container">
           <div class="hero-grid">
             <div class="hero-content">
-              <h1>
+              <h1 data-i18n-html="heroTitle">
                 Hust <span class="metallic-gold">LBC</span> Dedicated To
                 Students
               </h1>
-              <p class="hero-description">
+              <p class="hero-description" data-i18n="heroDesc">
                 A flexible and budget-friendly book rental service dedicated to
                 helping HUST students expand their knowledge.
               </p>
               <div class="hero-buttons">
-                <a href="catalog.html" class="btn btn-gold">Explore More</a>
+                <a
+                  href="catalog.html"
+                  class="btn btn-gold"
+                  data-i18n="heroExplore"
+                  >Explore More</a
+                >
               </div>
             </div>
             <div class="hero-visual">
@@ -54,8 +78,12 @@
                       alt="Luxury gold watch on velvet" />
                   </div>
                   <div class="card-meta">
-                    <h3 class="card-title metallic-gold">Signature Book</h3>
-                    <span class="card-badge">Limited</span>
+                    <h3 class="card-title metallic-gold" data-i18n="heroCardTitle">
+                      Signature Book
+                    </h3>
+                    <span class="card-badge" data-i18n="heroCardBadge"
+                      >Limited</span
+                    >
                   </div>
                 </div>
               </div>
@@ -67,22 +95,22 @@
       <section class="products">
         <div class="container">
           <div class="section-header">
-            <span class="section-tag">Curated Selection</span>
-            <h2 class="section-title">
+            <span class="section-tag" data-i18n="sectionCuratedTag"
+              >Curated Selection</span
+            >
+            <h2
+              class="section-title"
+              data-i18n-html="sectionCuratedTitle"
+              data-i18n-default="Featured <span class=&quot;metallic-gold&quot;>Editions</span>">
               Featured <span class="metallic-gold">Editions</span>
             </h2>
           </div>
 
-          <!-- Carousel Wrapper -->
           <div class="carousel-container">
-            <!-- Nút lùi -->
             <button class="carousel-nav prev" aria-label="Previous">❮</button>
 
-            <!-- Khung nhìn (ẩn đi những sách bị tràn ra ngoài) -->
             <div class="carousel-viewport">
-              <!-- Đường ray chứa tất cả các sách -->
               <div class="carousel-track">
-                <!-- Book 1 -->
                 <div class="product-card">
                   <div class="product-card-inner">
                     <div class="product-image">
@@ -91,15 +119,23 @@
                         alt="Book Cover 1" />
                     </div>
                     <h3 class="product-title">The Spanish Bride</h3>
-                    <h2 class="product-title">By Author : Duy Nguyen</h2>
-                    <p class="product-price">Available</p>
-                    <button class="btn btn-gold btn-block card-action">
+                    <h2 class="product-title" data-i18n-prefix="byAuthor">
+                      By Author : Duy Nguyen
+                    </h2>
+                    <p
+                      class="product-price"
+                      data-i18n="statusAvailable"
+                      data-i18n-default="Available">
+                      Available
+                    </p>
+                    <button
+                      class="btn btn-gold btn-block card-action"
+                      data-i18n="btnBorrow">
                       Borrow
                     </button>
                   </div>
                 </div>
 
-                <!-- Book 2 -->
                 <div class="product-card">
                   <div class="product-card-inner">
                     <div class="product-image">
@@ -109,14 +145,17 @@
                     </div>
                     <h3 class="product-title">The Big Clock</h3>
                     <h2 class="product-title">By Author : Duy</h2>
-                    <p class="product-price">Borrowed</p>
-                    <button class="btn btn-outline btn-block card-action">
+                    <p class="product-price" data-i18n="statusBorrowed">
+                      Borrowed
+                    </p>
+                    <button
+                      class="btn btn-outline btn-block card-action"
+                      data-i18n="btnReserve">
                       Reserve
                     </button>
                   </div>
                 </div>
 
-                <!-- Book 3 -->
                 <div class="product-card">
                   <div class="product-card-inner">
                     <div class="product-image">
@@ -126,14 +165,17 @@
                     </div>
                     <h3 class="product-title">The Secret Garden</h3>
                     <h2 class="product-title">By Author : Son Nguyen</h2>
-                    <p class="product-price">Available</p>
-                    <button class="btn btn-gold btn-block card-action">
+                    <p class="product-price" data-i18n="statusAvailable">
+                      Available
+                    </p>
+                    <button
+                      class="btn btn-gold btn-block card-action"
+                      data-i18n="btnBorrow">
                       Borrow
                     </button>
                   </div>
                 </div>
 
-                <!-- Book 4 -->
                 <div class="product-card">
                   <div class="product-card-inner">
                     <div class="product-image">
@@ -143,14 +185,17 @@
                     </div>
                     <h3 class="product-title">The Great Gatsby</h3>
                     <h2 class="product-title">By Author : Son</h2>
-                    <p class="product-price">Available</p>
-                    <button class="btn btn-gold btn-block card-action">
+                    <p class="product-price" data-i18n="statusAvailable">
+                      Available
+                    </p>
+                    <button
+                      class="btn btn-gold btn-block card-action"
+                      data-i18n="btnBorrow">
                       Borrow
                     </button>
                   </div>
                 </div>
 
-                <!-- Book 5 -->
                 <div class="product-card">
                   <div class="product-card-inner">
                     <div class="product-image">
@@ -160,8 +205,12 @@
                     </div>
                     <h3 class="product-title">Huckleberry Finn</h3>
                     <h2 class="product-title">By Author : Bao Nguyen</h2>
-                    <p class="product-price">Available</p>
-                    <button class="btn btn-gold btn-block card-action">
+                    <p class="product-price" data-i18n="statusAvailable">
+                      Available
+                    </p>
+                    <button
+                      class="btn btn-gold btn-block card-action"
+                      data-i18n="btnBorrow">
                       Borrow
                     </button>
                   </div>
@@ -169,32 +218,28 @@
               </div>
             </div>
 
-            <!-- Nút tiến -->
             <button class="carousel-nav next" aria-label="Next">❯</button>
           </div>
         </div>
       </section>
 
-      <!-- Popular Author -->
       <section class="products">
         <div class="container">
           <div class="section-header">
-            <span class="section-tag">Author</span>
-            <h2 class="section-title">
+            <span class="section-tag" data-i18n="sectionAuthorTag">Author</span>
+            <h2
+              class="section-title"
+              data-i18n-html="sectionAuthorTitle"
+              data-i18n-default="Popular <span class=&quot;metallic-gold&quot;>Authors</span>">
               Popular <span class="metallic-gold">Authors</span>
             </h2>
           </div>
 
-          <!-- Carousel Wrapper -->
           <div class="carousel-container">
-            <!-- Nút lùi -->
             <button class="carousel-nav prev" aria-label="Previous">❮</button>
 
-            <!-- Khung nhìn (ẩn đi những sách bị tràn ra ngoài) -->
             <div class="carousel-viewport">
-              <!-- Đường ray chứa tất cả các sách -->
               <div class="carousel-track">
-                <!-- Author 1 -->
                 <div class="product-card">
                   <div class="product-card-inner">
                     <div class="product-image">
@@ -206,7 +251,6 @@
                   </div>
                 </div>
 
-                <!-- Author 2 -->
                 <div class="product-card">
                   <div class="product-card-inner">
                     <div class="product-image">
@@ -218,7 +262,6 @@
                   </div>
                 </div>
 
-                <!-- Author 3 -->
                 <div class="product-card">
                   <div class="product-card-inner">
                     <div class="product-image">
@@ -230,7 +273,6 @@
                   </div>
                 </div>
 
-                <!-- Author 4 -->
                 <div class="product-card">
                   <div class="product-card-inner">
                     <div class="product-image">
@@ -242,7 +284,6 @@
                   </div>
                 </div>
 
-                <!-- Author 5 -->
                 <div class="product-card">
                   <div class="product-card-inner">
                     <div class="product-image">
@@ -256,7 +297,6 @@
               </div>
             </div>
 
-            <!-- Nút tiến -->
             <button class="carousel-nav next" aria-label="Next">❯</button>
           </div>
         </div>
@@ -265,15 +305,20 @@
       <section class="cta">
         <div class="container">
           <div class="cta-card">
-            <h2 class="cta-title">
-              <span class="metallic-gold">HUST LBC</span> COMUNITY
+            <h2
+              class="cta-title"
+              data-i18n-html="ctaCommunityTitle"
+              data-i18n-default="<span class=&quot;metallic-gold&quot;>HUST LBC</span> COMMUNITY">
+              <span class="metallic-gold">HUST LBC</span> COMMUNITY
             </h2>
-            <p class="cta-description">
+            <p class="cta-description" data-i18n="ctaCommunityDesc">
               A community of book lovers dedicated to sharing knowledge and
               fostering a love of reading among HUST students. Join us to
               connect, share, and grow together.
             </p>
-            <a href="login.html" class="btn btn-gold">Join</a>
+            <a href="login.html" class="btn btn-gold" data-i18n="ctaJoin"
+              >Join</a
+            >
           </div>
         </div>
       </section>
@@ -288,6 +333,8 @@
       </div>
     </footer>
 
+    <!-- ⚠️ i18n.js PHẢI ĐƯỢC NẠP TRƯỚC để apply theme + ngôn ngữ ngay khi trang load -->
+    <script src="assets/js/i18n.js"></script>
     <script src="assets/js/index/index.js"></script>
     <script src="assets/js/main.js"></script>
   </body>

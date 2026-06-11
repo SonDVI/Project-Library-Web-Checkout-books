@@ -12,228 +12,40 @@
       rel="stylesheet" />
 
     <link rel="stylesheet" href="assets/css/style.css" />
-    <link rel="stylesheet" href="assets/css/index.css" />
-
-    <style>
-      .setting-container {
-        display: flex;
-        flex-direction: column;
-        gap: 1.5rem;
-        margin-top: 3rem;
-      }
-
-      /* Các ô cấu hình bo góc chất liệu kính mờ Luxury */
-      .setting-card-luxury {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 2rem;
-        background: rgba(255, 255, 255, 0.03);
-        border: 1px solid rgba(212, 175, 55, 0.15);
-        border-radius: 16px;
-        backdrop-filter: blur(10px);
-        transition: all 0.3s ease;
-      }
-
-      .setting-card-luxury:hover {
-        border-color: rgba(212, 175, 55, 0.4);
-        background: rgba(255, 255, 255, 0.05);
-      }
-
-      .setting-info {
-        max-width: 60%;
-      }
-
-      .setting-label-luxury {
-        font-family: "Outfit", sans-serif;
-        font-size: 1.25rem;
-        font-weight: 600;
-        margin-bottom: 0.5rem;
-        color: #fff;
-      }
-
-      .setting-sub-text {
-        font-size: 0.9rem;
-        color: #a0a0a0;
-        line-height: 1.5;
-      }
-
-      /* Dropdown Ngôn ngữ */
-      .select-luxury-wrapper {
-        position: relative;
-        width: 220px;
-      }
-
-      .select-luxury-wrapper::after {
-        content: "▼";
-        font-size: 0.7rem;
-        color: #daa520;
-        position: absolute;
-        right: 1.25rem;
-        top: 50%;
-        transform: translateY(-50%);
-        pointer-events: none;
-      }
-
-      .select-luxury {
-        width: 100%;
-        padding: 0.75rem 1.25rem;
-        background: #111;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 8px;
-        color: #fff;
-        font-family: "Outfit", sans-serif;
-        appearance: none;
-        cursor: pointer;
-        transition: border-color 0.3s;
-      }
-
-      /* Nút gạt Công tắc Sáng/Tối */
-      .theme-switch-container {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-      }
-
-      .switch-luxury-track {
-        position: relative;
-        width: 64px;
-        height: 32px;
-        background: #111;
-        border: 1px solid rgba(212, 175, 55, 0.2);
-        border-radius: 100px;
-      }
-
-      .switch-luxury-track input {
-        opacity: 0;
-        width: 0;
-        height: 0;
-      }
-
-      .switch-luxury-handle {
-        position: absolute;
-        top: 2px;
-        left: 2px;
-        width: 26px;
-        height: 26px;
-        background: linear-gradient(135deg, #b8860b, #ffd700);
-        border-radius: 50%;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
-      }
-
-      .switch-luxury-handle .icon-sun {
-        opacity: 0;
-        position: absolute;
-        font-size: 0.8rem;
-      }
-      .switch-luxury-handle .icon-moon {
-        opacity: 1;
-        position: absolute;
-        font-size: 0.8rem;
-      }
-
-      .switch-luxury-track input:checked + .switch-luxury-handle {
-        transform: translateX(32px);
-        background: linear-gradient(135deg, #ff9e22, #ffd700);
-      }
-
-      .switch-luxury-track input:checked + .switch-luxury-handle .icon-sun {
-        opacity: 1;
-      }
-      .switch-luxury-track input:checked + .switch-luxury-handle .icon-moon {
-        opacity: 0;
-      }
-
-      .toggle-label {
-        font-size: 0.9rem;
-        color: #a0a0a0;
-        width: 140px;
-      }
-
-      .setting-submit-bar {
-        display: flex;
-        justify-content: flex-end;
-        margin-top: 3rem;
-        padding-top: 1.5rem;
-        border-top: 1px solid rgba(255, 255, 255, 0.05);
-      }
-
-      /* ==========================================================================
-         ⚙️ ĐOẠN CSS ĐỔI MÀU GIAO DIỆN SÁNG VÀ BIẾN CÁC NÚT NAV THÀNH MÀU VÀNG GOLD
-         ========================================================================== */
-      body.light-theme {
-        background-color: #f5f5f7 !important;
-        color: #1d1d1f !important;
-      }
-
-      body.light-theme nav {
-        background: rgba(255, 255, 255, 0.95) !important;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-      }
-
-      /* Ép các nút Catalog, Dashboard, Login... thành màu Vàng Gold sang trọng */
-      body.light-theme .nav-links a {
-        color: #b8860b !important;
-        font-weight: 500;
-      }
-
-      body.light-theme .nav-links a:hover,
-      body.light-theme .nav-links a.active {
-        color: #ffd700 !important;
-        border-bottom: 2px solid #ffd700;
-      }
-
-      body.light-theme .logo {
-        color: #b8860b !important;
-      }
-
-      body.light-theme .setting-label-luxury {
-        color: #1d1d1f !important;
-      }
-      body.light-theme .setting-card-luxury {
-        background: rgba(0, 0, 0, 0.02);
-        border-color: rgba(0, 0, 0, 0.08);
-      }
-      body.light-theme .setting-sub-text,
-      body.light-theme .toggle-label {
-        color: #6e6e73;
-      }
-      body.light-theme .select-luxury,
-      body.light-theme .switch-luxury-track {
-        background: #e8e8ed;
-        color: #1d1d1f;
-        border-color: rgba(0, 0, 0, 0.1);
-      }
-      body.light-theme .section-title {
-        color: #1d1d1f !important;
-      }
-
-      @media (max-width: 768px) {
-        .setting-card-luxury {
-          flex-direction: column;
-          align-items: flex-start;
-          gap: 1.5rem;
-        }
-        .setting-info {
-          max-width: 100%;
-        }
-      }
-    </style>
+    <link rel="stylesheet" href="assets/css/setting.css" />
   </head>
   <body>
     <nav>
       <div class="container">
         <a href="index.html" class="logo metallic-gold">HUST LBC</a>
         <ul class="nav-links">
-          <li><a href="catalog.html">Catalog</a></li>
-          <li><a href="dashboard.html">Dashboard</a></li>
-          <li><a href="login.html">Login</a></li>
-          <li><a href="setting.html" class="active">Setting</a></li>
+          <li><a href="catalog.html" data-i18n="navCatalog">Catalog</a></li>
+          <li>
+            <a href="dashboard.html" data-i18n="navDashboard">Dashboard</a>
+          </li>
+
+          <li id="nav-login-wrapper">
+            <a href="login.html" data-i18n="navLogin">Login</a>
+          </li>
+
+          <li
+            class="user-nav-wrapper"
+            id="nav-user-profile"
+            style="display: none">
+            <div class="user-info-box">
+              <span class="user-icon">👤</span>
+              <span id="user-display-name">Tên User</span>
+            </div>
+            <button id="logout-btn" class="btn-logout" data-i18n="navLogout">
+              Đăng xuất
+            </button>
+          </li>
+
+          <li>
+            <a href="setting.html" class="active" data-i18n="navSetting"
+              >Setting</a
+            >
+          </li>
         </ul>
       </div>
     </nav>
@@ -242,8 +54,13 @@
       <section class="products">
         <div class="container">
           <div class="section-header">
-            <span class="section-tag">User Preferences</span>
-            <h2 class="section-title">
+            <span class="section-tag" data-i18n="sectionTag"
+              >User Preferences</span
+            >
+            <h2
+              class="section-title"
+              data-i18n-html="sectionTitle"
+              data-i18n-default='System <span class="metallic-gold">Settings</span>'>
               System <span class="metallic-gold">Settings</span>
             </h2>
           </div>
@@ -251,21 +68,23 @@
           <div class="setting-container">
             <div class="setting-card-luxury">
               <div class="setting-info">
-                <h3 class="setting-label-luxury">Giao diện hệ thống</h3>
-                <p class="setting-sub-text">
+                <h3 class="setting-label-luxury" data-i18n="themeLabel">
+                  Giao diện hệ thống
+                </h3>
+                <p class="setting-sub-text" data-i18n="themeSub">
                   Chuyển đổi giữa giao diện nền tối sang trọng hoặc nền sáng bảo
                   vệ mắt.
                 </p>
               </div>
               <div class="setting-action-zone">
                 <div class="theme-switch-container">
-                  <div class="switch-luxury-track">
+                  <label class="switch-luxury-track" for="theme-toggle">
                     <input type="checkbox" id="theme-toggle" />
-                    <label for="theme-toggle" class="switch-luxury-handle">
+                    <span class="switch-luxury-handle">
                       <span class="icon-sun">☀️</span>
                       <span class="icon-moon">🌙</span>
-                    </label>
-                  </div>
+                    </span>
+                  </label>
                   <span class="toggle-label" id="theme-status"
                     >Chế độ tối (Mặc định)</span
                   >
@@ -275,18 +94,26 @@
 
             <div class="setting-card-luxury">
               <div class="setting-info">
-                <h3 class="setting-label-luxury">Ngôn ngữ hiển thị</h3>
-                <p class="setting-sub-text">
+                <h3 class="setting-label-luxury" data-i18n="langLabel">
+                  Ngôn ngữ hiển thị
+                </h3>
+                <p class="setting-sub-text" data-i18n="langSub">
                   Chọn ngôn ngữ chính để dịch toàn bộ nội dung trên trang thư
                   viện.
                 </p>
               </div>
               <div class="setting-action-zone">
                 <div class="select-luxury-wrapper">
-                  <select class="select-luxury">
-                    <option value="vi" selected>Tiếng Việt (Vietnamese)</option>
-                    <option value="en">English (Tiếng Anh)</option>
-                    <option value="ja">日本語 (Tiếng Nhật)</option>
+                  <select class="select-luxury" id="lang-select">
+                    <option value="vi" data-i18n="langOptionVI">
+                      Tiếng Việt (Vietnamese)
+                    </option>
+                    <option value="en" data-i18n="langOptionEN">
+                      English (Tiếng Anh)
+                    </option>
+                    <option value="ja" data-i18n="langOptionJA">
+                      日本語 (Tiếng Nhật)
+                    </option>
                   </select>
                 </div>
               </div>
@@ -297,15 +124,23 @@
             <a
               href="dashboard.html"
               class="btn btn-outline"
+              id="btn-cancel"
               style="
                 margin-right: 1rem;
                 text-decoration: none;
                 display: inline-flex;
                 align-items: center;
               "
+              data-i18n="btnCancel"
               >Cancel</a
             >
-            <button type="button" class="btn btn-gold">Save Changes</button>
+            <button
+              type="button"
+              class="btn btn-gold"
+              id="btn-save"
+              data-i18n="btnSave">
+              Save Changes
+            </button>
           </div>
         </div>
       </section>
@@ -313,177 +148,15 @@
 
     <footer>
       <div class="container">
-        <div class="footer-logo metallic-gold">HUST LBC</div>
-        <p>&copy; 2026 HUST LBC. Crafted with hyperrealistic precision.</p>
+        <div class="footer-logo metallic-gold reveal">HUST LBC</div>
+        <p class="reveal stagger-1" data-i18n="footerCopyright">
+          &copy; 2026 HUST LBC. Crafted with hyperrealistic precision.
+        </p>
       </div>
     </footer>
 
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        const themeToggle = document.getElementById("theme-toggle");
-        const themeStatus = document.getElementById("theme-status");
-        const selectLanguage = document.querySelector(".select-luxury");
-        const btnSave = document.querySelector(".setting-submit-bar .btn-gold");
-
-        // Kho từ điển dữ liệu (Dictionary)
-        const dictionary = {
-          vi: {
-            sectionTag: "User Preferences",
-            sectionTitle: "Settings",
-            themeLabel: "Giao diện hệ thống",
-            themeSub:
-              "Chuyển đổi giữa giao diện nền tối sang trọng hoặc nền sáng bảo vệ mắt.",
-            themeStatusDark: "Chế độ tối (Mặc định)",
-            themeStatusLight: "Light Mode (Chế độ sáng)",
-            langLabel: "Ngôn ngữ hiển thị",
-            langSub:
-              "Chọn ngôn ngữ chính để dịch toàn bộ nội dung trên trang thư viện.",
-            btnCancel: "Cancel",
-            btnSave: "Save Changes",
-            navCatalog: "Catalog",
-            navDashboard: "Dashboard",
-            navLogin: "Login",
-            navSetting: "Setting",
-          },
-          en: {
-            sectionTag: "User Preferences",
-            sectionTitle: "Settings",
-            themeLabel: "System Interface",
-            themeSub:
-              "Switch between luxurious dark theme or eye-protection light theme.",
-            themeStatusDark: "Dark Mode (Default)",
-            themeStatusLight: "Light Mode",
-            langLabel: "Display Language",
-            langSub:
-              "Select the primary language to translate all content on the library site.",
-            btnCancel: "Cancel",
-            btnSave: "Save Changes",
-            navCatalog: "Catalog",
-            navDashboard: "Dashboard",
-            navLogin: "Login",
-            navSetting: "Settings",
-          },
-          ja: {
-            sectionTag: "ユーザー設定",
-            sectionTitle: "設定",
-            themeLabel: "システムインターフェース",
-            themeSub:
-              "高級感のあるダークテーマと目を保護するライトテーマを切り替えます。",
-            themeStatusDark: "ダークモード（デフォルト）",
-            themeStatusLight: "ライトモード",
-            langLabel: "表示言語",
-            langSub:
-              "ライブラリサイト của tất cả các nội dung を翻訳するメイン言語を選択します。",
-            btnCancel: "キャンセル",
-            btnSave: "変更を保存",
-            navCatalog: "カタログ",
-            navDashboard: "ダッシュボード",
-            navLogin: "ログイン",
-            navSetting: "設定",
-          },
-        };
-
-        // 1. TỰ ĐỘNG ĐỌC CẤU HÌNH ĐÃ LƯU TỪ BỘ NHỚ KHI KHỞI ĐỘNG TRANG
-        const savedTheme = localStorage.getItem("app-theme") || "dark";
-        const savedLang = localStorage.getItem("app-lang") || "vi";
-
-        // Áp dụng theme cũ
-        if (savedTheme === "light") {
-          document.body.classList.add("light-theme");
-          if (themeToggle) themeToggle.checked = true;
-        } else {
-          document.body.classList.remove("light-theme");
-          if (themeToggle) themeToggle.checked = false;
-        }
-
-        // Áp dụng ngôn ngữ cũ
-        if (selectLanguage) selectLanguage.value = savedLang;
-        translatePage(savedLang);
-
-        // 2. Nghe sự kiện tương tác tạm thời (Xem trước trên màn hình)
-        if (themeToggle) {
-          themeToggle.addEventListener("change", function () {
-            if (this.checked) {
-              document.body.classList.add("light-theme");
-            } else {
-              document.body.classList.remove("light-theme");
-            }
-            translatePage(selectLanguage ? selectLanguage.value : "vi");
-          });
-        }
-
-        if (selectLanguage) {
-          selectLanguage.addEventListener("change", function () {
-            translatePage(this.value);
-          });
-        }
-
-        // Hàm dịch chữ trang Setting
-        function translatePage(lang) {
-          const data = dictionary[lang];
-          if (!data) return;
-
-          const sectionTag = document.querySelector(".section-tag");
-          const sectionTitle = document.querySelector(".section-title");
-          if (sectionTag) sectionTag.textContent = data.sectionTag;
-          if (sectionTitle)
-            sectionTitle.innerHTML = `System <span class="metallic-gold">${data.sectionTitle}</span>`;
-
-          const cards = document.querySelectorAll(".setting-card-luxury");
-          cards.forEach((card) => {
-            const label = card.querySelector(".setting-label-luxury");
-            const subText = card.querySelector(".setting-sub-text");
-            if (label && subText) {
-              if (card.querySelector("#theme-toggle")) {
-                label.textContent = data.themeLabel;
-                subText.textContent = data.themeSub;
-                if (themeStatus)
-                  themeStatus.textContent = themeToggle.checked
-                    ? data.themeStatusLight
-                    : data.themeStatusDark;
-              } else if (card.querySelector(".select-luxury")) {
-                label.textContent = data.langLabel;
-                subText.textContent = data.langSub;
-              }
-            }
-          });
-
-          // Dịch luôn cả các nút trên thanh Nav ngay tại thời điểm xem trước
-          const navLinks = document.querySelectorAll(".nav-links a");
-          navLinks.forEach((link) => {
-            const href = link.getAttribute("href") || "";
-            if (href.includes("catalog.html"))
-              link.textContent = data.navCatalog;
-            if (href.includes("dashboard.html"))
-              link.textContent = data.navDashboard;
-            if (href.includes("login.html")) link.textContent = data.navLogin;
-            if (href.includes("setting.html"))
-              link.textContent = data.navSetting;
-          });
-
-          const btnOutline = document.querySelector(
-            ".setting-submit-bar .btn-outline",
-          );
-          if (btnOutline) btnOutline.textContent = data.btnCancel;
-          if (btnSave) btnSave.textContent = data.btnSave;
-        }
-
-        // 3. 🌟 NÚT BẤM CHỐT HẠ (SAVE CHANGES): LƯU VÀO KÉT SẮT TRÌNH DUYỆT
-        if (btnSave) {
-          btnSave.addEventListener("click", () => {
-            const currentTheme = themeToggle.checked ? "light" : "dark";
-            const currentLang = selectLanguage.value;
-
-            localStorage.setItem("app-theme", currentTheme);
-            localStorage.setItem("app-lang", currentLang);
-
-            alert(
-              "Cài đặt đã được lưu thành công! Hãy chuyển sang các trang khác để xem kết quả đồng bộ.",
-            );
-          });
-        }
-      });
-    </script>
+    <script src="assets/js/i18n.js"></script>
     <script src="assets/js/main.js"></script>
+    <script src="assets/js/setting/setting.js"></script>
   </body>
 </html>

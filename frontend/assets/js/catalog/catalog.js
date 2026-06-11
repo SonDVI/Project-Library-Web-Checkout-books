@@ -99,8 +99,26 @@ document.addEventListener("DOMContentLoaded", () => {
   function renderCatalog(books) {
     container.innerHTML = "";
 
+    // Lấy chuỗi i18n hiện tại (fallback về tiếng Anh nếu I18N chưa sẵn sàng)
+    const lang = (window.I18N && window.I18N.getLang()) || "en";
+    const dict =
+      (window.I18N && window.I18N.dictionary[lang]) ||
+      (window.I18N && window.I18N.dictionary.en) ||
+      {};
+    const t = (key, fallback) => dict[key] || fallback;
+    const tCategory = (cat) => {
+      // Map category từ data → i18n key
+      const map = {
+        Fiction: "filterFiction",
+        Classic: "filterClassic",
+        Mystery: "filterMystery",
+        Fantasy: "filterFantasy",
+      };
+      return t(map[cat] || "", cat);
+    };
+
     if (books.length === 0) {
-      container.innerHTML = `<h3 style="text-align:center; color: var(--color-text-muted); padding: 4rem; animation: fadeInUp 0.5s ease both;">No books found matching your criteria.</h3>`;
+      container.innerHTML = `<h3 style="text-align:center; color: var(--color-text-muted); padding: 4rem; animation: fadeInUp 0.5s ease both;">${t("noBooksFound", "No books found matching your criteria.")}</h3>`;
       return;
     }
 
@@ -125,10 +143,10 @@ document.addEventListener("DOMContentLoaded", () => {
               <img src="${book.img}" alt="${book.title}" />
             </div>
             <h3 class="product-title">${book.title}</h3>
-            <p class="product-author">By: ${book.author}</p>
-            <p class="product-price" style="color: ${book.status === "Available" ? "var(--color-gold)" : "var(--color-text-muted)"}">${book.status}</p>
+            <p class="product-author">${t("byAuthor", "By Author: ")} ${book.author}</p>
+            <p class="product-price" style="color: ${book.status === "Available" ? "var(--color-gold)" : "var(--color-text-muted)"}">${book.status === "Available" ? t("statusAvailable", "Available") : t("statusBorrowed", "Borrowed")}</p>
             <button class="btn ${book.status === "Available" ? "btn-gold" : "btn-outline"} btn-block card-action">
-              ${book.status === "Available" ? "Borrow" : "Reserve"}
+              ${book.status === "Available" ? t("btnBorrow", "Borrow") : t("btnReserve", "Reserve")}
             </button>
           </div>
         </div>
@@ -139,7 +157,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // Thêm inline style animation-delay cho cả hàng ngang (row)
       const rowHTML = `
         <div class="category-row" style="animation-delay: ${rowIndex * 150}ms">
-          <h2 class="category-title">${category}</h2>
+          <h2 class="category-title">${tCategory(category)}</h2>
           <div class="carousel-container">
             <button class="carousel-nav prev">❮</button>
             <div class="carousel-viewport">
@@ -262,4 +280,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Khởi chạy khi load trang
   renderCatalog(booksDB);
+
+  // Khi ngôn ngữ thay đổi (do người dùng đổi ở trang Setting → quay lại Catalog),
+  // re-render danh sách sách với ngôn ngữ mới.
+  document.addEventListener("i18n:applied", () => {
+    handleFilters();
+  });
 });

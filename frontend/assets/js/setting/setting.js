@@ -1,5 +1,8 @@
 /**
- * setting.js - Xử lý logic riêng cho trang Cài đặt
+ * setting.js - Logic riêng cho trang Cài đặt
+ * - Dùng bộ từ điển + apply theme/lang chung từ window.I18N
+ * - Cho phép xem trước (preview) trước khi nhấn Save
+ * - Save: ghi localStorage, các trang khác sẽ tự áp dụng khi load
  */
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -7,101 +10,60 @@ document.addEventListener("DOMContentLoaded", () => {
   const themeStatus = document.getElementById("theme-status");
   const selectLanguage = document.querySelector(".select-luxury");
   const btnSave = document.querySelector(".setting-submit-bar .btn-gold");
+  const btnCancel = document.querySelector(".setting-submit-bar .btn-outline");
 
-  // 1. Dữ liệu ngôn ngữ (Bạn có thể chuyển bộ này sang common.js sau này)
-  const dictionary = {
-    vi: {
-      sectionTag: "User Preferences",
-      sectionTitle: "Settings",
-      themeLabel: "Giao diện hệ thống",
-      themeSub:
-        "Chuyển đổi giữa giao diện nền tối sang trọng hoặc nền sáng bảo vệ mắt.",
-      themeStatusDark: "Chế độ tối (Mặc định)",
-      themeStatusLight: "Light Mode (Chế độ sáng)",
-      langLabel: "Ngôn ngữ hiển thị",
-      langSub:
-        "Chọn ngôn ngữ chính để dịch toàn bộ nội dung trên trang thư viện.",
-      btnCancel: "Cancel",
-      btnSave: "Save Changes",
-    },
-    en: {
-      sectionTag: "User Preferences",
-      sectionTitle: "Settings",
-      themeLabel: "System Interface",
-      themeSub:
-        "Switch between luxurious dark theme or eye-protection light theme.",
-      themeStatusDark: "Dark Mode (Default)",
-      themeStatusLight: "Light Mode",
-      langLabel: "Display Language",
-      langSub:
-        "Select the primary language to translate all content on the library site.",
-      btnCancel: "Cancel",
-      btnSave: "Save Changes",
-    },
-    ja: {
-      sectionTag: "ユーザー設定",
-      sectionTitle: "設定",
-      themeLabel: "システムインターフェース",
-      themeSub:
-        "高級感のあるダークテーマと目を保護するライトテーマを切り替えます。",
-      themeStatusDark: "ダークモード（デフォルト）",
-      themeStatusLight: "ライトモード",
-      langLabel: "表示言語",
-      langSub:
-        "ライブラリサイトの全コンテンツを翻訳するメイン言語を選択します。",
-      btnCancel: "キャンセル",
-      btnSave: "変更を保存",
-    },
-  };
-
-  // 2. Khởi tạo trạng thái ban đầu từ localStorage
-  const savedTheme = localStorage.getItem("app-theme") || "dark";
-  const savedLang = localStorage.getItem("app-lang") || "vi";
+  // 1. Khởi tạo trạng thái từ localStorage (window.I18N đã apply sẵn)
+  const savedTheme = window.I18N.getTheme();
+  const savedLang = window.I18N.getLang();
 
   if (themeToggle) themeToggle.checked = savedTheme === "light";
   if (selectLanguage) selectLanguage.value = savedLang;
 
-  // Áp dụng theme ban đầu
-  if (savedTheme === "light") document.body.classList.add("light-theme");
-  translatePage(savedLang);
+  // Cập nhật trạng thái theme label
+  function updateThemeStatus() {
+    if (!themeStatus) return;
+    const isLight = themeToggle && themeToggle.checked;
+    const lang = selectLanguage ? selectLanguage.value : "vi";
+    const key = isLight ? "themeStatusLight" : "themeStatusDark";
+    // Lấy text đã được dịch từ dictionary
+    const data = window.I18N.dictionary[lang];
+    if (data && data[key]) themeStatus.textContent = data[key];
+  }
+  updateThemeStatus();
 
-  // 3. Sự kiện thay đổi (Preview)
+  // 2. Sự kiện PREVIEW (chỉ thay đổi giao diện, CHƯA lưu localStorage)
   themeToggle?.addEventListener("change", () => {
-    document.body.classList.toggle("light-theme", themeToggle.checked);
-    translatePage(selectLanguage.value);
+    const newTheme = themeToggle.checked ? "light" : "dark";
+    window.I18N.preview(newTheme, selectLanguage ? selectLanguage.value : null);
+    updateThemeStatus();
   });
 
-  selectLanguage?.addEventListener("change", () =>
-    translatePage(selectLanguage.value),
-  );
+  selectLanguage?.addEventListener("change", () => {
+    window.I18N.preview(null, selectLanguage.value);
+    updateThemeStatus();
+  });
 
-  // 4. Hàm dịch giao diện
-  function translatePage(lang) {
-    const data = dictionary[lang];
-    if (!data) return;
-    document.querySelector(".section-tag").textContent = data.sectionTag;
-    document.querySelector(".section-title").innerHTML =
-      `System <span class="metallic-gold">${data.sectionTitle}</span>`;
-
-    // Cập nhật các label
-    const labels = document.querySelectorAll(".setting-label-luxury");
-    const subs = document.querySelectorAll(".setting-sub-text");
-    labels[0].textContent = data.themeLabel;
-    subs[0].textContent = data.themeSub;
-    themeStatus.textContent = themeToggle.checked
-      ? data.themeStatusLight
-      : data.themeStatusDark;
-
-    labels[1].textContent = data.langLabel;
-    subs[1].textContent = data.langSub;
-
-    document.querySelector(".btn-gold").textContent = data.btnSave;
-  }
-
-  // 5. Lưu cấu hình
+  // 3. NÚT SAVE — ghi vào localStorage để mọi trang áp dụng từ lần sau
   btnSave?.addEventListener("click", () => {
-    localStorage.setItem("app-theme", themeToggle.checked ? "light" : "dark");
-    localStorage.setItem("app-lang", selectLanguage.value);
-    alert("Cài đặt đã được lưu thành công!");
+    const newTheme = themeToggle.checked ? "light" : "dark";
+    const newLang = selectLanguage.value;
+
+    localStorage.setItem("app-theme", newTheme);
+    localStorage.setItem("app-lang", newLang);
+
+    const msg =
+      (window.I18N.dictionary[newLang] &&
+        window.I18N.dictionary[newLang].saveSuccess) ||
+      "Settings saved successfully!";
+    alert(msg);
+  });
+
+  // 4. NÚT CANCEL — khôi phục theme + lang về giá trị đã lưu
+  btnCancel?.addEventListener("click", (e) => {
+    e.preventDefault();
+    themeToggle.checked = savedTheme === "light";
+    selectLanguage.value = savedLang;
+    window.I18N.preview(savedTheme, savedLang);
+    updateThemeStatus();
   });
 });

@@ -321,3 +321,119 @@ footer p {
     transform: none;
   }
 }
+/* ==========================================================================
+   USER PROFILE NAVBAR (HIỂN THỊ TÀI KHOẢN VÀ NÚT ĐĂNG XUẤT)
+   ========================================================================== */
+.user-nav-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 5px 12px;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.user-info-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.user-icon {
+  font-size: 16px;
+  opacity: 0.8;
+}
+
+#user-display-name {
+  color: var(--color-gold, #d4af37);
+  max-width: 150px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.btn-logout {
+  background-color: transparent;
+  color: #ffffff;
+  border: 1px solid #ff4757;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-logout:hover {
+  background-color: #ff4757;
+  color: #ffffff;
+  box-shadow: 0 0 10px rgba(255, 71, 87, 0.4);
+  transform: translateY(-1px);
+}
+
+.btn-logout:active {
+  transform: translateY(1px);
+}
+/* ==========================================================================
+   ⚙️ GLOBAL LIGHT THEME (Áp dụng cho mọi trang)
+   ========================================================================== */
+body.light-theme {
+  background-color: #f5f5f7 !important;
+  color: #1d1d1f !important;
+}
+
+body.light-theme nav {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+body.light-theme .nav-links a,
+body.light-theme .logo {
+  color: #b8860b !important;
+  font-weight: 500;
+}
+
+body.light-theme .nav-links a:hover,
+body.light-theme .nav-links a.active {
+  color: #ffd700 !important;
+  border-bottom: 2px solid #ffd700;
+}
+
+body.light-theme .user-info-box {
+  color: #1d1d1f !important;
+}
+
+body.light-theme .user-nav-wrapper {
+  background-color: rgba(0, 0, 0, 0.05) !important;
+  border-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Đổi màu các Khối (Card) và Tiêu đề trên nền sáng */
+body.light-theme .section-title,
+body.light-theme .card-title,
+body.light-theme .product-title,
+body.light-theme h1,
+body.light-theme h2,
+body.light-theme h3 {
+  color: #1d1d1f !important;
+}
+
+body.light-theme .product-card-inner,
+body.light-theme .stat-card,
+body.light-theme .setting-card-luxury {
+  background: rgba(0, 0, 0, 0.02) !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+body.light-theme .card-desc,
+body.light-theme .hero-description,
+body.light-theme p {
+  color: #6e6e73 !important;
+}
