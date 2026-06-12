@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Book Detail | HUST LBC</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Outfit:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet" />
+
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="stylesheet" href="assets/css/book-detail.css?v=6" />
+  </head>
+  <body>
+    <nav>
+      <div class="container">
+        <a href="index.html" class="logo metallic-gold">HUST LBC</a>
+        <ul class="nav-links">
+          <li><a href="catalog.html" data-i18n="navCatalog">Catalog</a></li>
+          <li>
+            <a href="dashboard.html" data-i18n="navDashboard">Dashboard</a>
+          </li>
+          <li id="nav-login-wrapper">
+            <a href="login.html" data-i18n="navLogin">Login</a>
+          </li>
+          <li
+            class="user-nav-wrapper"
+            id="nav-user-profile"
+            style="display: none">
+            <div class="user-info-box">
+              <span class="user-icon">👤</span>
+              <span id="user-display-name">Tên User</span>
+            </div>
+            <button id="logout-btn" class="btn-logout" data-i18n="navLogout">
+              Đăng xuất
+            </button>
+          </li>
+          <li><a href="setting.html" data-i18n="navSetting">Setting</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="cinematic-main">
+      <div class="ambient-glow"></div>
+
+      <div class="container">
+        <div class="cinematic-grid">
+          <div class="col-cover reveal">
+            <div class="cover-showcase">
+              <img
+                src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=800&q=80"
+                alt="The Spanish Bride"
+                id="detail-img" />
+            </div>
+            <div class="status-indicator">
+              <span class="pulse-dot available"></span>
+              <span
+                class="status-text"
+                id="detail-status"
+                data-i18n="statusAvailable"
+                >Available</span
+              >
+            </div>
+          </div>
+
+          <div class="col-content reveal stagger-1">
+            <div class="meta-tags">
+              <span class="tag-gold" id="detail-category">TIỂU THUYẾT</span>
+              <span class="tag-outline">LỊCH SỬ</span>
+            </div>
+
+            <h1 class="luxury-title" id="detail-title">
+              The Spanish <br /><em>Bride</em>
+            </h1>
+            <h3 class="luxury-author">
+              <span data-i18n="byAuthor">TÁC GIẢ</span>
+              <strong id="detail-author">GEORGETTE HEYER</strong>
+            </h3>
+
+            <div class="luxury-description">
+              <p id="detail-desc">
+                Một cuốn tiểu thuyết lịch sử lãng mạn đầy kịch tính lấy bối cảnh
+                trong cuộc Chiến tranh Bán đảo. Câu chuyện kể về mối tình mãnh
+                liệt và đầy thử thách giữa một sĩ quan lữ đoàn và một cô gái trẻ
+                người Tây Ban Nha.
+              </p>
+              <blockquote class="editorial-quote">
+                "Kiệt tác lịch sử dệt nên từ máu, nước mắt và sự lãng mạn tột
+                cùng."
+              </blockquote>
+            </div>
+
+            <div class="action-dock">
+              <button class="btn btn-gold btn-large" id="btn-add-cart">
+                Thêm vào giỏ mượn
+              </button>
+              <a href="catalog.html" class="btn btn-outline btn-large"
+                >Quay lại Catalog</a
+              >
+            </div>
+          </div>
+
+          <div class="col-reviews reveal stagger-2">
+            <div class="review-panel">
+              <div class="rating-header">
+                <div class="score metallic-gold">4.8</div>
+                <div class="stars">★★★★★</div>
+                <div class="count">124 Đánh giá</div>
+              </div>
+
+              <button
+                id="btn-open-review"
+                class="btn btn-outline btn-block"
+                style="margin-bottom: 1.5rem">
+                Viết đánh giá của cậu
+              </button>
+
+              <div class="review-scroll-area">
+                <div class="review-card">
+                  <div class="reviewer-info">
+                    <img
+                      src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&q=80"
+                      alt="Avatar"
+                      class="avatar" />
+                    <div>
+                      <h4 class="name">Nguyễn Huy Dũng</h4>
+                      <span class="star-rating">★★★★★</span>
+                    </div>
+                  </div>
+                  <p class="comment">
+                    Cốt truyện lôi cuốn. Đọc một lèo trong 2 ngày là hết luôn!
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <section class="editorial-recommendations reveal">
+          <div class="editorial-header">
+            <h2 class="section-title">
+              Khám phá <span class="metallic-gold">Thêm</span>
+            </h2>
+            <div class="header-line"></div>
+          </div>
+
+          <div class="recommend-grid" id="recommend-container">
+            <div class="product-card">
+              <div class="product-card-inner">
+                <div class="product-image">
+                  <img
+                    src="https://images.unsplash.com/photo-1512820790803-83ca734da794?w=600&q=80"
+                    alt="Book Cover" />
+                </div>
+                <h3 class="product-title">The Great Gatsby</h3>
+                <h2 class="product-title">By Author : Son</h2>
+                <p class="product-price">Available</p>
+                <button class="btn btn-gold btn-block">Xem chi tiết</button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <div id="review-modal" class="modal-overlay">
+      <div class="modal-content review-modal-inner">
+        <button class="close-modal" id="btn-close-review">&times;</button>
+        <h2 class="metallic-gold" style="margin-bottom: 0.5rem">
+          Đánh giá của cậu
+        </h2>
+        <p
+          style="
+            color: var(--color-text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+          ">
+          Chia sẻ cảm nghĩ về cuốn sách "The Spanish Bride"
+        </p>
+
+        <form id="submit-review-form">
+          <div class="star-rating-input" id="star-rating-container">
+            <span class="star" data-value="1">★</span>
+            <span class="star" data-value="2">★</span>
+            <span class="star" data-value="3">★</span>
+            <span class="star" data-value="4">★</span>
+            <span class="star" data-value="5">★</span>
+          </div>
+          <input type="hidden" id="selected-rating" value="0" />
+
+          <div
+            class="form-group"
+            style="text-align: left; margin-bottom: 1.5rem">
+            <textarea
+              id="review-text"
+              class="form-input"
+              rows="4"
+              placeholder="Sách này tuyệt vời ở điểm nào?"
+              required
+              style="resize: none"></textarea>
+          </div>
+          <button type="submit" class="btn btn-gold btn-block">
+            Gửi Đánh Giá
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <div class="cart-overlay" id="cart-overlay"></div>
+    <div class="cart-sidebar" id="cart-sidebar">
+      <div class="cart-header">
+        <h2 class="metallic-gold" style="font-size: 1.5rem; margin: 0">
+          Giỏ Mượn
+        </h2>
+        <button class="close-cart" id="btn-close-cart">&times;</button>
+      </div>
+
+      <div class="cart-items-container" id="cart-items">
+        <div class="cart-item">
+          <img
+            src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=200&q=80"
+            alt="Cover"
+            class="cart-item-img" />
+          <div class="cart-item-info">
+            <h4 class="cart-item-title">The Spanish Bride</h4>
+            <p class="cart-item-author">Georgette Heyer</p>
+            <div class="cart-item-price">Phí: 5.000đ/ngày</div>
+          </div>
+          <button class="btn-remove-item" title="Xóa khỏi giỏ">&times;</button>
+        </div>
+      </div>
+
+      <div class="cart-footer">
+        <div class="cart-total">
+          <span>Tạm tính:</span>
+          <strong class="metallic-gold" id="cart-total-price"
+            >5.000đ/ngày</strong
+          >
+        </div>
+        <button class="btn btn-gold btn-block" id="btn-checkout">
+          Xác Nhận Mượn
+        </button>
+      </div>
+    </div>
+
+    <footer>
+      <div class="container">
+        <div class="footer-logo metallic-gold">HUST LBC</div>
+        <p data-i18n="footerCopyright">
+          &copy; 2026 HUST LBC. Crafted with hyperrealistic precision.
+        </p>
+      </div>
+    </footer>
+
+    <script src="assets/js/i18n.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/bookdetail/book-detail.js"></script>
+  </body>
+</html>
+  </body>
+</html>

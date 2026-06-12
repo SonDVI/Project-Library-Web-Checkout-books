@@ -1,12 +1,11 @@
 /* ==========================================================================
-   CATALOG PAGE STYLES
+   CATALOG PAGE STYLES (ĐỒNG BỘ INDEX.CSS + THEME)
    ========================================================================== */
-
-/* Page Header */
 .page-header {
-  padding: 120px 0 60px;
+  padding: 140px 0 60px;
   text-align: center;
   background: var(--color-bg-alt);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.1);
 }
 
 .page-title {
@@ -14,6 +13,7 @@
   font-size: clamp(2.5rem, 5vw, 4rem);
   font-weight: 700;
   margin-bottom: 1rem;
+  color: var(--color-text);
 }
 
 .page-description {
@@ -23,285 +23,288 @@
   margin: 0 auto;
 }
 
-/* Search and Filter Bar */
-.search-filter {
-  padding: 2rem 0;
+/* =======================================
+   THANH TÌM KIẾM TỔ HỢP (COMBO SEARCH)
+   ======================================= */
+.search-engine-wrapper {
+  display: flex;
+  align-items: center;
+  max-width: 700px;
+  margin: 2.5rem auto 0;
   background: var(--color-bg);
-  border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 50px;
+  padding: 0.4rem;
+  position: relative;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
-.search-filter .container {
+.search-engine-wrapper:focus-within {
+  border-color: var(--color-gold);
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+}
+
+.search-select {
+  background: transparent;
+  color: var(--color-gold);
+  border: none;
+  border-right: 1px solid rgba(212, 175, 55, 0.2);
+  padding: 0.5rem 1rem 0.5rem 1.5rem;
+  outline: none;
+  font-family: var(--font-body);
+  font-weight: 600;
+  cursor: pointer;
+  appearance: none;
+}
+.search-select option {
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+.search-main-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  color: var(--color-text);
+  font-size: 1.05rem;
+  outline: none;
+}
+.search-main-input::placeholder {
+  color: var(--color-text-muted);
+  opacity: 0.6;
+}
+
+.btn-search-icon {
+  background: var(--color-gold);
+  border: none;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.btn-search-icon:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+}
+
+/* Auto Suggest Dropdown */
+.suggest-dropdown {
+  position: absolute;
+  top: 110%;
+  left: 0;
+  width: 100%;
+  background: var(--color-bg-alt);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  z-index: 100;
+  text-align: left;
+  overflow: hidden;
+  display: none;
+}
+.suggest-item {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-.search-bar {
-  flex: 1;
-  min-width: 300px;
-}
-
-.search-input {
-  width: 100%;
-  padding: 0.8rem 1.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 100px;
-  background: rgba(255, 255, 255, 0.05);
-  color: var(--color-text);
-  font-family: inherit;
-  font-size: 0.9375rem;
-  transition: all 0.3s ease;
-}
-
-.search-input:focus {
-  outline: none;
-  border-color: var(--color-gold);
-  box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
-  background: rgba(255, 255, 255, 0.1);
-}
-
-.search-input::placeholder {
-  color: rgba(255, 255, 255, 0.4);
-}
-
-.filter-options {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-/* ==========================================================================
-   DROPDOWN UI (MATCHING SCREENSHOT)
-   ========================================================================== */
-.filter-options {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-}
-
-.filter-select {
-  appearance: none; /* Ẩn mũi tên mặc định xấu xí của trình duyệt */
-  background-color: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 100px; /* Bo tròn 2 đầu dạng viên thuốc (pill) */
-  color: var(--color-text);
-  padding: 0.6rem 2.5rem 0.6rem 1.25rem;
-  font-family: inherit;
-  font-size: 0.9375rem;
-  font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s ease;
-
-  /* Vẽ lại mũi tên màu trắng sắc nét bằng SVG */
-  background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='white' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 1rem center;
+  transition: background 0.2s;
+}
+.suggest-item:hover {
+  background: rgba(212, 175, 55, 0.05);
 }
 
-/* Hiệu ứng viền vàng phát sáng khi hover hoặc click vào (giống ảnh của bạn) */
-.filter-select:hover,
-.filter-select:focus {
-  outline: none;
-  border-color: var(--color-gold);
-  box-shadow: 0 0 15px rgba(212, 175, 55, 0.15);
-}
-
-/* Tùy chỉnh màu nền cho danh sách xổ xuống */
-.filter-select option {
-  background-color: var(--color-bg);
-  color: var(--color-text);
-  padding: 10px;
-}
-
-/* Books Catalog Area */
+/* =======================================
+   CATALOG LAYOUT (SIDEBAR + GRID)
+   ======================================= */
 .books-catalog {
   padding: 60px 0 100px;
+  background: var(--color-bg);
+  min-height: 50vh;
+}
+.catalog-layout {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 3rem;
+  align-items: start;
 }
 
-/* ==========================================================================
-   CATEGORY ROWS & CAROUSEL (NETFLIX STYLE)
-   ========================================================================== */
-.category-row {
-  margin-bottom: 4rem;
-  /* THÊM DÒNG DƯỚI ĐÂY: Hiệu ứng trượt lên cho toàn bộ hàng */
-  animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-.category-title {
-  font-family: var(--font-display);
-  font-size: 1.75rem;
-  font-weight: 600;
-  margin-bottom: 1.5rem;
-  padding-left: 1rem;
-  border-left: 4px solid var(--color-gold);
-  color: var(--color-text);
-}
-
-.carousel-container {
-  position: relative;
-  padding: 0 3rem; /* Không gian cho nút */
-}
-
-.carousel-viewport {
-  overflow: hidden;
-  width: 100%;
-}
-
-.carousel-track {
-  display: flex;
-  gap: 1.5rem;
-  transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-  will-change: transform;
-}
-
-/* Card Style (Copy and adjusted for Catalog) */
-.product-card {
-  flex: 0 0 calc(25% - 1.125rem); /* 4 cột mặc định */
-  min-width: 0;
-  perspective: 1000px;
-  cursor: pointer;
-  /* THÊM DÒNG DƯỚI ĐÂY: Hiệu ứng trượt lên cho từng thẻ sách */
-  animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-.product-card-inner {
-  padding: 1.5rem;
+/* Sidebar */
+.catalog-sidebar {
   background: linear-gradient(
     145deg,
-    rgba(255, 255, 255, 0.08),
-    rgba(255, 255, 255, 0.02)
+    rgba(255, 255, 255, 0.05),
+    rgba(255, 255, 255, 0.01)
   );
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 16px;
-  transition: all 0.4s ease;
-  height: 100%;
+  padding: 2rem 1.5rem;
+}
+
+.filter-group {
+  margin-bottom: 2rem;
+}
+.filter-group:last-child {
+  margin-bottom: 0;
+}
+.filter-title {
+  font-size: 0.85rem;
+  color: var(--color-gold);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 1.2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding-bottom: 0.5rem;
+}
+
+.filter-select-box {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--color-text);
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  outline: none;
+  cursor: pointer;
+}
+.filter-select-box option {
+  background: var(--color-bg);
+}
+
+/* Custom Radio & Checkbox */
+.custom-radio,
+.custom-check {
+  display: block;
+  position: relative;
+  padding-left: 30px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+  transition: 0.2s;
+}
+.custom-radio:hover,
+.custom-check:hover {
+  color: var(--color-text);
+}
+.custom-radio input,
+.custom-check input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+.radiomark,
+.checkmark {
+  position: absolute;
+  top: 2px;
+  left: 0;
+  height: 18px;
+  width: 18px;
+  background-color: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+.radiomark {
+  border-radius: 50%;
+}
+.checkmark {
+  border-radius: 4px;
+}
+.custom-radio input:checked ~ .radiomark,
+.custom-check input:checked ~ .checkmark {
+  background-color: rgba(212, 175, 55, 0.2);
+  border-color: var(--color-gold);
+}
+.custom-radio input:checked ~ .radiomark:after {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-gold);
+}
+.custom-check input:checked ~ .checkmark:after {
+  content: "✔";
+  position: absolute;
+  top: -2px;
+  left: 3px;
+  font-size: 12px;
+  color: var(--color-gold);
+}
+
+/* =======================================
+   PHÂN TRANG (PAGINATION)
+   ======================================= */
+.catalog-content-area {
   display: flex;
   flex-direction: column;
+  gap: 3rem;
 }
-
-.product-card:hover .product-card-inner {
-  border-color: rgba(212, 175, 55, 0.3);
-  box-shadow:
-    0 15px 35px rgba(0, 0, 0, 0.3),
-    0 0 30px rgba(212, 175, 55, 0.1);
-  transform: translateY(-8px);
-}
-
-.product-image {
-  width: 100%;
-  aspect-ratio: 3/4;
-  border-radius: 8px;
-  overflow: hidden;
-  margin-bottom: 1.25rem;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
-}
-
-.product-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.5s ease;
-}
-
-.product-card:hover .product-image img {
-  transform: scale(1.05);
-}
-
-.product-title {
-  font-family: var(--font-display);
-  font-size: 1.125rem;
-  font-weight: 600;
-  margin-bottom: 0.25rem;
-}
-
-.product-author {
-  font-size: 0.875rem;
-  color: var(--color-text-muted);
-  margin-bottom: 0.5rem;
-}
-
-.product-price {
-  font-size: 0.9375rem;
-  font-weight: 600;
-  margin-bottom: 1.25rem;
-}
-
-.btn-block {
-  width: 100%;
+.pagination-container {
+  display: flex;
   justify-content: center;
-  padding: 0.6rem 1rem;
-  margin-top: auto;
+  align-items: center;
+  gap: 0.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding-top: 2rem;
 }
-
-/* Slider Nav Buttons */
-.carousel-nav {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
+.page-numbers {
+  display: flex;
+  gap: 0.5rem;
+}
+.page-btn {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--color-text-muted);
   width: 40px;
   height: 40px;
-  border-radius: 50%;
-  background: rgba(26, 26, 46, 0.8);
-  border: 1px solid var(--color-gold);
-  color: var(--color-gold);
-  font-size: 1rem;
+  border-radius: 8px;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  font-weight: 500;
   cursor: pointer;
-  z-index: 10;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
+  transition: 0.3s;
+}
+.page-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--color-text);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+.page-btn.active {
+  background: rgba(212, 175, 55, 0.15);
+  color: var(--color-gold);
+  border-color: var(--color-gold);
+}
+.page-btn.nav-btn {
+  background: rgba(0, 0, 0, 0.2);
+  font-size: 1.2rem;
+}
+.page-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
 }
 
-.carousel-nav:hover {
-  background: linear-gradient(
-    135deg,
-    var(--color-gold-dark),
-    var(--color-gold-light)
-  );
-  color: var(--color-bg);
-  box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
-  transform: translateY(-50%) scale(1.1);
-}
-
-.carousel-nav.prev {
-  left: 0;
-}
-.carousel-nav.next {
-  right: 0;
-}
-
-/* Responsive Settings */
-@media (max-width: 1024px) {
-  .product-card {
-    flex: 0 0 calc(33.333% - 1rem);
+/* Responsive */
+@media (max-width: 992px) {
+  .catalog-layout {
+    grid-template-columns: 1fr;
+  }
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
   }
 }
-
-@media (max-width: 768px) {
-  .search-filter .container {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  .filter-options {
-    justify-content: space-between;
-  }
-  .carousel-container {
-    padding: 0 2rem;
-  }
-  .product-card {
-    flex: 0 0 calc(50% - 0.75rem);
-  }
-  .category-title {
-    font-size: 1.5rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .product-card {
-    flex: 0 0 100%;
+@media (max-width: 600px) {
+  .products-grid {
+    grid-template-columns: 1fr !important;
   }
 }

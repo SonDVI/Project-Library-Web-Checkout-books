@@ -3,125 +3,35 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Hust | Dashboard - Library Statistics</title>
+    <title>Dashboard | HUST LBC</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Outfit:wght@300;400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Outfit:wght@300;400;500;600;700&display=swap"
       rel="stylesheet" />
 
     <link rel="stylesheet" href="assets/css/style.css" />
     <link rel="stylesheet" href="assets/css/index.css" />
-
-    <style>
-      /* --- CSS DASHBOARD LUXURY --- */
-      .filter-bar {
-        display: flex;
-        gap: 1rem;
-        margin-bottom: 3rem;
-        justify-content: center;
-        flex-wrap: wrap;
-      }
-
-      .filter-btn {
-        padding: 0.8rem 1.8rem;
-        background: rgba(255, 255, 255, 0.03);
-        border: 1px solid rgba(212, 175, 55, 0.2);
-        color: #a0a0a0;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        font-family: "Outfit", sans-serif;
-      }
-
-      .filter-btn.active {
-        background: linear-gradient(135deg, #b8860b, #ffd700);
-        color: #000;
-        border-color: #ffd700;
-        font-weight: 600;
-      }
-
-      .filter-btn:hover {
-        border-color: #ffd700;
-        color: #fff;
-      }
-
-      .stats-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-        gap: 2rem;
-      }
-
-      .stat-card {
-        padding: 2.5rem;
-        background: rgba(255, 255, 255, 0.03);
-        border: 1px solid rgba(212, 175, 55, 0.15);
-        border-radius: 16px;
-        backdrop-filter: blur(10px);
-        transition: all 0.3s ease;
-      }
-
-      .rating-badge {
-        display: inline-block;
-        background: rgba(255, 255, 255, 0.1);
-        color: #fff;
-        padding: 0.3rem 1rem;
-        border-radius: 20px;
-        font-weight: 700;
-        margin-bottom: 1.5rem;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-      }
-
-      .card-title {
-        font-family: "Playfair Display";
-        font-size: 1.8rem;
-        margin-bottom: 1rem;
-        display: block;
-        transition: 0.3s;
-      }
-
-      .card-title:hover {
-        color: #ffd700;
-        transform: translateX(5px);
-      }
-
-      /* Metallic Colors */
-      .metallic-gold {
-        background: linear-gradient(135deg, #b8860b, #ffd700);
-        background-clip: text;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-      }
-      .metallic-silver {
-        background: linear-gradient(135deg, #c0c0c0, #e0e0e0);
-        background-clip: text;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-      }
-      .metallic-bronze {
-        background: linear-gradient(135deg, #cd7f32, #d2b48c);
-        background-clip: text;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-      }
-
-      .card-desc {
-        color: #a0a0a0;
-        font-size: 1rem;
-        line-height: 1.6;
-      }
-    </style>
+    <link rel="stylesheet" href="assets/css/dashboard.css?v=99" />
   </head>
   <body>
     <nav>
       <div class="container">
         <a href="index.html" class="logo metallic-gold">HUST LBC</a>
         <ul class="nav-links">
-          <li><a href="catalog.html">Catalog</a></li>
-          <li><a href="dashboard.html" class="active">Dashboard</a></li>
+          <li><a href="catalog.html" data-i18n="navCatalog">Catalog</a></li>
+          <li>
+            <a href="dashboard.html" class="active" data-i18n="navDashboard"
+              >Dashboard</a
+            >
+          </li>
+          <li><a href="profile.html" data-i18n="navProfile">Profile</a></li>
+          <li><a href="setting.html" data-i18n="navSetting">Setting</a></li>
 
-          <li id="nav-login-wrapper"><a href="login.html">Login</a></li>
+          <li id="nav-login-wrapper">
+            <a href="login.html" data-i18n="navLogin">Login</a>
+          </li>
 
           <li
             class="user-nav-wrapper"
@@ -131,125 +41,95 @@
               <span class="user-icon">👤</span>
               <span id="user-display-name">Tên User</span>
             </div>
-            <button id="logout-btn" class="btn-logout">Đăng xuất</button>
+            <button id="logout-btn" class="btn-logout" data-i18n="navLogout">
+              Đăng xuất
+            </button>
           </li>
-
-          <li><a href="setting.html">Setting</a></li>
         </ul>
       </div>
     </nav>
 
-    <main style="padding-top: 120px; padding-bottom: 80px">
+    <main class="dashboard-main">
+      <div class="ambient-glow"></div>
+
       <div class="container">
-        <div class="section-header" style="text-align: center">
-          <span class="section-tag">Library Statistics</span>
-          <h2 class="section-title">
-            Top Rated <span class="metallic-gold">Content</span>
-          </h2>
-        </div>
+        <header class="dash-header fade-in-up" style="animation-delay: 0.1s">
+          <h1 class="dash-title" data-i18n="dashTitle">
+            Library <span class="metallic-gold">Command Center</span>
+          </h1>
+          <p class="dash-subtitle" data-i18n="dashSubtitle">
+            Tổng quan dữ liệu mượn trả và xu hướng đọc sách mới nhất.
+          </p>
+        </header>
 
-        <div class="filter-bar">
-          <button class="filter-btn active" data-filter="engineering">
-            Engineering
-          </button>
-          <button class="filter-btn" data-filter="literature">
-            Literature
-          </button>
-          <button class="filter-btn" data-filter="customer">Customers</button>
-        </div>
-
-        <div class="stats-grid">
-          <div class="stat-card" data-category="engineering">
-            <div class="rating-badge">★ 4.8/5</div>
-            <a
-              href="https://vi.wikipedia.org/wiki/Nguyễn_Văn_A"
-              target="_blank"
-              class="card-title metallic-gold"
-              style="text-decoration: none"
-              >Top Rated Author</a
-            >
-            <p class="card-desc">
-              <strong>Prof. Nguyen Van A</strong> - Chuyên gia CNTT.
-            </p>
-          </div>
-
-          <div class="stat-card" data-category="engineering">
-            <div class="rating-badge">★ 4.8/5</div>
-            <a
-              href="https://vi.wikipedia.org/wiki/Cấu_trúc_dữ_liệu"
-              target="_blank"
-              class="card-title metallic-gold"
-              style="text-decoration: none"
-              >Top Rated Work</a
-            >
-            <p class="card-desc">
-              <strong>"Cấu trúc dữ liệu hiện đại"</strong> - Tác phẩm được đánh
-              giá cao nhất về độ thực tiễn.
-            </p>
+        <div class="bento-grid">
+          <div
+            class="bento-card card-leaderboard fade-in-up"
+            style="animation-delay: 0.2s">
+            <div class="card-head">
+              <h3 data-i18n="dashTopReaders">Top Độc Giả</h3>
+              <span class="badge">Live</span>
+            </div>
+            <div class="fintech-list" id="leaderboard-list"></div>
           </div>
 
           <div
-            class="stat-card"
-            data-category="literature"
-            style="display: none">
-            <div class="rating-badge">★ 4.5/5</div>
-            <div class="card-title metallic-gold">Top Rated Author</div>
-            <p class="card-desc">
-              <strong>Nguyễn Văn B</strong> - Tác giả giàu cảm xúc.
-            </p>
+            class="bento-card card-trending fade-in-up"
+            style="animation-delay: 0.3s">
+            <div class="card-head">
+              <h3 data-i18n="dashTrendingBooks">Sách Thịnh Hành</h3>
+              <div class="pill-filters" id="trending-filters">
+                <button
+                  class="pill-btn active"
+                  data-time="day"
+                  data-i18n="timeToday">
+                  Hôm nay
+                </button>
+                <button
+                  class="pill-btn"
+                  data-time="month"
+                  data-i18n="timeThisMonth">
+                  Tháng này
+                </button>
+                <button
+                  class="pill-btn"
+                  data-time="year"
+                  data-i18n="timeThisYear">
+                  Năm nay
+                </button>
+              </div>
+            </div>
+            <div class="trending-grid" id="trending-books-grid"></div>
           </div>
 
-          <div class="stat-card" data-category="customer" style="display: none">
-            <div class="rating-badge">100 Points</div>
-            <div class="card-title metallic-gold">Nguyen Huy Dung</div>
-            <p class="card-desc">
-              Sách yêu thích: <strong>Giải tích 1</strong>
-            </p>
-          </div>
-
-          <div class="stat-card" data-category="customer" style="display: none">
-            <div class="rating-badge">98 Points</div>
-            <div class="card-title metallic-silver">Kendrick Lamar</div>
-            <p class="card-desc">Sách yêu thích: <strong>Đại số</strong></p>
-          </div>
-
-          <div class="stat-card" data-category="customer" style="display: none">
-            <div class="rating-badge">96 Points</div>
-            <div class="card-title metallic-bronze">Drake</div>
-            <p class="card-desc">
-              Sách yêu thích: <strong>Giải tích 2</strong>
-            </p>
+          <div
+            class="bento-card card-authors fade-in-up"
+            style="animation-delay: 0.4s">
+            <div class="card-head">
+              <h3 data-i18n="dashAuthorRankings">Bảng Xếp Hạng Tác Giả</h3>
+              <select class="luxury-select" id="author-sort-select">
+                <option value="views" data-i18n="sortViews">
+                  🔥 Theo Lượt Xem
+                </option>
+                <option value="borrows" data-i18n="sortBorrows">
+                  📚 Theo Số Lần Mượn
+                </option>
+                <option value="votes" data-i18n="sortVotes">
+                  ⭐ Theo Lượt Vote
+                </option>
+                <option value="loves" data-i18n="sortLoves">
+                  ❤️ Theo Lượt Yêu Thích
+                </option>
+              </select>
+            </div>
+            <div class="author-list" id="author-ranking-list"></div>
           </div>
         </div>
       </div>
     </main>
 
-    <script>
-      // Kịch bản điều khiển bộ lọc Dashboard
-      document.addEventListener("DOMContentLoaded", () => {
-        const filterBtns = document.querySelectorAll(".filter-btn");
-        const cards = document.querySelectorAll(".stat-card");
-
-        filterBtns.forEach((btn) => {
-          btn.addEventListener("click", () => {
-            document
-              .querySelector(".filter-btn.active")
-              ?.classList.remove("active");
-            btn.classList.add("active");
-
-            const filter = btn.getAttribute("data-filter");
-            cards.forEach((card) => {
-              if (card.getAttribute("data-category") === filter) {
-                card.style.display = "block";
-              } else {
-                card.style.display = "none";
-              }
-            });
-          });
-        });
-      });
-    </script>
-
+    <script src="assets/js/i18n.js"></script>
     <script src="assets/js/main.js"></script>
+    <script src="assets/js/dashboard/dashboard.js?v=99"></script>
   </body>
 </html>

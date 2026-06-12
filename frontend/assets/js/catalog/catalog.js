@@ -1,289 +1,256 @@
-// ==========================================================================
-// CATALOG DATA & LOGIC
-// ==========================================================================
 document.addEventListener("DOMContentLoaded", () => {
-  // 1. Dữ liệu giả (Mock Data)
+  const gridArea = document.getElementById("books-render-area");
+  const searchInput = document.getElementById("catalog-search");
+  const searchCategory = document.getElementById("search-category");
+  const suggestBox = document.getElementById("suggest-box");
+
+  const pageNumbersContainer = document.getElementById("page-numbers");
+  const btnPrev = document.getElementById("prev-page");
+  const btnNext = document.getElementById("next-page");
+
+  // =====================================================================
+  // KHO SÁCH (MOCK DB)
+  // =====================================================================
   const booksDB = [
     {
-      id: 1,
+      id: "B1",
       title: "The Spanish Bride",
       author: "Georgette Heyer",
-      category: "Fiction",
-      status: "Available",
-      date: "2023-10-01",
-      img: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=600&q=80",
+      cover:
+        "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=600&q=80",
+      status: "ok",
+      cat: "lit",
     },
     {
-      id: 2,
-      title: "The Big Clock",
-      author: "Kenneth Fearing",
-      category: "Mystery",
-      status: "Borrowed",
-      date: "2023-09-15",
-      img: "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=600&q=80",
-    },
-    {
-      id: 3,
-      title: "The Secret Garden",
-      author: "Frances Hodgson Burnett",
-      category: "Classic",
-      status: "Available",
-      date: "2024-01-20",
-      img: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=400&q=80",
-    },
-    {
-      id: 4,
+      id: "B2",
       title: "The Great Gatsby",
       author: "F. Scott Fitzgerald",
-      category: "Classic",
-      status: "Available",
-      date: "2023-11-05",
-      img: "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=600&q=80",
+      cover:
+        "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=600&q=80",
+      status: "ok",
+      cat: "lit",
     },
     {
-      id: 5,
-      title: "Huckleberry Finn",
-      author: "Mark Twain",
-      category: "Classic",
-      status: "Available",
-      date: "2022-05-10",
-      img: "https://images.unsplash.com/photo-1532012197267-da84d127e765?w=600&q=80",
+      id: "B3",
+      title: "C++ Programming",
+      author: "Bjarne Stroustrup",
+      cover:
+        "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=600&q=80",
+      status: "out",
+      cat: "tech",
     },
     {
-      id: 6,
-      title: "Dune",
-      author: "Frank Herbert",
-      category: "Fantasy",
-      status: "Available",
-      date: "2024-02-01",
-      img: "https://images.unsplash.com/photo-1524995997946-a1c9e3154a63?w=600&q=80",
+      id: "B4",
+      title: "YOLOv11 Architecture",
+      author: "AI Research",
+      cover:
+        "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=600&q=80",
+      status: "ok",
+      cat: "tech",
     },
     {
-      id: 7,
-      title: "1984",
-      author: "George Orwell",
-      category: "Fiction",
-      status: "Reserved",
-      date: "2023-12-12",
-      img: "https://images.unsplash.com/photo-1543002589-bfa54ab09368?w=600&q=80",
+      id: "B5",
+      title: "Calisthenics Mastery",
+      author: "Frank Medrano",
+      cover:
+        "https://images.unsplash.com/photo-1532012197267-da84d127e765?w=600&q=80",
+      status: "ok",
+      cat: "fit",
     },
     {
-      id: 8,
-      title: "To Kill a Mockingbird",
-      author: "Harper Lee",
-      category: "Fiction",
-      status: "Available",
-      date: "2023-08-22",
-      img: "https://images.unsplash.com/photo-1554080353-ff56c2e61dc6?w=600&q=80",
-    },
-    {
-      id: 9,
-      title: "Sherlock Holmes",
-      author: "Arthur Conan Doyle",
-      category: "Mystery",
-      status: "Available",
-      date: "2021-06-15",
-      img: "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=600&q=80",
+      id: "B6",
+      title: "Deep Learning",
+      author: "Ian Goodfellow",
+      cover:
+        "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=600&q=80",
+      status: "ok",
+      cat: "tech",
     },
   ];
 
-  // 2. Lấy các phần tử HTML
-  const container = document.getElementById("catalog-container");
-  const searchInput = document.getElementById("search-input");
-  const categoryFilter = document.getElementById("category-filter");
-  const sortFilter = document.getElementById("sort-filter");
+  let currentPage = 1;
+  const itemsPerPage = 6;
+  let currentDisplayData = [...booksDB];
 
-  if (!container) return; // Dừng lại nếu không ở trang Catalog
+  // =====================================================================
+  // HÀM VẼ LƯỚI SÁCH (SỬ DỤNG TỪ ĐIỂN TỪ i18n.js CỦA CẬU)
+  // =====================================================================
+  function renderGrid() {
+    if (!gridArea) return;
+    gridArea.innerHTML = "";
 
-  // 3. Hàm tạo khối HTML sách (Đã thêm hiệu ứng Staggered Animation)
-  function renderCatalog(books) {
-    container.innerHTML = "";
+    // 🔥 MÓC VÀO BỘ NÃO window.I18N MÀ CẬU ĐÃ TẠO
+    const lang = window.I18N ? window.I18N.getLang() : "vi";
+    const t =
+      window.I18N && window.I18N.dictionary ? window.I18N.dictionary[lang] : {};
 
-    // Lấy chuỗi i18n hiện tại (fallback về tiếng Anh nếu I18N chưa sẵn sàng)
-    const lang = (window.I18N && window.I18N.getLang()) || "en";
-    const dict =
-      (window.I18N && window.I18N.dictionary[lang]) ||
-      (window.I18N && window.I18N.dictionary.en) ||
-      {};
-    const t = (key, fallback) => dict[key] || fallback;
-    const tCategory = (cat) => {
-      // Map category từ data → i18n key
-      const map = {
-        Fiction: "filterFiction",
-        Classic: "filterClassic",
-        Mystery: "filterMystery",
-        Fantasy: "filterFantasy",
-      };
-      return t(map[cat] || "", cat);
-    };
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const paginatedItems = currentDisplayData.slice(startIndex, endIndex);
 
-    if (books.length === 0) {
-      container.innerHTML = `<h3 style="text-align:center; color: var(--color-text-muted); padding: 4rem; animation: fadeInUp 0.5s ease both;">${t("noBooksFound", "No books found matching your criteria.")}</h3>`;
-      return;
-    }
+    gridArea.innerHTML = paginatedItems
+      .map((book) => {
+        const isAvailable = book.status === "ok";
 
-    // Gộp sách theo category
-    const groupedBooks = books.reduce((acc, book) => {
-      if (!acc[book.category]) acc[book.category] = [];
-      acc[book.category].push(book);
-      return acc;
-    }, {});
+        // 🚀 DỊCH TỰ ĐỘNG BẰNG TỪ ĐIỂN CỦA CẬU!
+        const statusText = isAvailable
+          ? t.statusAvailable || "Available"
+          : t.statusBorrowed || "Borrowed";
+        const btnText = isAvailable
+          ? t.btnBorrow || "Borrow"
+          : t.btnReserve || "Reserve";
+        const authorPrefix = t.byAuthor || "By: ";
 
-    let rowIndex = 0; // Biến đếm số hàng để tạo độ trễ
+        const btnClass = isAvailable ? "btn-gold" : "btn-outline";
+        const priceColor = isAvailable ? "var(--color-gold)" : "#ff4757";
 
-    // Tạo các Row (Hàng ngang)
-    for (const [category, categoryBooks] of Object.entries(groupedBooks)) {
-      // Thêm (book, index) vào vòng lặp map để tính độ trễ cho từng thẻ sách
-      let cardsHTML = categoryBooks
-        .map(
-          (book, index) => `
-        <div class="product-card" style="animation-delay: ${index * 80}ms">
+        return `
+        <div class="product-card" onclick="window.location.href='book-detail.html'">
           <div class="product-card-inner">
             <div class="product-image">
-              <img src="${book.img}" alt="${book.title}" />
+              <img src="${book.cover}" alt="Book Cover" />
             </div>
             <h3 class="product-title">${book.title}</h3>
-            <p class="product-author">${t("byAuthor", "By Author: ")} ${book.author}</p>
-            <p class="product-price" style="color: ${book.status === "Available" ? "var(--color-gold)" : "var(--color-text-muted)"}">${book.status === "Available" ? t("statusAvailable", "Available") : t("statusBorrowed", "Borrowed")}</p>
-            <button class="btn ${book.status === "Available" ? "btn-gold" : "btn-outline"} btn-block card-action">
-              ${book.status === "Available" ? t("btnBorrow", "Borrow") : t("btnReserve", "Reserve")}
-            </button>
-          </div>
-        </div>
-      `,
-        )
-        .join("");
-
-      // Thêm inline style animation-delay cho cả hàng ngang (row)
-      const rowHTML = `
-        <div class="category-row" style="animation-delay: ${rowIndex * 150}ms">
-          <h2 class="category-title">${tCategory(category)}</h2>
-          <div class="carousel-container">
-            <button class="carousel-nav prev">❮</button>
-            <div class="carousel-viewport">
-              <div class="carousel-track">
-                ${cardsHTML}
-              </div>
-            </div>
-            <button class="carousel-nav next">❯</button>
+            <h2 class="product-title" style="font-family:var(--font-body); font-size:0.85rem; color:var(--color-text-muted); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:1rem;">
+              ${authorPrefix} ${book.author}
+            </h2>
+            <p class="product-price" style="color: ${priceColor}">${statusText}</p>
+            <button class="btn ${btnClass} btn-block card-action">${btnText}</button>
           </div>
         </div>
       `;
-      container.insertAdjacentHTML("beforeend", rowHTML);
+      })
+      .join("");
 
-      rowIndex++; // Tăng biến đếm hàng lên
-    }
-
-    // Kích hoạt lại slider cho các hàng sách vừa tạo
-    initCarousels();
+    renderPaginationControls();
   }
 
-  // 4. Khởi tạo Slider cho mọi hàng ngang
-  function initCarousels() {
-    const carousels = document.querySelectorAll(".carousel-container");
-
-    carousels.forEach((carousel) => {
-      const track = carousel.querySelector(".carousel-track");
-      const prevBtn = carousel.querySelector(".carousel-nav.prev");
-      const nextBtn = carousel.querySelector(".carousel-nav.next");
-      const cards = Array.from(track.children);
-
-      let currentIndex = 0;
-
-      // Tính số lượng thẻ sách nhìn thấy trên màn hình
-      function getVisibleItems() {
-        if (window.innerWidth <= 480) return 1;
-        if (window.innerWidth <= 768) return 2;
-        if (window.innerWidth <= 1024) return 3;
-        return 4;
-      }
-
-      // Ẩn nút mũi tên nếu sách quá ít không đủ để trượt
-      if (cards.length <= getVisibleItems()) {
-        prevBtn.style.display = "none";
-        nextBtn.style.display = "none";
-      } else {
-        prevBtn.style.display = "flex";
-        nextBtn.style.display = "flex";
-      }
-
-      function updateCarousel() {
-        if (!cards.length) return;
-        const cardWidth = cards[0].getBoundingClientRect().width;
-        const gap = 24; // 1.5rem
-        const moveAmount = (cardWidth + gap) * currentIndex;
-        track.style.transform = `translateX(-${moveAmount}px)`;
-      }
-
-      nextBtn.addEventListener("click", () => {
-        const maxIndex = cards.length - getVisibleItems();
-        if (maxIndex <= 0) return;
-
-        if (currentIndex < maxIndex) {
-          currentIndex++;
-        } else {
-          currentIndex = 0; // Vòng lặp về đầu
-        }
-        updateCarousel();
-      });
-
-      prevBtn.addEventListener("click", () => {
-        const maxIndex = cards.length - getVisibleItems();
-        if (maxIndex <= 0) return;
-
-        if (currentIndex > 0) {
-          currentIndex--;
-        } else {
-          currentIndex = maxIndex; // Vòng lặp xuống cuối
-        }
-        updateCarousel();
-      });
-
-      window.addEventListener("resize", () => {
-        currentIndex = 0;
-        updateCarousel();
-      });
-    });
-  }
-
-  // 5. Logic Tìm kiếm và Lọc
-  function handleFilters() {
-    const searchTerm = searchInput.value.toLowerCase();
-    const category = categoryFilter.value;
-    const sort = sortFilter.value;
-
-    // Lọc theo search box và dropdown danh mục
-    let filtered = booksDB.filter((book) => {
-      const matchSearch =
-        book.title.toLowerCase().includes(searchTerm) ||
-        book.author.toLowerCase().includes(searchTerm);
-      const matchCategory = category === "all" || book.category === category;
-      return matchSearch && matchCategory;
-    });
-
-    // Sắp xếp
-    filtered.sort((a, b) => {
-      if (sort === "newest") return new Date(b.date) - new Date(a.date);
-      if (sort === "oldest") return new Date(a.date) - new Date(b.date);
-      if (sort === "title") return a.title.localeCompare(b.title);
-      if (sort === "author") return a.author.localeCompare(b.author);
-      return 0;
-    });
-
-    renderCatalog(filtered);
-  }
-
-  // 6. Kích hoạt bộ lọc khi người dùng gõ phím hoặc chọn select
-  searchInput.addEventListener("input", handleFilters);
-  categoryFilter.addEventListener("change", handleFilters);
-  sortFilter.addEventListener("change", handleFilters);
-
-  // Khởi chạy khi load trang
-  renderCatalog(booksDB);
-
-  // Khi ngôn ngữ thay đổi (do người dùng đổi ở trang Setting → quay lại Catalog),
-  // re-render danh sách sách với ngôn ngữ mới.
+  // LẮNG NGHE SỰ KIỆN: Bất cứ khi nào i18n.js áp dụng ngôn ngữ mới, vẽ lại sách!
   document.addEventListener("i18n:applied", () => {
-    handleFilters();
+    // Cập nhật Placeholder thanh tìm kiếm
+    const lang = window.I18N.getLang();
+    const t = window.I18N.dictionary[lang];
+    if (searchInput && t && t.searchPlaceholder) {
+      searchInput.placeholder = t.searchPlaceholder;
+    }
+    renderGrid();
   });
+
+  // =====================================================================
+  // HÀM PHÂN TRANG & NÚT BẤM (GIỮ NGUYÊN)
+  // =====================================================================
+  function renderPaginationControls() {
+    const totalPages = Math.ceil(currentDisplayData.length / itemsPerPage);
+    if (pageNumbersContainer) {
+      pageNumbersContainer.innerHTML = "";
+      for (let i = 1; i <= totalPages; i++) {
+        const btn = document.createElement("button");
+        btn.className = `page-btn ${i === currentPage ? "active" : ""}`;
+        btn.innerText = i;
+        btn.addEventListener("click", () => {
+          currentPage = i;
+          renderGrid();
+        });
+        pageNumbersContainer.appendChild(btn);
+      }
+    }
+    if (btnPrev) btnPrev.disabled = currentPage === 1;
+    if (btnNext)
+      btnNext.disabled = currentPage === totalPages || totalPages === 0;
+  }
+
+  if (btnPrev)
+    btnPrev.addEventListener("click", () => {
+      if (currentPage > 1) {
+        currentPage--;
+        renderGrid();
+      }
+    });
+  if (btnNext)
+    btnNext.addEventListener("click", () => {
+      const totalPages = Math.ceil(currentDisplayData.length / itemsPerPage);
+      if (currentPage < totalPages) {
+        currentPage++;
+        renderGrid();
+      }
+    });
+
+  renderGrid();
+
+  // =====================================================================
+  // HÀM TÌM KIẾM AUTO-SUGGEST
+  // =====================================================================
+  if (searchInput && suggestBox && searchCategory) {
+    searchInput.addEventListener("input", (e) => {
+      const keyword = e.target.value.toLowerCase().trim();
+      const catFilter = searchCategory.value;
+
+      if (keyword.length === 0) {
+        suggestBox.style.display = "none";
+        currentDisplayData = [...booksDB];
+        currentPage = 1;
+        renderGrid();
+        return;
+      }
+
+      currentDisplayData = booksDB.filter((b) => {
+        if (catFilter === "title")
+          return b.title.toLowerCase().includes(keyword);
+        if (catFilter === "author")
+          return b.author.toLowerCase().includes(keyword);
+        return (
+          b.title.toLowerCase().includes(keyword) ||
+          b.author.toLowerCase().includes(keyword)
+        );
+      });
+
+      currentPage = 1;
+      renderGrid();
+
+      if (currentDisplayData.length > 0) {
+        suggestBox.style.display = "block";
+        suggestBox.innerHTML = currentDisplayData
+          .slice(0, 4)
+          .map(
+            (b) => `
+          <div class="suggest-item" data-title="${b.title}">
+            <div>
+              <div style="color: var(--color-text); font-weight: 500;">${b.title}</div>
+              <div style="color: var(--color-text-muted); font-size: 0.8rem;">${b.author}</div>
+            </div>
+          </div>
+        `,
+          )
+          .join("");
+      } else {
+        const lang = window.I18N ? window.I18N.getLang() : "vi";
+        const t =
+          window.I18N && window.I18N.dictionary
+            ? window.I18N.dictionary[lang]
+            : {};
+        const msg = t.noBooksFound || "⚠️ Không tìm thấy kết quả.";
+
+        suggestBox.style.display = "block";
+        suggestBox.innerHTML = `<div class="suggest-item" style="color:#ff4757;">${msg}</div>`;
+      }
+    });
+
+    suggestBox.addEventListener("click", (e) => {
+      const item = e.target.closest(".suggest-item");
+      if (item && item.getAttribute("data-title")) {
+        searchInput.value = item.getAttribute("data-title");
+        suggestBox.style.display = "none";
+      }
+    });
+
+    document.addEventListener("click", (e) => {
+      if (
+        e.target !== searchInput &&
+        e.target !== suggestBox &&
+        e.target !== searchCategory
+      ) {
+        suggestBox.style.display = "none";
+      }
+    });
+  }
 });

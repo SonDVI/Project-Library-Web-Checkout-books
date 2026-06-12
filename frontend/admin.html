@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Portal | HUST LBC</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Outfit:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet" />
+
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="stylesheet" href="assets/css/admin.css?v=101" />
+  </head>
+  <body>
+    <nav>
+      <div class="container">
+        <a href="index.html" class="logo metallic-gold"
+          >HUST LBC <span class="admin-badge">[ADMIN]</span></a
+        >
+        <ul class="nav-links">
+          <li><a href="dashboard.html">Về Dashboard</a></li>
+          <li class="user-nav-wrapper" style="display: flex">
+            <div class="user-info-box">
+              <span class="user-icon" style="color: #ff4757">👑</span>
+              <span id="user-display-name">Admin</span>
+            </div>
+            <button id="logout-btn" class="btn-logout">Thoát</button>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="admin-main">
+      <div class="ambient-glow-fintech"></div>
+
+      <div class="container">
+        <header class="admin-header fade-in-up">
+          <div>
+            <h1 class="dash-title">
+              Hệ Thống <span class="metallic-gold">Quản Trị</span>
+            </h1>
+            <p
+              style="
+                color: #888;
+                font-size: 0.9rem;
+                margin-top: 0.5rem;
+                letter-spacing: 1px;
+              ">
+              LIVE DATA MONITORING
+            </p>
+          </div>
+          <button class="btn btn-gold btn-glow" id="btn-add-book">
+            <span style="font-size: 1.2rem; margin-right: 5px">+</span> Thêm
+            Sách Mới
+          </button>
+        </header>
+
+        <div class="fintech-summary fade-in-up" style="animation-delay: 0.1s">
+          <div class="summary-card">
+            <div class="card-title">Tổng Sách Trong Kho</div>
+            <div class="card-value">1,248</div>
+            <div class="card-trend trend-up">▲ +12 so với tháng trước</div>
+          </div>
+          <div class="summary-card">
+            <div class="card-title">Đang Được Mượn</div>
+            <div class="card-value" style="color: #ffa502">342</div>
+            <div class="card-trend trend-up">▲ Hoạt động mượn tăng 5%</div>
+          </div>
+          <div class="summary-card card-alert">
+            <div class="card-title">Cảnh Báo Quá Hạn</div>
+            <div class="card-value" style="color: #ff4757" id="overdue-count">
+              0
+            </div>
+            <div class="card-trend trend-down">▼ Yêu cầu thu hồi ngay</div>
+          </div>
+        </div>
+
+        <div class="filter-bar fade-in-up" style="animation-delay: 0.2s">
+          <div class="filter-pills" id="book-filters">
+            <button class="pill-btn active" data-filter="all">
+              Tất Cả Giao Dịch
+            </button>
+            <button class="pill-btn" data-filter="available">
+              Trong Kho (Available)
+            </button>
+            <button class="pill-btn" data-filter="borrowed">
+              Đang Mượn (Active)
+            </button>
+            <button class="pill-btn" data-filter="overdue">
+              Quá Hạn (Overdue)
+            </button>
+          </div>
+          <div class="search-box">
+            <input
+              type="text"
+              id="admin-search"
+              placeholder="Nhập ID sách, tên người mượn..."
+              class="fintech-input" />
+          </div>
+        </div>
+
+        <div class="table-container fade-in-up" style="animation-delay: 0.3s">
+          <table class="fintech-table">
+            <thead>
+              <tr>
+                <th>Mã Sách</th>
+                <th>Tên Sách</th>
+                <th>Trạng Thái</th>
+                <th>Người Đang Mượn</th>
+                <th>Ngày Phải Trả</th>
+                <th>Thao Tác</th>
+              </tr>
+            </thead>
+            <tbody id="admin-book-list"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+
+    <div id="book-modal" class="modal-overlay">
+      <div class="modal-content scale-in">
+        <h2 class="metallic-gold">Khởi Tạo Dữ Liệu Sách</h2>
+        <p style="color: #888; margin-bottom: 2rem">
+          Đang chờ API endpoint từ C++ backend.
+        </p>
+        <button class="btn btn-outline" id="close-book-modal">
+          Đóng cửa sổ
+        </button>
+      </div>
+    </div>
+    <script src="assets/js/i18n.js"></script>
+
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/admin/admin.js"></script>
+  </body>
+</html>

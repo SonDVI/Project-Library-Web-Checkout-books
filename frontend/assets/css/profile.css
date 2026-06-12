@@ -1,0 +1,187 @@
+.profile-main {
+  background-color: #1a1a2e;
+  padding-top: 140px;
+  padding-bottom: 100px;
+  min-height: 100vh;
+  color: #fff;
+}
+.profile-grid {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 4rem;
+}
+
+/* =======================================
+   DIGITAL BLACK CARD DESIGN (VIP)
+   ======================================= */
+.luxury-card-wrapper {
+  perspective: 1000px;
+}
+.digital-black-card {
+  width: 100%;
+  height: 215px;
+  background: linear-gradient(135deg, #0d0d15 0%, #151522 50%, #050508 100%);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 16px;
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition:
+    transform 0.4s ease,
+    box-shadow 0.4s ease;
+}
+.digital-black-card:hover {
+  transform: rotateY(10deg) rotateX(5deg) translateY(-5px);
+  box-shadow: 0 30px 60px rgba(212, 175, 55, 0.15);
+  border-color: rgba(212, 175, 55, 0.6);
+}
+.card-glow {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.05) 0%,
+    transparent 60%
+  );
+  transform: rotate(30deg);
+  pointer-events: none;
+}
+.card-header-v {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.card-logo {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: #ffd700;
+  letter-spacing: 1px;
+}
+.card-type {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.4);
+  letter-spacing: 2px;
+  font-weight: 700;
+}
+
+.card-chip {
+  width: 40px;
+  height: 30px;
+  background: linear-gradient(135deg, #b8860b, #ffd700);
+  border-radius: 6px;
+  margin-top: 0.5rem;
+  opacity: 0.8;
+  position: relative;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+.card-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: #fff;
+  margin-bottom: 0.2rem;
+  text-transform: uppercase;
+}
+.card-meta {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+  font-family: "Fira Code", monospace;
+}
+
+/* Mockup mã vạch ở đằng sau thẻ */
+.card-barcode {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.4rem;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+.barcode-line {
+  width: 100%;
+  height: 12px;
+  background: repeating-linear-gradient(
+    90deg,
+    #fff,
+    #fff 2px,
+    transparent 2px,
+    transparent 6px
+  );
+  opacity: 0.4;
+}
+.barcode-text {
+  font-size: 0.6rem;
+  color: rgba(255, 255, 255, 0.3);
+  font-family: "Fira Code", monospace;
+  letter-spacing: 1px;
+}
+
+.sidebar-tip {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.4);
+  text-align: center;
+  margin-top: 1.5rem;
+  line-height: 1.4;
+}
+
+/* =======================================
+   LUXURY FORM
+   ======================================= */
+.profile-content {
+  background: rgba(255, 255, 255, 0.01);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 20px;
+  padding: 3rem;
+  backdrop-filter: blur(10px);
+}
+.luxury-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+.luxury-form label {
+  font-size: 0.85rem;
+  color: #8e9bb0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+.luxury-input {
+  width: 100%;
+  background: rgba(26, 26, 46, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 0.8rem 1.2rem;
+  border-radius: 8px;
+  color: #fff;
+  outline: none;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+.luxury-input:focus {
+  border-color: var(--color-gold);
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.15);
+  background: rgba(26, 26, 46, 0.9);
+}
+
+@media (max-width: 992px) {
+  .profile-grid {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+}
