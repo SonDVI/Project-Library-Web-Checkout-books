@@ -150,50 +150,5 @@ public:
         if (db) sqlite3_close(db);
         return success;
     }
-    // 1. HÀM XÓA SÁCH (SÁT THỦ)
-    bool deleteBook(int id) {
-        sqlite3* db = nullptr;
-        if (sqlite3_open(db_name.c_str(), &db) != SQLITE_OK) return false;
-        
-        sqlite3_stmt* stmt = nullptr;
-        const char* sql = "DELETE FROM borrowed_books WHERE id = ?;";
-        bool success = false;
-        
-        if (sqlite3_prepare_v2(db, sql, -1, &stmt, nullptr) == SQLITE_OK) {
-            sqlite3_bind_int(stmt, 1, id);
-            success = (sqlite3_step(stmt) == SQLITE_DONE);
-        }
-        if (stmt) sqlite3_finalize(stmt);
-        if (db) sqlite3_close(db);
-        return success;
-    }
-
-    // 2. HÀM CHỈNH SỬA SÁCH (BÁC SĨ)
-    bool updateBook(int id, std::string title, std::string author, std::string category, double price, std::string img, std::string auth_img, std::string sum, std::string status, std::string date) {
-        sqlite3* db = nullptr;
-        if (sqlite3_open(db_name.c_str(), &db) != SQLITE_OK) return false;
-        
-        sqlite3_stmt* stmt = nullptr;
-        // Cập nhật toàn bộ thông tin, bao gồm cả trạng thái và ngày trả
-        const char* sql = "UPDATE borrowed_books SET book_title = ?, author = ?, category = ?, borrow_price = ?, image_url = ?, author_image_url = ?, summary = ?, status = ?, borrow_date = ? WHERE id = ?;";
-        bool success = false;
-        
-        if (sqlite3_prepare_v2(db, sql, -1, &stmt, nullptr) == SQLITE_OK) {
-            sqlite3_bind_text(stmt, 1, title.c_str(), -1, SQLITE_TRANSIENT);
-            sqlite3_bind_text(stmt, 2, author.c_str(), -1, SQLITE_TRANSIENT);
-            sqlite3_bind_text(stmt, 3, category.c_str(), -1, SQLITE_TRANSIENT);
-            sqlite3_bind_double(stmt, 4, price);
-            sqlite3_bind_text(stmt, 5, img.c_str(), -1, SQLITE_TRANSIENT);
-            sqlite3_bind_text(stmt, 6, auth_img.c_str(), -1, SQLITE_TRANSIENT);
-            sqlite3_bind_text(stmt, 7, sum.c_str(), -1, SQLITE_TRANSIENT);
-            sqlite3_bind_text(stmt, 8, status.c_str(), -1, SQLITE_TRANSIENT);
-            sqlite3_bind_text(stmt, 9, date.c_str(), -1, SQLITE_TRANSIENT);
-            sqlite3_bind_int(stmt, 10, id);
-            
-            success = (sqlite3_step(stmt) == SQLITE_DONE);
-        }
-        if (stmt) sqlite3_finalize(stmt);
-        if (db) sqlite3_close(db);
-        return success;
-    }
+    
 };
