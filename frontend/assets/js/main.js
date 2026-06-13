@@ -2,6 +2,15 @@
 // GLOBAL LOGIC (Chạy trên mọi trang)
 // ==========================================================================
 document.addEventListener("DOMContentLoaded", () => {
+  const currentRole = localStorage.getItem("userRole");
+
+  // SỬA LỖI ĐỒNG BỘ ID: Đổi từ admin-nav-link thành nav-admin-link cho khớp HTML
+  const adminNavLink = document.getElementById("nav-admin-link");
+
+  // Nếu là Admin thì hiện nút Quản trị lên, không thì vẫn giữ nguyên trạng thái ẩn (display: none)
+  if (currentRole === "admin" && adminNavLink) {
+    adminNavLink.style.display = "block";
+  }
   // 1. Hiệu ứng cuộn hiện ra (Dùng chung cho Footer, Header, hoặc bất kỳ text nào)
   const revealElements = document.querySelectorAll(".reveal, .reveal-3d");
 

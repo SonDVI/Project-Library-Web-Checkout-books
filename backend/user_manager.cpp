@@ -5,21 +5,25 @@
 
 using namespace std;
 
-// Initializing Data
 UserManager::UserManager(const string& path) {
     dbPath = path;
     loadUsers();
 }
 
 void UserManager::loadUsers() {
+    users.clear(); // Xóa sạch bộ nhớ tạm trước khi nạp mới
     ifstream file(dbPath);
+    
     if(!file.is_open()) {
-        cout << "Loi: khong the mo file database " << dbPath << "\n";
-        return;
+        file.open("database/users.txt");
+        if (!file.is_open()) {
+            cout << "CẢNH BÁO: Khong tim thay file users.txt o bat cu dau!\n";
+            return;
+        }
     }
 
     string line;
-    getline(file, line); // Đọc dòng tiêu đề
+    getline(file, line); 
     while(getline(file, line)) {
         if(line.empty()) continue;
         stringstream ss(line);
@@ -31,29 +35,24 @@ void UserManager::loadUsers() {
         getline(ss, u.password, ',');
         getline(ss, u.role, ',');
 
-        users.push_back(u); // push vao vector quan li du lieu user
+        users.push_back(u); 
     }
-    file.close(); // Nhớ đóng file
-} 
+    file.close(); 
+}
 
-// Login 
-bool UserManager::authenticate(const string& email, const string& password, User& loggedInUser) { // Sửa lại tham số cho khớp file .h
+bool UserManager::authenticate(const string& email, const string& password, User& loggedInUser) {
     for(const User& u : users) {
-        if(u.email == email && u.password == password) { // Sửa lỗi gõ sai chữ pasword
+        if(u.email == email && u.password == password) {
             loggedInUser = u;
             return true;
         }
     }
-    return false; // Khong co Tai khoan khop
+    return false; 
 }
 
-// Registering
 bool UserManager::registerUser(const string& name, const string& email, const string& password) {
     for(const auto& u : users) {
-        if(u.email == email) {
-            cout << "Email Exists" << endl;
-            return false;
-        }
+        if(u.email == email) return false;
     }
     
     int newId = 1;
@@ -62,16 +61,50 @@ bool UserManager::registerUser(const string& name, const string& email, const st
     }
 
     User newUser = {to_string(newId), name, email, password, "student"};
-    users.push_back(newUser); // tao acc xong thi push vao users de luu tam
+    users.push_back(newUser); 
 
-    // luu thong tin vao o cung
     ofstream file(dbPath, ios::app);
     if(file.is_open()) {
-        file << endl << newUser.id << "," << newUser.name << "," << newUser.email << "," << newUser.password << "," << newUser.role;
+        file << "\n" << newUser.id << "," << newUser.name << "," << newUser.email << "," << newUser.password << "," << newUser.role;
         file.close();
-        cout << "Da Luu Ho So moi " << name << " vao database." << endl;
         return true;
     }
+    return false;
+}
+
+int UserManager::getTotalUsers() {
+    return users.size();
+}
+
+std::vector<User> UserManager::getAllUsers() {
+    return users;
+}
+
+// Hàm thực thi lệnh xóa tài khoản vật lý khỏi file .txt bảo toàn dòng đầu
+bool UserManager::deleteUser(const string& email) {
+    bool found = false;
+    for (auto it = users.begin(); it != users.end(); ++it) {
+        if (it->email == email) {
+            users.erase(it);
+            found = true;
+            break;
+        }
+    }
+    if (!found) return false;
+
+    ofstream file(dbPath, ios::trunc);
+    if (!file.is_open()) {
+        file.open("database/users.txt", ios::trunc);
+    }
     
-    return false; // Thêm return false để phòng trường hợp file không mở được
+    if (file.is_open()) {
+        file << "id,name,email,password,role\n";
+        for (size_t i = 0; i < users.size(); ++i) {
+            file << users[i].id << "," << users[i].name << "," << users[i].email << "," << users[i].password << "," << users[i].role;
+            if (i < users.size() - 1) file << "\n";
+        }
+        file.close();
+        return true;
+    }
+    return false;
 }

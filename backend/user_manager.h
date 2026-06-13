@@ -15,16 +15,18 @@ struct User{
 class UserManager {
     private :
     std::vector<User> users;
-    std::string dbPath; // database path
+    std::string dbPath; 
 
     void loadUsers();
 
-
     public :
     UserManager(const std::string& path);
-    //check if email and password is right
     bool authenticate(const std::string& email, const std::string& password, User& loggedInUser);
-    //registering user and go to
     bool registerUser(const std::string& name, const std::string& email, const std::string& password);
+    int getTotalUsers(); 
+    
+    
+    std::vector<User> getAllUsers();
+    bool deleteUser(const std::string& email);
 };
 #endif
