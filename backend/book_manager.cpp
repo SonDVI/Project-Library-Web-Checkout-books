@@ -24,6 +24,16 @@ struct DashboardStats {
     int total_overdue;
 };
 
+// 🌟 THÊM MỚI: Cấu trúc lưu trữ Đánh giá sách
+struct BookReview {
+    int id;
+    int book_id;
+    std::string user_name;
+    int rating;
+    std::string comment;
+    std::string created_at;
+};
+
 class AdminDatabaseManager {
 private:
     std::string db_name;
@@ -48,9 +58,20 @@ public:
             "borrower_email TEXT NOT NULL,"
             "borrow_date TEXT NOT NULL,"
             "status TEXT DEFAULT 'Active');";
-
         sqlite3_exec(db, table_borrow_sql, nullptr, nullptr, nullptr);
         
+        // 🌟 THÊM MỚI: Tạo bảng lưu trữ Đánh giá Vĩnh viễn
+        const char* table_reviews_sql = 
+            "CREATE TABLE IF NOT EXISTS book_reviews ("
+            "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+            "book_id INTEGER NOT NULL,"
+            "user_name TEXT NOT NULL,"
+            "rating INTEGER NOT NULL,"
+            "comment TEXT,"
+            "created_at TEXT DEFAULT CURRENT_DATE);";
+        sqlite3_exec(db, table_reviews_sql, nullptr, nullptr, nullptr);
+        
+        // (Mock dữ liệu mẫu giữ nguyên)
         sqlite3_stmt* stmt = nullptr;
         int count_borrow = 0;
         if (sqlite3_prepare_v2(db, "SELECT COUNT(*) FROM borrowed_books;", -1, &stmt, nullptr) == SQLITE_OK) {
@@ -69,29 +90,26 @@ public:
         return true;
     }
 
+    // (Các hàm getDashboardStats, getAllBorrowedBooks, addAvailableBook, deleteBook, updateBook giữ nguyên hoàn toàn)
     DashboardStats getDashboardStats() {
         DashboardStats stats = {0, 0, 0};
         sqlite3* db = nullptr;
         if (sqlite3_open(db_name.c_str(), &db) != SQLITE_OK) return stats;
-
         sqlite3_stmt* stmt = nullptr;
         if (sqlite3_prepare_v2(db, "SELECT COUNT(*) FROM borrowed_books;", -1, &stmt, nullptr) == SQLITE_OK) {
             if (sqlite3_step(stmt) == SQLITE_ROW) stats.total_titles = sqlite3_column_int(stmt, 0);
         }
         if (stmt) sqlite3_finalize(stmt);
-        
         stmt = nullptr;
         if (sqlite3_prepare_v2(db, "SELECT COUNT(*) FROM borrowed_books WHERE status != 'Available';", -1, &stmt, nullptr) == SQLITE_OK) {
             if (sqlite3_step(stmt) == SQLITE_ROW) stats.total_borrowed_transactions = sqlite3_column_int(stmt, 0);
         }
         if (stmt) sqlite3_finalize(stmt);
-
         stmt = nullptr;
         if (sqlite3_prepare_v2(db, "SELECT COUNT(*) FROM borrowed_books WHERE status = 'Overdue';", -1, &stmt, nullptr) == SQLITE_OK) {
             if (sqlite3_step(stmt) == SQLITE_ROW) stats.total_overdue = sqlite3_column_int(stmt, 0);
         }
         if (stmt) sqlite3_finalize(stmt);
-
         if (db) sqlite3_close(db);
         return stats;
     }
@@ -100,11 +118,8 @@ public:
         std::vector<BorrowedBook> list;
         sqlite3* db = nullptr;
         if (sqlite3_open(db_name.c_str(), &db) != SQLITE_OK) return list;
-
         sqlite3_stmt* stmt = nullptr;
         const char* sql = "SELECT id, book_title, author, category, borrow_price, image_url, author_image_url, summary, borrower_email, borrow_date, status FROM borrowed_books ORDER BY id DESC;";
-        
-        // KIỂM TRA LỖI: Chỉ lấy dữ liệu nếu câu lệnh đúng chuẩn cấu trúc bảng mới
         if (sqlite3_prepare_v2(db, sql, -1, &stmt, nullptr) == SQLITE_OK) {
             while (sqlite3_step(stmt) == SQLITE_ROW) {
                 BorrowedBook b;
@@ -130,10 +145,8 @@ public:
     bool addAvailableBook(std::string title, std::string author, std::string category, double price, std::string img, std::string auth_img, std::string sum) {
         sqlite3* db = nullptr;
         if (sqlite3_open(db_name.c_str(), &db) != SQLITE_OK) return false;
-        
         sqlite3_stmt* stmt = nullptr;
         const char* sql = "INSERT INTO borrowed_books (book_title, author, category, borrow_price, image_url, author_image_url, summary, borrower_email, borrow_date, status) VALUES (?, ?, ?, ?, ?, ?, ?, '—', '—', 'Available');";
-        
         bool success = false;
         if (sqlite3_prepare_v2(db, sql, -1, &stmt, nullptr) == SQLITE_OK) {
             sqlite3_bind_text(stmt, 1, title.c_str(), -1, SQLITE_TRANSIENT);
@@ -143,12 +156,120 @@ public:
             sqlite3_bind_text(stmt, 5, img.c_str(), -1, SQLITE_TRANSIENT);
             sqlite3_bind_text(stmt, 6, auth_img.c_str(), -1, SQLITE_TRANSIENT);
             sqlite3_bind_text(stmt, 7, sum.c_str(), -1, SQLITE_TRANSIENT);
-            
             success = (sqlite3_step(stmt) == SQLITE_DONE);
         }
         if (stmt) sqlite3_finalize(stmt);
         if (db) sqlite3_close(db);
         return success;
     }
-    
+
+    bool deleteBook(int id) {
+        sqlite3* db = nullptr;
+        if (sqlite3_open(db_name.c_str(), &db) != SQLITE_OK) return false;
+        sqlite3_stmt* stmt = nullptr;
+        const char* sql = "DELETE FROM borrowed_books WHERE id = ?;";
+        bool success = false;
+        if (sqlite3_prepare_v2(db, sql, -1, &stmt, nullptr) == SQLITE_OK) {
+            sqlite3_bind_int(stmt, 1, id);
+            success = (sqlite3_step(stmt) == SQLITE_DONE);
+        }
+        if (stmt) sqlite3_finalize(stmt);
+        if (db) sqlite3_close(db);
+        return success;
+    }
+
+    bool updateBook(int id, std::string title, std::string author, std::string category, double price, std::string img, std::string auth_img, std::string sum, std::string status, std::string date) {
+        sqlite3* db = nullptr;
+        if (sqlite3_open(db_name.c_str(), &db) != SQLITE_OK) return false;
+        sqlite3_stmt* stmt = nullptr;
+        const char* sql = "UPDATE borrowed_books SET book_title = ?, author = ?, category = ?, borrow_price = ?, image_url = ?, author_image_url = ?, summary = ?, status = ?, borrow_date = ? WHERE id = ?;";
+        bool success = false;
+        if (sqlite3_prepare_v2(db, sql, -1, &stmt, nullptr) == SQLITE_OK) {
+            sqlite3_bind_text(stmt, 1, title.c_str(), -1, SQLITE_TRANSIENT);
+            sqlite3_bind_text(stmt, 2, author.c_str(), -1, SQLITE_TRANSIENT);
+            sqlite3_bind_text(stmt, 3, category.c_str(), -1, SQLITE_TRANSIENT);
+            sqlite3_bind_double(stmt, 4, price);
+            sqlite3_bind_text(stmt, 5, img.c_str(), -1, SQLITE_TRANSIENT);
+            sqlite3_bind_text(stmt, 6, auth_img.c_str(), -1, SQLITE_TRANSIENT);
+            sqlite3_bind_text(stmt, 7, sum.c_str(), -1, SQLITE_TRANSIENT);
+            sqlite3_bind_text(stmt, 8, status.c_str(), -1, SQLITE_TRANSIENT);
+            sqlite3_bind_text(stmt, 9, date.c_str(), -1, SQLITE_TRANSIENT);
+            sqlite3_bind_int(stmt, 10, id);
+            success = (sqlite3_step(stmt) == SQLITE_DONE);
+        }
+        if (stmt) sqlite3_finalize(stmt);
+        if (db) sqlite3_close(db);
+        return success;
+    }
+
+    // ========================================================
+    // 🌟 THÊM MỚI: CÁC HÀM XỬ LÝ ĐÁNH GIÁ (REVIEWS)
+    // ========================================================
+    std::vector<BookReview> getReviews(int book_id) {
+        std::vector<BookReview> list;
+        sqlite3* db = nullptr;
+        if (sqlite3_open(db_name.c_str(), &db) != SQLITE_OK) return list;
+
+        sqlite3_stmt* stmt = nullptr;
+        const char* sql = "SELECT id, book_id, user_name, rating, comment, created_at FROM book_reviews WHERE book_id = ? ORDER BY id DESC;";
+        if (sqlite3_prepare_v2(db, sql, -1, &stmt, nullptr) == SQLITE_OK) {
+            sqlite3_bind_int(stmt, 1, book_id);
+            while (sqlite3_step(stmt) == SQLITE_ROW) {
+                BookReview r;
+                r.id = sqlite3_column_int(stmt, 0);
+                r.book_id = sqlite3_column_int(stmt, 1);
+                r.user_name = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 2));
+                r.rating = sqlite3_column_int(stmt, 3);
+                r.comment = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 4));
+                r.created_at = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 5));
+                list.push_back(r);
+            }
+        }
+        if (stmt) sqlite3_finalize(stmt);
+        if (db) sqlite3_close(db);
+        return list;
+    }
+
+    bool addReview(int book_id, std::string user_name, int rating, std::string comment) {
+        sqlite3* db = nullptr;
+        if (sqlite3_open(db_name.c_str(), &db) != SQLITE_OK) return false;
+
+        sqlite3_stmt* stmt = nullptr;
+        const char* sql = "INSERT INTO book_reviews (book_id, user_name, rating, comment) VALUES (?, ?, ?, ?);";
+        bool success = false;
+        if (sqlite3_prepare_v2(db, sql, -1, &stmt, nullptr) == SQLITE_OK) {
+            sqlite3_bind_int(stmt, 1, book_id);
+            sqlite3_bind_text(stmt, 2, user_name.c_str(), -1, SQLITE_TRANSIENT);
+            sqlite3_bind_int(stmt, 3, rating);
+            sqlite3_bind_text(stmt, 4, comment.c_str(), -1, SQLITE_TRANSIENT);
+            success = (sqlite3_step(stmt) == SQLITE_DONE);
+        }
+        if (stmt) sqlite3_finalize(stmt);
+        if (db) sqlite3_close(db);
+        return success;
+    }
+    // 🌟 HÀM XUẤT KHO SÁCH (CHECKOUT CHO NGƯỜI DÙNG MƯỢN)
+    bool checkoutBook(int id, std::string email, std::string due_date) {
+        sqlite3* db = nullptr;
+        if (sqlite3_open(db_name.c_str(), &db) != SQLITE_OK) return false;
+        
+        sqlite3_stmt* stmt = nullptr;
+        // Lệnh UPDATE: Chỉ cho phép mượn nếu sách đang ở trạng thái 'Available'
+        const char* sql = "UPDATE borrowed_books SET status = 'Active', borrower_email = ?, borrow_date = ? WHERE id = ? AND status = 'Available';";
+        bool success = false;
+        
+        if (sqlite3_prepare_v2(db, sql, -1, &stmt, nullptr) == SQLITE_OK) {
+            sqlite3_bind_text(stmt, 1, email.c_str(), -1, SQLITE_TRANSIENT);
+            sqlite3_bind_text(stmt, 2, due_date.c_str(), -1, SQLITE_TRANSIENT);
+            sqlite3_bind_int(stmt, 3, id);
+            
+            if (sqlite3_step(stmt) == SQLITE_DONE) {
+                // Kiểm tra xem có dòng nào thực sự bị thay đổi không (Tránh trùng đơn)
+                if (sqlite3_changes(db) > 0) success = true;
+            }
+        }
+        if (stmt) sqlite3_finalize(stmt);
+        if (db) sqlite3_close(db);
+        return success;
+    }
 };

@@ -1,8 +1,6 @@
 /**
  * setting.js - Logic riêng cho trang Cài đặt
- * - Dùng bộ từ điển + apply theme/lang chung từ window.I18N
- * - Cho phép xem trước (preview) trước khi nhấn Save
- * - Save: ghi localStorage, các trang khác sẽ tự áp dụng khi load
+ * - Đồng bộ với localStorage để main.js và i18n.js ở các trang khác đọc được
  */
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -12,58 +10,85 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnSave = document.querySelector(".setting-submit-bar .btn-gold");
   const btnCancel = document.querySelector(".setting-submit-bar .btn-outline");
 
-  // 1. Khởi tạo trạng thái từ localStorage (window.I18N đã apply sẵn)
-  const savedTheme = window.I18N.getTheme();
-  const savedLang = window.I18N.getLang();
+  // 1. Khởi tạo trạng thái từ localStorage
+  const savedTheme = window.I18N
+    ? window.I18N.getTheme()
+    : localStorage.getItem("app-theme") || "dark";
+  const savedLang = window.I18N
+    ? window.I18N.getLang()
+    : localStorage.getItem("app-lang") || "vi";
 
   if (themeToggle) themeToggle.checked = savedTheme === "light";
   if (selectLanguage) selectLanguage.value = savedLang;
 
-  // Cập nhật trạng thái theme label
+  // Cập nhật text trạng thái theme (Dịch theo ngôn ngữ)
   function updateThemeStatus() {
     if (!themeStatus) return;
     const isLight = themeToggle && themeToggle.checked;
     const lang = selectLanguage ? selectLanguage.value : "vi";
     const key = isLight ? "themeStatusLight" : "themeStatusDark";
-    // Lấy text đã được dịch từ dictionary
-    const data = window.I18N.dictionary[lang];
-    if (data && data[key]) themeStatus.textContent = data[key];
+
+    if (window.I18N && window.I18N.dictionary) {
+      const data = window.I18N.dictionary[lang];
+      if (data && data[key]) themeStatus.textContent = data[key];
+    } else {
+      themeStatus.textContent = isLight
+        ? "Chế độ sáng"
+        : "Chế độ tối (Mặc định)";
+    }
   }
   updateThemeStatus();
 
-  // 2. Sự kiện PREVIEW (chỉ thay đổi giao diện, CHƯA lưu localStorage)
+  // 2. Sự kiện PREVIEW (chỉ thay đổi giao diện tạm thời)
   themeToggle?.addEventListener("change", () => {
     const newTheme = themeToggle.checked ? "light" : "dark";
-    window.I18N.preview(newTheme, selectLanguage ? selectLanguage.value : null);
+    if (window.I18N)
+      window.I18N.preview(
+        newTheme,
+        selectLanguage ? selectLanguage.value : null,
+      );
     updateThemeStatus();
   });
 
   selectLanguage?.addEventListener("change", () => {
-    window.I18N.preview(null, selectLanguage.value);
+    if (window.I18N) window.I18N.preview(null, selectLanguage.value);
     updateThemeStatus();
   });
 
-  // 3. NÚT SAVE — ghi vào localStorage để mọi trang áp dụng từ lần sau
+  // 3. NÚT SAVE — Đồng bộ toàn hệ thống
   btnSave?.addEventListener("click", () => {
     const newTheme = themeToggle.checked ? "light" : "dark";
     const newLang = selectLanguage.value;
 
+    // Ghi vĩnh viễn vào bộ nhớ trình duyệt
     localStorage.setItem("app-theme", newTheme);
     localStorage.setItem("app-lang", newLang);
 
-    const msg =
-      (window.I18N.dictionary[newLang] &&
-        window.I18N.dictionary[newLang].saveSuccess) ||
-      "Settings saved successfully!";
+    // Lấy câu thông báo chuẩn xác
+    let msg = "✅ Cài đặt đã được lưu! Hệ thống đang đồng bộ...";
+    if (
+      window.I18N &&
+      window.I18N.dictionary &&
+      window.I18N.dictionary[newLang]
+    ) {
+      msg = window.I18N.dictionary[newLang].saveSuccess || msg;
+    }
+
     alert(msg);
+
+    // 🌟 ĐIỂM CHỐT UX: Đưa người dùng về Dashboard ngay lập tức để nhìn thấy thành quả đồng bộ
+    window.location.href = "dashboard.html";
   });
 
-  // 4. NÚT CANCEL — khôi phục theme + lang về giá trị đã lưu
+  // 4. NÚT CANCEL — Hủy thay đổi, khôi phục như cũ
   btnCancel?.addEventListener("click", (e) => {
     e.preventDefault();
     themeToggle.checked = savedTheme === "light";
     selectLanguage.value = savedLang;
-    window.I18N.preview(savedTheme, savedLang);
+
+    if (window.I18N) window.I18N.preview(savedTheme, savedLang);
     updateThemeStatus();
+
+    window.location.href = "dashboard.html";
   });
 });

@@ -13,21 +13,25 @@
 
     <link rel="stylesheet" href="assets/css/style.css" />
     <link rel="stylesheet" href="assets/css/index.css" />
-    <link rel="stylesheet" href="assets/css/catalog.css?v=99" />
+    <link rel="stylesheet" href="assets/css/catalog.css?v=100" />
   </head>
   <body>
     <nav>
       <div class="container">
         <a href="index.html" class="logo metallic-gold">HUST LBC</a>
         <ul class="nav-links">
-                   <li><a href="catalog.html" data-i18n="navCatalog">Catalog</a></li>
           <li>
-            <a href="dashboard.html" class="active" data-i18n="navDashboard"
-              >Dashboard</a
+            <a href="catalog.html" class="active" data-i18n="navCatalog"
+              >Catalog</a
             >
           </li>
-          <li id="nav-admin-link" style="display: none;">
-            <a href="admin.html" style="color: #ff4757; font-weight: 600;">👑 Quản Trị</a>
+          <li>
+            <a href="dashboard.html" data-i18n="navDashboard">Dashboard</a>
+          </li>
+          <li id="nav-admin-link" style="display: none">
+            <a href="admin.html" style="color: #ff4757; font-weight: 600"
+              >👑 Quản Trị</a
+            >
           </li>
           <li><a href="profile.html" data-i18n="navProfile">Profile</a></li>
           <li><a href="setting.html" data-i18n="navSetting">Setting</a></li>
@@ -35,7 +39,7 @@
           <li id="nav-login-wrapper">
             <a href="login.html" data-i18n="navLogin">Login</a>
           </li>
-                    <li
+          <li
             class="user-nav-wrapper"
             id="nav-user-profile"
             style="display: none">
@@ -47,10 +51,11 @@
               Đăng xuất
             </button>
           </li>
+        </ul>
+      </div>
     </nav>
-
     <main>
-      <section class="page-header">
+      <section class="page-header fade-in-up" style="animation-delay: 0.1s">
         <div class="container">
           <h1 class="page-title" data-i18n-html="pageTitleCatalog">
             Danh Mục <span class="metallic-gold">Sách</span>
@@ -59,7 +64,9 @@
             Khám phá bộ sưu tập sách phong phú có sẵn để mượn
           </p>
 
-          <div class="search-engine-wrapper">
+          <div
+            class="search-engine-wrapper fade-in-up"
+            style="animation-delay: 0.2s">
             <select id="search-category" class="search-select">
               <option value="all" data-i18n="filterAllCategories">
                 Tất cả
@@ -83,9 +90,11 @@
 
       <section class="books-catalog">
         <div class="container catalog-layout">
-          <aside class="catalog-sidebar">
+          <aside
+            class="catalog-sidebar fade-in-up"
+            style="animation-delay: 0.3s">
             <div class="filter-group">
-              <h3 class="filter-title">Sắp Xếp</h3>
+              <h3 class="filter-title" data-i18n="filterSortTitle">Sắp Xếp</h3>
               <select class="filter-select-box" id="sort-select">
                 <option data-i18n="sortNewest">Mới nhất</option>
                 <option data-i18n="sortOldest">Cũ nhất</option>
@@ -95,7 +104,9 @@
             </div>
 
             <div class="filter-group">
-              <h3 class="filter-title">Danh Mục</h3>
+              <h3 class="filter-title" data-i18n="filterCategoryTitle">
+                Danh Mục
+              </h3>
               <label class="custom-radio">
                 <span data-i18n="filterAllCategories">Tất Cả Thể Loại</span>
                 <input type="radio" name="cat" value="all" checked />
@@ -114,7 +125,9 @@
             </div>
 
             <div class="filter-group">
-              <h3 class="filter-title">Tình Trạng</h3>
+              <h3 class="filter-title" data-i18n="filterStatusTitle">
+                Tình Trạng
+              </h3>
               <label class="custom-check">
                 <span data-i18n="statusAvailable">Sẵn sàng mượn</span>
                 <input type="checkbox" id="filter-available" checked />
@@ -123,7 +136,9 @@
             </div>
           </aside>
 
-          <div class="catalog-content-area">
+          <div
+            class="catalog-content-area fade-in-up"
+            style="animation-delay: 0.4s">
             <div
               class="products-grid"
               id="books-render-area"
@@ -149,6 +164,6 @@
 
     <script src="assets/js/i18n.js"></script>
     <script src="assets/js/main.js"></script>
-    <script src="assets/js/catalog/catalog.js?v=99"></script>
+    <script src="assets/js/catalog/catalog.js?v=100"></script>
   </body>
 </html>

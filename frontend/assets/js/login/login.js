@@ -46,6 +46,8 @@ document.addEventListener("DOMContentLoaded", () => {
           localStorage.setItem("userRole", result.role);
 
           // Thành công thì chuyển thẳng sang trang chủ/dashboard
+          //mail
+          localStorage.setItem("userEmail", email);
           window.location.href = "dashboard.html";
         } else {
           // Sai mật khẩu thì báo lỗi bằng chữ đỏ từ C++

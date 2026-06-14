@@ -10,7 +10,7 @@
       href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap"
       rel="stylesheet" />
     <link rel="stylesheet" href="assets/css/style.css" />
-    <link rel="stylesheet" href="assets/css/profile.css?v=2" />
+    <link rel="stylesheet" href="assets/css/profile.css?v=3" />
   </head>
   <body>
     <nav>
@@ -19,18 +19,19 @@
         <ul class="nav-links">
           <li><a href="catalog.html" data-i18n="navCatalog">Catalog</a></li>
           <li>
-            <a href="dashboard.html" class="active" data-i18n="navDashboard"
-              >Dashboard</a
-            >
+            <a href="dashboard.html" data-i18n="navDashboard">Dashboard</a>
           </li>
           <li id="nav-admin-link" style="display: none">
             <a href="admin.html" style="color: #ff4757; font-weight: 600"
               >👑 Quản Trị</a
             >
           </li>
-          <li><a href="profile.html" data-i18n="navProfile">Profile</a></li>
+          <li>
+            <a href="profile.html" class="active" data-i18n="navProfile"
+              >Profile</a
+            >
+          </li>
           <li><a href="setting.html" data-i18n="navSetting">Setting</a></li>
-
           <li id="nav-login-wrapper">
             <a href="login.html" data-i18n="navLogin">Login</a>
           </li>
@@ -52,20 +53,18 @@
 
     <main class="profile-main">
       <div class="container profile-grid">
-        <div class="profile-sidebar">
+        <div class="profile-sidebar fade-in-up" style="animation-delay: 0.1s">
           <div class="luxury-card-wrapper">
             <div class="digital-black-card">
               <div class="card-glow"></div>
               <div class="card-header-v">
                 <span class="card-logo">HUST LBC</span>
-                <span class="card-type">VIP MEMBER</span>
+                <span class="card-type" id="card-type">MEMBER</span>
               </div>
               <div class="card-chip"></div>
               <div class="card-holder-info">
-                <div class="card-name" id="card-holder-name">
-                  NGUYỄN BẢO SƠN
-                </div>
-                <div class="card-meta">MSSV: 20256789 | Viện ĐTVT</div>
+                <div class="card-name" id="card-holder-name">ĐANG TẢI...</div>
+                <div class="card-meta">MSSV: 2025XXXX | Viện ĐTVT</div>
               </div>
               <div class="card-barcode">
                 <div class="barcode-line"></div>
@@ -73,12 +72,33 @@
               </div>
             </div>
           </div>
-          <p class="sidebar-tip">
-            ✨ Thẻ điện tử tự động kích hoạt dựa trên mã sinh viên đăng nhập.
+
+          <div
+            class="vip-progress-container fade-in-up"
+            style="animation-delay: 0.2s">
+            <div class="vip-header">
+              <span class="vip-title"
+                >Hạng:
+                <strong id="tier-name" class="metallic-gold"
+                  >STUDENT</strong
+                ></span
+              >
+              <span class="vip-count" id="borrow-count-text">0 / 100</span>
+            </div>
+            <div class="progress-bar-bg">
+              <div class="progress-bar-fill" id="vip-progress-fill"></div>
+            </div>
+            <p class="vip-perk" id="vip-perk-text">
+              Đang tải dữ liệu tiến trình...
+            </p>
+          </div>
+
+          <p class="sidebar-tip fade-in-up" style="animation-delay: 0.3s">
+            ✨ Thẻ điện tử tự động kích hoạt và đồng bộ với hệ thống.
           </p>
         </div>
 
-        <div class="profile-content">
+        <div class="profile-content fade-in-up" style="animation-delay: 0.2s">
           <h2 class="section-title">
             Hồ Sơ <span class="metallic-gold">Cá Nhân</span>
           </h2>
@@ -90,69 +110,318 @@
                 <input
                   type="text"
                   id="input-fullname"
-                  value="Nguyễn Bảo Sơn"
-                  class="luxury-input" />
+                  class="luxury-input"
+                  placeholder="Đang tải..." />
               </div>
               <div class="form-group">
-                <label>Mã Số Sinh Viên</label>
+                <label>Email Tài Khoản</label>
                 <input
-                  type="text"
-                  value="20256789"
+                  type="email"
+                  id="input-email"
                   class="luxury-input"
                   disabled
-                  style="opacity: 0.5; cursor: not-allowed" />
+                  style="opacity: 0.5; cursor: not-allowed"
+                  placeholder="Đang tải..." />
               </div>
             </div>
+
             <div class="form-group">
-              <label>Chuyên Ngành / Lớp</label>
-              <input
-                type="text"
-                value="Truyền thông số & Kỹ thuật đa phương tiện (ET-E16)"
+              <label>Chuyên Ngành / Lớp Sinh Hoạt</label>
+              <select
+                id="input-classname"
                 class="luxury-input"
-                disabled
-                style="opacity: 0.5" />
+                style="
+                  appearance: auto;
+                  background-color: rgba(26, 26, 46, 0.9);
+                  cursor: pointer;
+                ">
+                <option value="Chưa cập nhật">
+                  -- Chọn Chuyên Ngành của cậu --
+                </option>
+
+                <optgroup label="1. Công nghệ thông tin & Điện tử viễn thông">
+                  <option value="IT1: Khoa học Máy tính">
+                    IT1: Khoa học Máy tính
+                  </option>
+                  <option value="IT2: Kỹ thuật Máy tính">
+                    IT2: Kỹ thuật Máy tính
+                  </option>
+                  <option value="IT-E6: Công nghệ thông tin (Global ICT)">
+                    IT-E6: Công nghệ thông tin (Global ICT)
+                  </option>
+                  <option value="IT-E7: An toàn không gian số (Cyber Security)">
+                    IT-E7: An toàn không gian số (Cyber Security)
+                  </option>
+                  <option value="IT-E10: Khoa học Dữ liệu và Trí tuệ Nhân tạo">
+                    IT-E10: Khoa học Dữ liệu và Trí tuệ Nhân tạo
+                  </option>
+                  <option value="IT-E15: An toàn không gian số (CT tiên tiến)">
+                    IT-E15: An toàn không gian số (CT tiên tiến)
+                  </option>
+                  <option value="IT-EP: Công nghệ thông tin (Việt - Pháp)">
+                    IT-EP: Công nghệ thông tin (Việt - Pháp)
+                  </option>
+                  <option value="ET1: Kỹ thuật Điện tử - Viễn thông">
+                    ET1: Kỹ thuật Điện tử - Viễn thông
+                  </option>
+                  <option value="ET2: Kỹ thuật Y sinh">
+                    ET2: Kỹ thuật Y sinh
+                  </option>
+                  <option value="ET-E4: Hệ thống nhúng thông minh và IoT">
+                    ET-E4: Hệ thống nhúng thông minh và IoT
+                  </option>
+                  <option value="ET-E9: Kỹ thuật ĐTVT (CT tiên tiến)">
+                    ET-E9: Kỹ thuật ĐTVT (CT tiên tiến)
+                  </option>
+                  <option
+                    value="ET-E16: Kỹ thuật đa phương tiện (CT tiên tiến)">
+                    ET-E16: Kỹ thuật đa phương tiện (CT tiên tiến)
+                  </option>
+                  <option value="ET-LUH: ĐTVT liên kết Leibniz Hannover">
+                    ET-LUH: ĐTVT liên kết Leibniz Hannover
+                  </option>
+                </optgroup>
+
+                <optgroup label="2. Cơ khí, Cơ điện tử & Hàng không">
+                  <option value="ME1: Kỹ thuật Cơ khí">
+                    ME1: Kỹ thuật Cơ khí
+                  </option>
+                  <option value="ME2: Kỹ thuật Cơ điện tử">
+                    ME2: Kỹ thuật Cơ điện tử
+                  </option>
+                  <option value="ME-E1: Kỹ thuật Cơ điện tử (CT tiên tiến)">
+                    ME-E1: Kỹ thuật Cơ điện tử (CT tiên tiến)
+                  </option>
+                  <option value="TE1: Kỹ thuật Ô tô">TE1: Kỹ thuật Ô tô</option>
+                  <option value="TE2: Kỹ thuật Hàng không">
+                    TE2: Kỹ thuật Hàng không
+                  </option>
+                  <option value="TE-E2: Kỹ thuật Ô tô (CT tiên tiến)">
+                    TE-E2: Kỹ thuật Ô tô (CT tiên tiến)
+                  </option>
+                  <option value="MS1: Kỹ thuật Cơ khí động lực">
+                    MS1: Kỹ thuật Cơ khí động lực
+                  </option>
+                  <option value="MS2: Kỹ thuật Hệ thống công nghiệp">
+                    MS2: Kỹ thuật Hệ thống công nghiệp
+                  </option>
+                  <option value="ME-GU: Cơ khí - Chế tạo máy (Griffith)">
+                    ME-GU: Cơ khí - Chế tạo máy (Griffith)
+                  </option>
+                  <option value="ME-LUH: Cơ điện tử (Leibniz Hannover)">
+                    ME-LUH: Cơ điện tử (Leibniz Hannover)
+                  </option>
+                </optgroup>
+
+                <optgroup label="3. Điện, Tự động hóa & Năng lượng">
+                  <option value="EE1: Kỹ thuật Điện">EE1: Kỹ thuật Điện</option>
+                  <option value="EE2: Kỹ thuật Điều khiển và Tự động hóa">
+                    EE2: Kỹ thuật Điều khiển và Tự động hóa
+                  </option>
+                  <option value="EE-E8: Hệ thống điện và Năng lượng tái tạo">
+                    EE-E8: Hệ thống điện và Năng lượng tái tạo
+                  </option>
+                  <option
+                    value="EE-EP: Hệ thống điện và Tự động hóa (Việt - Pháp)">
+                    EE-EP: Hệ thống điện và Tự động hóa (Việt - Pháp)
+                  </option>
+                  <option
+                    value="EE-E18: Hệ thống điện và năng lượng tái tạo (CT tiên tiến)">
+                    EE-E18: Hệ thống điện và năng lượng tái tạo (CT tiên tiến)
+                  </option>
+                  <option value="HE1: Kỹ thuật Nhiệt">
+                    HE1: Kỹ thuật Nhiệt
+                  </option>
+                </optgroup>
+
+                <optgroup label="4. Hóa học, Sinh học, Thực phẩm & Môi trường">
+                  <option value="BF1: Kỹ thuật Sinh học">
+                    BF1: Kỹ thuật Sinh học
+                  </option>
+                  <option value="BF2: Kỹ thuật Thực phẩm">
+                    BF2: Kỹ thuật Thực phẩm
+                  </option>
+                  <option value="BF-E12: Kỹ thuật thực phẩm (CT tiên tiến)">
+                    BF-E12: Kỹ thuật thực phẩm (CT tiên tiến)
+                  </option>
+                  <option value="BF-E19: Kỹ thuật sinh học (CT tiên tiến)">
+                    BF-E19: Kỹ thuật sinh học (CT tiên tiến)
+                  </option>
+                  <option value="CH1: Kỹ thuật Hóa học">
+                    CH1: Kỹ thuật Hóa học
+                  </option>
+                  <option value="CH2: Hóa học">CH2: Hóa học</option>
+                  <option value="CH-E11: Kỹ thuật Hóa dược (CT tiên tiến)">
+                    CH-E11: Kỹ thuật Hóa dược (CT tiên tiến)
+                  </option>
+                  <option value="EV1: Kỹ thuật Môi trường">
+                    EV1: Kỹ thuật Môi trường
+                  </option>
+                  <option value="EV2: Quản lý Tài nguyên và Môi trường">
+                    EV2: Quản lý Tài nguyên và Môi trường
+                  </option>
+                </optgroup>
+
+                <optgroup label="5. Vật liệu, Toán tin & Vật lý kỹ thuật">
+                  <option value="MS3: Kỹ thuật Vật liệu">
+                    MS3: Kỹ thuật Vật liệu
+                  </option>
+                  <option
+                    value="MS-E14: Khoa học và Kỹ thuật Vật liệu (CT tiên tiến)">
+                    MS-E14: Khoa học và Kỹ thuật Vật liệu (CT tiên tiến)
+                  </option>
+                  <option value="MS5: Kỹ thuật In">MS5: Kỹ thuật In</option>
+                  <option value="MI1: Toán tin">MI1: Toán tin</option>
+                  <option value="MI2: Hệ thống thông tin quản lý">
+                    MI2: Hệ thống thông tin quản lý
+                  </option>
+                  <option value="PH1: Vật lý Kỹ thuật">
+                    PH1: Vật lý Kỹ thuật
+                  </option>
+                  <option value="PH2: Kỹ thuật Hạt nhân">
+                    PH2: Kỹ thuật Hạt nhân
+                  </option>
+                </optgroup>
+
+                <optgroup label="6. Kinh tế, Quản lý & Ngôn ngữ">
+                  <option value="EM1: Quản trị Kinh doanh">
+                    EM1: Quản trị Kinh doanh
+                  </option>
+                  <option value="EM2: Kế toán">EM2: Kế toán</option>
+                  <option value="EM3: Tài chính - Ngân hàng">
+                    EM3: Tài chính - Ngân hàng
+                  </option>
+                  <option value="EM4: Phân tích Kinh doanh">
+                    EM4: Phân tích Kinh doanh
+                  </option>
+                  <option value="EM5: Logistics và Quản lý chuỗi cung ứng">
+                    EM5: Logistics và Quản lý chuỗi cung ứng
+                  </option>
+                  <option value="EM-E13: Quản trị Kinh doanh (CT tiên tiến)">
+                    EM-E13: Quản trị Kinh doanh (CT tiên tiến)
+                  </option>
+                  <option
+                    value="EM-VUW: Quản trị Kinh doanh (Victoria Wellington)">
+                    EM-VUW: Quản trị Kinh doanh (Victoria Wellington)
+                  </option>
+                  <option value="FL1: Ngôn ngữ Anh (Kỹ thuật - Công nghệ)">
+                    FL1: Ngôn ngữ Anh (Kỹ thuật - Công nghệ)
+                  </option>
+                  <option value="FL2: Ngôn ngữ Anh (Kinh tế - Công nghệ)">
+                    FL2: Ngôn ngữ Anh (Kinh tế - Công nghệ)
+                  </option>
+                </optgroup>
+
+                <optgroup label="7. Giáo dục & Công nghệ dệt may">
+                  <option value="ED2: Công nghệ Giáo dục">
+                    ED2: Công nghệ Giáo dục
+                  </option>
+                  <option value="ED3: Quản lý Giáo dục">
+                    ED3: Quản lý Giáo dục
+                  </option>
+                  <option value="TX1: Công nghệ Dệt, May">
+                    TX1: Công nghệ Dệt, May
+                  </option>
+                </optgroup>
+              </select>
             </div>
 
             <h2 class="section-title" style="margin-top: 3rem">
               Bảo Mật <span class="metallic-gold">Tài Khoản</span>
             </h2>
-            <div class="form-group">
-              <label>Mật khẩu hiện tại</label>
-              <input
-                type="password"
-                placeholder="••••••••"
-                class="luxury-input" />
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label>Mật khẩu mới</label>
+
+            <div
+              class="form-row"
+              style="
+                grid-template-columns: repeat(3, 1fr);
+                align-items: flex-end;
+                gap: 1.5rem;
+              ">
+              <div class="form-group" style="margin-bottom: 0">
+                <label style="line-height: 1.4">Mật khẩu hiện tại</label>
                 <input
                   type="password"
+                  id="input-current-pass"
+                  placeholder="••••••••"
+                  class="luxury-input" />
+              </div>
+
+              <div class="form-group" style="margin-bottom: 0">
+                <label style="line-height: 1.4">
+                  Mật khẩu mới<br />
+                  <span
+                    style="
+                      font-size: 0.7rem;
+                      color: #6c7a8f;
+                      text-transform: none;
+                      letter-spacing: 0;
+                    "
+                    >(Bỏ trống nếu không đổi)</span
+                  >
+                </label>
+                <input
+                  type="password"
+                  id="input-new-pass"
                   placeholder="Nhập mật khẩu mới"
                   class="luxury-input" />
               </div>
-              <div class="form-group">
-                <label>Xác nhận mật khẩu</label>
+
+              <div class="form-group" style="margin-bottom: 0">
+                <label style="line-height: 1.4">Xác nhận mật khẩu</label>
                 <input
                   type="password"
-                  placeholder="Xác nhận mật khẩu"
+                  id="input-confirm-pass"
+                  placeholder="Xác nhận lại"
                   class="luxury-input" />
               </div>
             </div>
 
             <button
               type="submit"
+              id="btn-submit-profile"
               class="btn btn-gold btn-large"
               style="margin-top: 1.5rem">
-              Cập Nhật Hồ Sơ
+              Lưu & Đồng Bộ Dữ Liệu
             </button>
           </form>
         </div>
       </div>
-    </main>
-    <script src="assets/js/i18n.js"></script>
+      <div
+        class="container user-library-section fade-in-up"
+        style="animation-delay: 0.4s; margin-top: 4rem">
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 2.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 1rem;
+          ">
+          <div>
+            <h2 class="section-title" style="margin-bottom: 0.5rem">
+              Tủ Sách <span class="metallic-gold">Cá Nhân</span>
+            </h2>
+            <p style="color: #8e9bb0; font-size: 0.95rem">
+              Quản lý các ấn phẩm cậu đang mượn và theo dõi lịch trình trả sách.
+            </p>
+          </div>
+          <a
+            href="catalog.html"
+            class="btn btn-outline"
+            style="font-size: 0.85rem; padding: 0.6rem 1.2rem"
+            >+ Mượn thêm sách</a
+          >
+        </div>
 
+        <div class="borrowed-grid" id="my-borrowed-books">
+          <div class="empty-library">Đang đồng bộ dữ liệu với máy chủ...</div>
+        </div>
+      </div>
+    </main>
+
+    <script src="assets/js/i18n.js"></script>
     <script src="assets/js/main.js"></script>
-    <script src="assets/js/profile/profile.js"></script>
+    <script src="assets/js/profile/profile.js?v=3"></script>
   </body>
 </html>

@@ -10,6 +10,7 @@ struct User{
     std::string email;
     std::string password;
     std::string role;
+    std::string classname;
 };
 
 class UserManager {
@@ -28,5 +29,7 @@ class UserManager {
     
     std::vector<User> getAllUsers();
     bool deleteUser(const std::string& email);
+    bool updateUser(const std::string& email, const std::string& newName, const std::string& newPass, const std::string& newClassname);
+
 };
 #endif

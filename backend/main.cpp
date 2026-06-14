@@ -138,6 +138,7 @@ int main() {
             node["email"] = u.email;
             node["password"] = u.password;
             node["role"] = u.role;
+            node["classname"] = u.classname;
             
             int b_count = 0; int t_paid = 0; bool overdue_flag = false;
             json active_bks = json::array();
@@ -170,6 +171,80 @@ int main() {
             auto body = json::parse(req.body);
             if (userManager.deleteUser(body["email"])) res.set_content("{\"status\": \"success\"}", "application/json");
             else res.status = 404;
+        } catch (...) { res.status = 400; }
+    });
+    // ========================================================
+    // API CẬP NHẬT THÔNG TIN PROFILE (MỚI)
+    // ========================================================
+    svr.Put("/api/users/update", [&](const Request& req, Response& res) {
+        cors_middleware(req, res);
+        try {
+            auto body = json::parse(req.body);
+            string email = body["email"];
+            string name = body["name"];
+            string classname = body.value("classname", "Chưa cập nhật");
+            string password = body.value("password", "");
+
+            if (userManager.updateUser(email, name, password, classname)) {
+                res.set_content("{\"status\": \"success\"}", "application/json");
+            } else {
+                res.status = 500;
+                res.set_content("{\"error\": \"Loi ghi Database!\"}", "application/json");
+            }
+        } catch (...) { res.status = 400; }
+    });
+    // ========================================================
+    // 🌟 API ĐÁNH GIÁ SÁCH (REVIEWS)
+    // ========================================================
+    svr.Get(R"(/api/reviews/(\d+))", [&](const Request& req, Response& res) {
+        cors_middleware(req, res);
+        int book_id = stoi(req.matches[1]);
+        auto reviews = dbManager.getReviews(book_id);
+        json j_arr = json::array();
+        for (const auto& r : reviews) {
+            j_arr.push_back({
+                {"id", r.id},
+                {"user_name", r.user_name},
+                {"rating", r.rating},
+                {"comment", r.comment},
+                {"created_at", r.created_at}
+            });
+        }
+        res.set_content(j_arr.dump(), "application/json");
+    });
+
+    svr.Post("/api/reviews", [&](const Request& req, Response& res) {
+        cors_middleware(req, res);
+        try {
+            auto body = json::parse(req.body);
+            int book_id = body["book_id"];
+            string user_name = body["user_name"];
+            int rating = body["rating"];
+            string comment = body["comment"];
+
+            if (dbManager.addReview(book_id, user_name, rating, comment)) {
+                res.set_content("{\"status\": \"success\"}", "application/json");
+            } else res.status = 500;
+        } catch (...) { res.status = 400; }
+    });
+
+    // ========================================================
+    // 🌟 API NGƯỜI DÙNG XÁC NHẬN MƯỢN SÁCH (CHECKOUT)
+    // ========================================================
+    svr.Post("/api/checkout", [&](const Request& req, Response& res) {
+        cors_middleware(req, res);
+        try {
+            auto body = json::parse(req.body);
+            int book_id = body["book_id"];
+            string email = body["email"];
+            string due_date = body["due_date"]; // Lấy ngày trả do JS tính toán
+
+            if (dbManager.checkoutBook(book_id, email, due_date)) {
+                res.set_content("{\"status\": \"success\"}", "application/json");
+            } else {
+                res.status = 400; // Sách có thể đã bị ai đó nhanh tay mượn mất
+                res.set_content("{\"error\": \"Sach khong kha dung hoac da bi muon!\"}", "application/json");
+            }
         } catch (...) { res.status = 400; }
     });
 

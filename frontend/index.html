@@ -21,9 +21,7 @@
         <ul class="nav-links">
           <li><a href="catalog.html" data-i18n="navCatalog">Catalog</a></li>
           <li>
-            <a href="dashboard.html" class="active" data-i18n="navDashboard"
-              >Dashboard</a
-            >
+            <a href="dashboard.html" data-i18n="navDashboard">Dashboard</a>
           </li>
           <li id="nav-admin-link" style="display: none">
             <a href="admin.html" style="color: #ff4757; font-weight: 600"
@@ -81,7 +79,7 @@
                   <div class="card-image">
                     <img
                       src="https://images.nxbbachkhoa.vn/Picture/2023/3/20/image-20230320163952673.jpg"
-                      alt="Luxury gold watch on velvet" />
+                      alt="Featured Book" />
                   </div>
                   <div class="card-meta">
                     <h3
@@ -116,116 +114,9 @@
 
           <div class="carousel-container">
             <button class="carousel-nav prev" aria-label="Previous">❮</button>
-
             <div class="carousel-viewport">
-              <div class="carousel-track">
-                <div class="product-card">
-                  <div class="product-card-inner">
-                    <div class="product-image">
-                      <img
-                        src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=600&q=80"
-                        alt="Book Cover 1" />
-                    </div>
-                    <h3 class="product-title">The Spanish Bride</h3>
-                    <h2 class="product-title" data-i18n-prefix="byAuthor">
-                      By Author : Duy Nguyen
-                    </h2>
-                    <p
-                      class="product-price"
-                      data-i18n="statusAvailable"
-                      data-i18n-default="Available">
-                      Available
-                    </p>
-                    <button
-                      class="btn btn-gold btn-block card-action"
-                      data-i18n="btnBorrow">
-                      Borrow
-                    </button>
-                  </div>
-                </div>
-
-                <div class="product-card">
-                  <div class="product-card-inner">
-                    <div class="product-image">
-                      <img
-                        src="https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=600&q=80"
-                        alt="Book Cover 2" />
-                    </div>
-                    <h3 class="product-title">The Big Clock</h3>
-                    <h2 class="product-title">By Author : Duy</h2>
-                    <p class="product-price" data-i18n="statusBorrowed">
-                      Borrowed
-                    </p>
-                    <button
-                      class="btn btn-outline btn-block card-action"
-                      data-i18n="btnReserve">
-                      Reserve
-                    </button>
-                  </div>
-                </div>
-
-                <div class="product-card">
-                  <div class="product-card-inner">
-                    <div class="product-image">
-                      <img
-                        src="https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=400&q=80"
-                        alt="Book Cover 3" />
-                    </div>
-                    <h3 class="product-title">The Secret Garden</h3>
-                    <h2 class="product-title">By Author : Son Nguyen</h2>
-                    <p class="product-price" data-i18n="statusAvailable">
-                      Available
-                    </p>
-                    <button
-                      class="btn btn-gold btn-block card-action"
-                      data-i18n="btnBorrow">
-                      Borrow
-                    </button>
-                  </div>
-                </div>
-
-                <div class="product-card">
-                  <div class="product-card-inner">
-                    <div class="product-image">
-                      <img
-                        src="https://images.unsplash.com/photo-1512820790803-83ca734da794?w=600&q=80"
-                        alt="Book Cover 4" />
-                    </div>
-                    <h3 class="product-title">The Great Gatsby</h3>
-                    <h2 class="product-title">By Author : Son</h2>
-                    <p class="product-price" data-i18n="statusAvailable">
-                      Available
-                    </p>
-                    <button
-                      class="btn btn-gold btn-block card-action"
-                      data-i18n="btnBorrow">
-                      Borrow
-                    </button>
-                  </div>
-                </div>
-
-                <div class="product-card">
-                  <div class="product-card-inner">
-                    <div class="product-image">
-                      <img
-                        src="https://images.unsplash.com/photo-1532012197267-da84d127e765?w=600&q=80"
-                        alt="Book Cover 5" />
-                    </div>
-                    <h3 class="product-title">Huckleberry Finn</h3>
-                    <h2 class="product-title">By Author : Bao Nguyen</h2>
-                    <p class="product-price" data-i18n="statusAvailable">
-                      Available
-                    </p>
-                    <button
-                      class="btn btn-gold btn-block card-action"
-                      data-i18n="btnBorrow">
-                      Borrow
-                    </button>
-                  </div>
-                </div>
-              </div>
+              <div class="carousel-track" id="featured-books-track"></div>
             </div>
-
             <button class="carousel-nav next" aria-label="Next">❯</button>
           </div>
         </div>
@@ -245,66 +136,9 @@
 
           <div class="carousel-container">
             <button class="carousel-nav prev" aria-label="Previous">❮</button>
-
             <div class="carousel-viewport">
-              <div class="carousel-track">
-                <div class="product-card">
-                  <div class="product-card-inner">
-                    <div class="product-image">
-                      <img
-                        src="https://i.scdn.co/image/ab6761610000e5ebdd63bbbb794fe896da8b1cca"
-                        alt="Author Cover 1" />
-                    </div>
-                    <h3 class="product-title">John Doe</h3>
-                  </div>
-                </div>
-
-                <div class="product-card">
-                  <div class="product-card-inner">
-                    <div class="product-image">
-                      <img
-                        src="https://www.janesmithauthor.com/uploads/b/c5209bf0-3a89-11ef-9367-8d7cf36590d5/JS%20square%20small.jpg"
-                        alt="Author Cover 2" />
-                    </div>
-                    <h3 class="product-title">Jane Smith</h3>
-                  </div>
-                </div>
-
-                <div class="product-card">
-                  <div class="product-card-inner">
-                    <div class="product-image">
-                      <img
-                        src="https://www.heydaybooks.com/wp-content/uploads/2022/08/Bob_Johnson_credit_Dani_Padgett_500pix-web.jpg"
-                        alt="Author Cover 3" />
-                    </div>
-                    <h3 class="product-title">Robert Johnson</h3>
-                  </div>
-                </div>
-
-                <div class="product-card">
-                  <div class="product-card-inner">
-                    <div class="product-image">
-                      <img
-                        src="https://m.media-amazon.com/images/M/MV5BNzhkYTNkNTktN2M5OS00MjU5LWFkMWQtZGEwOWIzZjcyY2NiXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg"
-                        alt="Author Cover 4" />
-                    </div>
-                    <h3 class="product-title">F. Scott Fitzgerald</h3>
-                  </div>
-                </div>
-
-                <div class="product-card">
-                  <div class="product-card-inner">
-                    <div class="product-image">
-                      <img
-                        src="https://www.americanpoems.com/wp-content/uploads/2018/09/Emily-Dickinson.gif"
-                        alt="Author Cover 5" />
-                    </div>
-                    <h3 class="product-title">Emily Dickinson</h3>
-                  </div>
-                </div>
-              </div>
+              <div class="carousel-track" id="popular-authors-track"></div>
             </div>
-
             <button class="carousel-nav next" aria-label="Next">❯</button>
           </div>
         </div>
@@ -341,7 +175,6 @@
       </div>
     </footer>
 
-    <!-- ⚠️ i18n.js PHẢI ĐƯỢC NẠP TRƯỚC để apply theme + ngôn ngữ ngay khi trang load -->
     <script src="assets/js/i18n.js"></script>
     <script src="assets/js/index/index.js"></script>
     <script src="assets/js/main.js"></script>

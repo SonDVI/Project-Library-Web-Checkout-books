@@ -316,3 +316,46 @@
     box-shadow: 0 0 0 0 rgba(212, 175, 55, 0);
   }
 }
+/* ==========================================================================
+   🚨 LIGHT THEME PERFECTED FOR LOGIN PORTAL
+   ========================================================================== */
+body.light-theme .auth-main {
+  background-color: #f5f5f7 !important;
+}
+
+body.light-theme .auth-card-inner {
+  background: rgba(255, 255, 255, 0.7) !important;
+  border: 1px solid rgba(184, 134, 11, 0.15) !important;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05) !important;
+}
+
+body.light-theme .form-header h2,
+body.light-theme .form-group label {
+  color: #1d1d1f !important;
+}
+
+body.light-theme .form-header p,
+body.light-theme .password-requirements li {
+  color: #515154 !important;
+}
+
+body.light-theme .form-input {
+  background: #ffffff !important;
+  color: #1d1d1f !important;
+  border: 1px solid rgba(0, 0, 0, 0.15) !important;
+}
+
+body.light-theme .form-input::placeholder {
+  color: rgba(0, 0, 0, 0.4) !important;
+}
+
+body.light-theme .form-input:focus {
+  border-color: #b8860b !important;
+  background: #ffffff !important;
+  box-shadow: 0 0 10px rgba(184, 134, 11, 0.15) !important;
+}
+
+body.light-theme .auth-tabs {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: rgba(0, 0, 0, 0.06);
+}

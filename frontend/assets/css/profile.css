@@ -185,3 +185,241 @@
     gap: 3rem;
   }
 }
+/* =======================================
+   ANIMATIONS (HIỆU ỨNG XUẤT HIỆN)
+   ======================================= */
+.fade-in-up {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =======================================
+   VIP PROGRESS BAR (THANH TIẾN ĐỘ)
+   ======================================= */
+.vip-progress-container {
+  margin-top: 1.5rem;
+  background: rgba(26, 26, 46, 0.6);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: 12px;
+  padding: 1.2rem 1.5rem;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+}
+
+.vip-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.8rem;
+}
+
+.vip-title {
+  font-size: 0.85rem;
+  color: #8e9bb0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.vip-count {
+  font-family: "Fira Code", monospace;
+  font-size: 0.9rem;
+  color: #fff;
+  font-weight: 500;
+}
+
+.progress-bar-bg {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  width: 0%; /* Khởi tạo ở mức 0 để JS chạy animation */
+  background: linear-gradient(90deg, #b8860b, #ffd700);
+  border-radius: 10px;
+  transition: width 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 0 12px rgba(212, 175, 55, 0.6);
+}
+
+.vip-perk {
+  font-size: 0.8rem;
+  color: #cbd5e1;
+  text-align: center;
+  line-height: 1.5;
+}
+/* =======================================
+   TỦ SÁCH CÁ NHÂN (BORROWED BOOKS DASHBOARD)
+   ======================================= */
+.user-library-section {
+  background: rgba(26, 26, 46, 0.4);
+  border: 1px solid rgba(212, 175, 55, 0.15);
+  border-radius: 24px;
+  padding: 3rem;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+}
+
+.borrowed-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.8rem;
+}
+
+.borrowed-card {
+  background: linear-gradient(
+    145deg,
+    rgba(20, 20, 30, 0.8),
+    rgba(10, 10, 15, 0.9)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.borrowed-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(212, 175, 55, 0.4);
+  box-shadow: 0 15px 40px rgba(212, 175, 55, 0.1);
+}
+
+/* Thanh vạch màu đánh dấu trạng thái bên trái */
+.borrowed-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: #2ed573; /* Mặc định màu xanh an toàn */
+}
+.borrowed-card.overdue::before {
+  background: #ff4757; /* Quá hạn chuyển đỏ */
+}
+
+.bc-title {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  color: #fff;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.bc-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: #8e9bb0;
+  font-family: "Fira Code", monospace;
+  padding-top: 1rem;
+  border-top: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+.bc-status {
+  align-self: flex-start;
+  padding: 0.4rem 1rem;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.bc-status.active {
+  background: rgba(46, 213, 115, 0.1);
+  color: #2ed573;
+  border: 1px solid rgba(46, 213, 115, 0.3);
+}
+
+.bc-status.overdue {
+  background: rgba(255, 71, 87, 0.1);
+  color: #ff4757;
+  border: 1px solid rgba(255, 71, 87, 0.3);
+  animation: pulseBgRed 1.5s infinite;
+}
+
+.empty-library {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 4rem 2rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 16px;
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+/* ==========================================================================
+   🚨 BỘ ĐỒNG BỘ LIGHT THEME CHO TỦ SÁCH
+   ========================================================================== */
+body.light-theme .user-library-section {
+  background: rgba(255, 255, 255, 0.8);
+  border-color: rgba(0, 0, 0, 0.1);
+}
+body.light-theme .borrowed-card {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+}
+body.light-theme .bc-title {
+  color: #1d1d1f;
+}
+body.light-theme .empty-library {
+  background: rgba(255, 255, 255, 0.5);
+  border-color: rgba(0, 0, 0, 0.1);
+}
+body.light-theme .empty-library p {
+  color: #515154 !important;
+}
+/* ==========================================================================
+   🚨 LIGHT THEME PERFECTED FOR PROFILE (Đồng bộ kính sữa Alabaster mờ)
+   ========================================================================== */
+body.light-theme .profile-main {
+  background-color: #f5f5f7 !important;
+  color: #1d1d1f !important;
+}
+
+/* Biến form tối thành form mờ cao cấp nền trắng */
+body.light-theme .profile-content {
+  background: rgba(255, 255, 255, 0.65) !important;
+  border: 1px solid rgba(184, 134, 11, 0.15) !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04) !important;
+}
+
+body.light-theme .luxury-form label,
+body.light-theme .section-title {
+  color: #1d1d1f !important;
+}
+
+/* Tinh chỉnh hộp nhập liệu */
+body.light-theme .luxury-input {
+  background: #ffffff !important;
+  color: #1d1d1f !important;
+  border: 1px solid rgba(0, 0, 0, 0.15) !important;
+}
+
+body.light-theme .luxury-input:focus {
+  border-color: #b8860b !important;
+  background: #ffffff !important;
+  box-shadow: 0 0 15px rgba(184, 134, 11, 0.15) !important;
+}
+
+body.light-theme .sidebar-tip {
+  color: #515154 !important;
+}

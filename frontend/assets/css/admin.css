@@ -395,3 +395,130 @@
 .modal-overlay.active .scale-in {
   transform: scale(1);
 }
+/* ==========================================================================
+   🚨 BỘ ĐỒNG BỘ LIGHT THEME CHO ADMIN PORTAL (Alabaster Glass)
+   ========================================================================== */
+/* 1. Nền tổng thể và Quầng sáng */
+body.light-theme .admin-main {
+  background-color: #f5f5f7 !important;
+  background-image: none !important; /* Tắt dải gradient đen */
+  color: #1d1d1f !important;
+}
+
+body.light-theme .ambient-glow-fintech {
+  opacity: 0.3;
+  background: radial-gradient(
+    circle,
+    rgba(212, 175, 55, 0.15) 0%,
+    transparent 60%
+  );
+}
+
+body.light-theme .dash-title {
+  color: #1d1d1f !important;
+}
+
+/* 2. Thẻ Thông kê (Summary Cards) */
+body.light-theme .summary-card {
+  background: rgba(255, 255, 255, 0.65) !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03) !important;
+}
+
+body.light-theme .summary-card:hover {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-color: rgba(184, 134, 11, 0.3) !important;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.06) !important;
+}
+
+body.light-theme .card-title {
+  color: #6e6e73 !important;
+}
+
+body.light-theme .card-value {
+  color: #1d1d1f !important;
+}
+
+/* 3. Thanh tìm kiếm và Bộ lọc (Filters) */
+body.light-theme .pill-btn {
+  background: rgba(0, 0, 0, 0.04) !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+  color: #515154 !important;
+}
+
+body.light-theme .pill-btn:hover {
+  background: rgba(0, 0, 0, 0.08) !important;
+  color: #1d1d1f !important;
+}
+
+body.light-theme .pill-btn.active {
+  background: rgba(184, 134, 11, 0.15) !important;
+  color: #b8860b !important;
+  border-color: rgba(184, 134, 11, 0.4) !important;
+}
+
+body.light-theme .fintech-input {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.15) !important;
+  color: #1d1d1f !important;
+}
+
+body.light-theme .fintech-input:focus {
+  border-color: #b8860b !important;
+  box-shadow: 0 0 10px rgba(184, 134, 11, 0.1) !important;
+}
+
+/* 4. Bảng Dữ liệu (Fintech Table) */
+body.light-theme .table-container {
+  background: rgba(255, 255, 255, 0.7) !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.03) !important;
+}
+
+body.light-theme .fintech-table th {
+  background: rgba(0, 0, 0, 0.03) !important;
+  color: #6e6e73 !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+
+body.light-theme .fintech-table td {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04) !important;
+}
+
+body.light-theme .fintech-table tbody tr:hover {
+  background: rgba(0, 0, 0, 0.02) !important;
+}
+
+body.light-theme .book-id,
+body.light-theme .date-normal {
+  color: #6e6e73 !important;
+}
+
+body.light-theme .book-title {
+  color: #1d1d1f !important;
+}
+
+body.light-theme .book-borrower {
+  color: #515154 !important;
+}
+
+/* 5. Cửa sổ Modal (Thêm/Sửa sách & Xem User) */
+body.light-theme .modal-overlay {
+  background: rgba(255, 255, 255, 0.6) !important;
+}
+
+body.light-theme .modal-content {
+  background: #ffffff !important;
+  border: 1px solid rgba(184, 134, 11, 0.3) !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1) !important;
+}
+
+body.light-theme .modal-content h2,
+body.light-theme .modal-content p,
+body.light-theme .modal-content td {
+  color: #1d1d1f !important;
+}
+
+body.light-theme .modal-content th {
+  color: #6e6e73 !important;
+}
