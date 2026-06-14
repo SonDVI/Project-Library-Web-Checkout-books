@@ -51,8 +51,7 @@ Vì Frontend được xây dựng hoàn toàn bằng mã nguồn tĩnh tối ưu
 
 
 ### DataFlow
-  [Trình duyệt Người dùng] ---> (Bắn yêu cầu API Fetch) ---> [Server C++ Port 8080]
+  *[Trình duyệt Người dùng] ---> (Bắn yêu cầu API Fetch) ---> [Server C++ Port 8080]
            ^                                                         |
            |                                                         v
-    (Render UI/UX mượt mà) <--- (Trả kết quả JSON) <--- [Cơ sở dữ liệu SQLite]
-"""
+    (Render UI/UX mượt mà) <--- (Trả kết quả JSON) <--- [Cơ sở dữ liệu SQLite]*
