@@ -34,7 +34,12 @@ Dự án được tối ưu hóa toàn diện với sự đồng hành và hỗ 
 
 Hệ thống hoạt động theo mô hình Client-Server độc lập, giao tiếp thông qua giao thức HTTP RESTful API (link github:https://github.com/yhirose/cpp-httplib)
 
-### 1. Khởi động Backend (C++ Server & SQLite)
+### 1. Cài toàn bộ mã nguồn về IDE
+* **Dùng lệnh:**
+
+  git clone https://github.com/SonDVI/Project-Library-Web-Checkout-books
+
+### 2. Khởi động Backend (C++ Server & SQLite)
 Yêu cầu máy máy tính đã cài đặt trình biên dịch `g++` và thư viện SQLite3.
 * **Bước 1:** Di chuyển vào thư mục lưu trữ backend.
 * **Bước 2:** Biên dịch mã nguồn bộ não C++:
@@ -43,7 +48,9 @@ Yêu cầu máy máy tính đã cài đặt trình biên dịch `g++` và thư v
 * **Bước 3:** Mở Server local host trên máy tính cá nhân :
 * ./server
   khi thấy dòng chữ "HUST LBC Backend Server is running..." thì server đã chạy thành công.
-### 2. Khởi chạy Frontend (Giao diện Web)
+
+  
+### 3. Khởi chạy Frontend (Giao diện Web)
 Vì Frontend được xây dựng hoàn toàn bằng mã nguồn tĩnh tối ưu (Pure HTML/CSS/JS), việc khởi chạy cực kỳ đơn giản:
 
 * **Cách 1 (Chạy cục bộ):** Click đúp trực tiếp vào file index.html trên máy tính để mở bằng trình duyệt (Chrome, Edge, Safari).
