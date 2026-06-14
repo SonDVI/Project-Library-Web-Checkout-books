@@ -1,14 +1,13 @@
 # Project được làm bởi hai thành viên thuộc lớp TTS & Kỹ thuật Đa Phương Tiện - 01 
 ---
-## Nguyễn Bảo Sơn                         
-## MSSV : 2025146605                       
-
-## Nguyễn khánh Duy
-## MSSV : 202514569
+### Nguyễn Bảo Sơn                         
+### MSSV : 2025146605                       
+### Nguyễn khánh Duy
+### MSSV : 202514569
                                                                                                   
 ---
 
-readme_content = """# HUST LBC - Library Book Checkout System
+# HUST LBC - Library Book Checkout System
 
 Một hệ thống quản lý và mượn trả sách Thư viện số cao cấp (Premium Full-Stack Platform) dành riêng cho sinh viên Đại học Bách Khoa Hà Nội (HUST). Dự án kết hợp hài hòa giữa giao diện đồ họa hiện đại mang phong cách Fintech/OLED Luxury ở Frontend và hiệu năng xử lý dữ liệu mạnh mẽ của C++ ở Backend.
 
