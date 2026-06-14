@@ -1,133 +1,139 @@
 document.addEventListener("DOMContentLoaded", async () => {
   console.log("🔥 Hệ thống UI Trang Chi Tiết Sách & Review đã khởi động!");
 
+  // 1. KIỂM TRA ID SÁCH TỪ URL
   const urlParams = new URLSearchParams(window.location.search);
   const bookId = urlParams.get("id");
+
+  // 🌟 BẢO VỆ UX: Nếu user mở thẳng trang chi tiết mà không có ID sách, đá về Catalog ngay!
+  if (!bookId) {
+    alert(
+      "⚠️ Cậu chưa chọn cuốn sách nào cả! Đang chuyển hướng về Danh mục...",
+    );
+    window.location.href = "catalog.html";
+    return;
+  }
+
+  const currentBookId = parseInt(bookId);
   let currentBookData = null;
   let allBooksData = [];
 
   // =======================================================
-  // 1. TẢI DỮ LIỆU SÁCH CHÍNH & RENDER SÁCH GỢI Ý
+  // 2. TẢI DỮ LIỆU SÁCH CHÍNH & RENDER SÁCH GỢI Ý
   // =======================================================
-  if (bookId) {
-    try {
-      const res = await fetch("http://localhost:8080/api/admin/books");
-      if (res.ok) {
-        allBooksData = await res.json();
-        currentBookData = allBooksData.find((b) => b.raw_id == bookId);
+  try {
+    const res = await fetch("http://localhost:8080/api/admin/books");
+    if (res.ok) {
+      allBooksData = await res.json();
+      currentBookData = allBooksData.find((b) => b.raw_id === currentBookId);
 
-        if (currentBookData) {
-          // Bơm dữ liệu lên UI Chi Tiết
-          document.getElementById("detail-title").innerHTML =
-            currentBookData.title;
-          document.getElementById("detail-author").textContent =
-            currentBookData.author;
-          document.getElementById("detail-category").textContent =
-            currentBookData.category.toUpperCase();
-          document.getElementById("detail-desc").textContent =
-            currentBookData.summary ||
-            "Cuốn sách này chưa có nội dung tóm tắt chi tiết.";
+      if (currentBookData) {
+        // Bơm dữ liệu lên UI Chi Tiết
+        document.getElementById("detail-title").innerHTML =
+          currentBookData.title;
+        document.getElementById("detail-author").textContent =
+          currentBookData.author;
+        document.getElementById("detail-category").textContent =
+          currentBookData.category.toUpperCase();
+        document.getElementById("detail-desc").textContent =
+          currentBookData.summary ||
+          "Cuốn sách này chưa có nội dung tóm tắt chi tiết.";
 
-          const coverUrl =
-            currentBookData.image_url ||
-            "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=800&q=80";
-          document.getElementById("detail-img").src = coverUrl;
+        const coverUrl =
+          currentBookData.image_url ||
+          "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=800&q=80";
+        document.getElementById("detail-img").src = coverUrl;
 
-          // Xử lý trạng thái đèn LED báo hiệu
-          const statusEl = document.getElementById("detail-status");
-          const dotEl = statusEl.previousElementSibling;
-          if (currentBookData.db_status === "Available") {
-            statusEl.textContent = "Sẵn sàng mượn";
-            dotEl.className = "pulse-dot available";
-          } else {
-            statusEl.textContent = "Đang được mượn";
-            dotEl.className = "pulse-dot unavailable";
-            document.getElementById("btn-add-cart").textContent =
-              "Đặt trước sách (Reserve)";
-            document.getElementById("btn-add-cart").className =
-              "btn btn-outline btn-large";
-          }
-
-          // Bơm dữ liệu vào Giỏ hàng chờ sẵn
-          document.querySelector(".cart-item-title").textContent =
-            currentBookData.title;
-          document.querySelector(".cart-item-author").textContent =
-            currentBookData.author;
-          document.querySelector(".cart-item-price").textContent =
-            `Phí: ${Number(currentBookData.price).toLocaleString()}đ/ngày`;
-          document.querySelector(".cart-item-img").src = coverUrl;
-          document.getElementById("cart-total-price").textContent =
-            `${Number(currentBookData.price).toLocaleString()}đ/ngày`;
-
-          // 🌟 RENDER SÁCH GỢI Ý (LOẠI BỎ CUỐN HIỆN TẠI, LẤY TỐI ĐA 4 CUỐN VÀ GẮN LINK URL)
-          const recommendContainer = document.getElementById(
-            "recommend-container",
-          );
-          const otherBooks = allBooksData
-            .filter((b) => b.raw_id != bookId)
-            .slice(0, 4);
-
-          if (recommendContainer) {
-            recommendContainer.innerHTML = otherBooks
-              .map(
-                (b) => `
-              <div class="product-card" onclick="window.location.href='book-detail.html?id=${b.raw_id}'" style="cursor: pointer;">
-                <div class="product-card-inner">
-                  <div class="product-image">
-                    <img src="${b.image_url || "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=600&q=80"}" alt="Book Cover" />
-                  </div>
-                  <h3 class="product-title">${b.title}</h3>
-                  <h2 class="product-title" style="font-family:var(--font-body); font-size:0.85rem; color:var(--color-text-muted); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:1rem;">
-                    Bởi: ${b.author}
-                  </h2>
-                  <p class="product-price" style="color: ${b.db_status === "Available" ? "var(--color-gold)" : "#ff4757"}">${b.db_status === "Available" ? "Sẵn sàng" : "Đang mượn"}</p>
-                  <button class="btn ${b.db_status === "Available" ? "btn-gold" : "btn-outline"} btn-block" onclick="event.stopPropagation(); window.location.href='book-detail.html?id=${b.raw_id}'">Xem chi tiết</button>
-                </div>
-              </div>
-            `,
-              )
-              .join("");
-          }
-
-          // Gọi hàm lấy Review ngay sau khi có bookId
-          fetchAndRenderReviews();
+        // Xử lý trạng thái đèn LED báo hiệu
+        const statusEl = document.getElementById("detail-status");
+        const dotEl = statusEl.previousElementSibling;
+        if (currentBookData.db_status === "Available") {
+          statusEl.textContent = "Sẵn sàng mượn";
+          dotEl.className = "pulse-dot available";
+        } else {
+          statusEl.textContent = "Đang được mượn";
+          dotEl.className = "pulse-dot unavailable";
+          document.getElementById("btn-add-cart").textContent =
+            "Đặt trước sách (Reserve)";
+          document.getElementById("btn-add-cart").className =
+            "btn btn-outline btn-large";
         }
+
+        // Bơm dữ liệu vào Giỏ hàng chờ sẵn
+        document.querySelector(".cart-item-title").textContent =
+          currentBookData.title;
+        document.querySelector(".cart-item-author").textContent =
+          currentBookData.author;
+        document.querySelector(".cart-item-price").textContent =
+          `Phí: ${Number(currentBookData.price).toLocaleString()}đ/ngày`;
+        document.querySelector(".cart-item-img").src = coverUrl;
+        document.getElementById("cart-total-price").textContent =
+          `${Number(currentBookData.price).toLocaleString()}đ/ngày`;
+
+        // 🌟 RENDER SÁCH GỢI Ý
+        const recommendContainer = document.getElementById(
+          "recommend-container",
+        );
+        const otherBooks = allBooksData
+          .filter((b) => b.raw_id !== currentBookId)
+          .slice(0, 4);
+
+        if (recommendContainer) {
+          recommendContainer.innerHTML = otherBooks
+            .map(
+              (b) => `
+            <div class="product-card" onclick="window.location.href='book-detail.html?id=${b.raw_id}'" style="cursor: pointer;">
+              <div class="product-card-inner">
+                <div class="product-image">
+                  <img src="${b.image_url || "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=600&q=80"}" alt="Book Cover" />
+                </div>
+                <h3 class="product-title">${b.title}</h3>
+                <h2 class="product-title" style="font-family:var(--font-body); font-size:0.85rem; color:var(--color-text-muted); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:1rem;">
+                  Bởi: ${b.author}
+                </h2>
+                <p class="product-price" style="color: ${b.db_status === "Available" ? "var(--color-gold)" : "#ff4757"}">${b.db_status === "Available" ? "Sẵn sàng" : "Đang mượn"}</p>
+                <button class="btn ${b.db_status === "Available" ? "btn-gold" : "btn-outline"} btn-block" onclick="event.stopPropagation(); window.location.href='book-detail.html?id=${b.raw_id}'">Xem chi tiết</button>
+              </div>
+            </div>
+          `,
+            )
+            .join("");
+        }
+
+        // Gọi hàm lấy Review ngay sau khi có currentBookId
+        fetchAndRenderReviews();
       }
-    } catch (err) {
-      console.error("Lỗi lấy dữ liệu sách chi tiết:", err);
     }
+  } catch (err) {
+    console.error("Lỗi lấy dữ liệu sách chi tiết:", err);
   }
 
   // =======================================================
-  // 2. LOGIC ĐÁNH GIÁ (TÍNH TRUNG BÌNH & LOAD TỪ DATABASE)
+  // 3. LOGIC ĐÁNH GIÁ (TÍNH TRUNG BÌNH & LOAD TỪ DATABASE)
   // =======================================================
   async function fetchAndRenderReviews() {
     try {
-      const res = await fetch(`http://localhost:8080/api/reviews/${bookId}`);
+      const res = await fetch(
+        `http://localhost:8080/api/reviews/${currentBookId}`,
+      );
       if (res.ok) {
         const reviews = await res.json();
-
         let avgScore = 0.0;
         let htmlStars = "☆☆☆☆☆";
 
-        // Tính toán Trung bình cộng số sao
         if (reviews.length > 0) {
           const sum = reviews.reduce((acc, curr) => acc + curr.rating, 0);
           avgScore = (sum / reviews.length).toFixed(1);
-
-          // Tạo HTML chuỗi Ngôi sao
           const filledStars = Math.round(avgScore);
           htmlStars = "★".repeat(filledStars) + "☆".repeat(5 - filledStars);
         }
 
-        // Cập nhật lên Bảng điều khiển
         document.querySelector(".rating-header .score").textContent =
           reviews.length > 0 ? avgScore : "0.0";
         document.querySelector(".rating-header .stars").textContent = htmlStars;
         document.querySelector(".rating-header .count").textContent =
           `${reviews.length} Đánh giá`;
 
-        // Render danh sách Đánh giá
         const reviewContainer = document.querySelector(".review-scroll-area");
         if (reviews.length === 0) {
           reviewContainer.innerHTML = `<p style="text-align:center; color:#888; margin-top:2rem;">Chưa có đánh giá nào. Hãy là người đầu tiên!</p>`;
@@ -158,7 +164,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // ==========================================
-  // 3. LOGIC GỬI MODAL ĐÁNH GIÁ (POST API)
+  // 4. LOGIC MODAL ĐÁNH GIÁ (POST API)
   // ==========================================
   const btnOpenReview = document.getElementById("btn-open-review");
   const btnCloseReview = document.getElementById("btn-close-review");
@@ -170,7 +176,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   if (btnOpenReview) {
     btnOpenReview.addEventListener("click", (e) => {
       e.preventDefault();
-      // Chặn nếu chưa đăng nhập
       if (!localStorage.getItem("userName")) {
         alert("⚠️ Bạn cần đăng nhập để có thể viết đánh giá!");
         window.location.href = "login.html";
@@ -188,7 +193,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (e.target === reviewModal) reviewModal.classList.remove("active");
   });
 
-  // Chọn sao
   if (stars.length > 0) {
     stars.forEach((star, index) => {
       star.addEventListener("mouseover", () => {
@@ -211,7 +215,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // Gửi Đánh giá xuống Backend
   if (reviewForm) {
     reviewForm.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -233,7 +236,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            book_id: parseInt(bookId),
+            book_id: currentBookId,
             user_name: userName,
             rating: score,
             comment: commentTxt,
@@ -246,8 +249,6 @@ document.addEventListener("DOMContentLoaded", async () => {
           stars.forEach((s) => s.classList.remove("active"));
           if (ratingInput) ratingInput.value = 0;
           reviewModal.classList.remove("active");
-
-          // Load lại bảng review để update số Trung bình
           fetchAndRenderReviews();
         }
       } catch (err) {
@@ -260,7 +261,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // ==========================================
-  // 4. LOGIC GIỎ HÀNG (GIỮ NGUYÊN)
+  // 5. LOGIC MỞ GIỎ HÀNG & MƯỢN SÁCH (CHECKOUT)
   // ==========================================
   const btnAddCart = document.getElementById("btn-add-cart");
   const cartOverlay = document.getElementById("cart-overlay");
@@ -285,49 +286,35 @@ document.addEventListener("DOMContentLoaded", async () => {
   if (btnCloseCart) btnCloseCart.addEventListener("click", closeCart);
   if (cartOverlay) cartOverlay.addEventListener("click", closeCart);
 
-  const removeBtns = document.querySelectorAll(".btn-remove-item");
-  removeBtns.forEach((btn) => {
-    btn.addEventListener("click", function () {
-      this.parentElement.remove();
-      document.getElementById("cart-total-price").textContent = "0đ";
-    });
-  });
-  // ==========================================
-  // 🌟 LOGIC XÁC NHẬN MƯỢN SÁCH (CHECKOUT)
-  // ==========================================
   const btnCheckout = document.getElementById("btn-checkout");
-
   if (btnCheckout) {
     btnCheckout.addEventListener("click", async () => {
       const userEmail = localStorage.getItem("userEmail");
 
-      // Chặn nếu khách chưa đăng nhập (Hoặc đăng nhập từ phiên bản cũ chưa có email)
       if (!userEmail) {
         alert("⚠️ Cậu cần đăng nhập để có thể mượn sách nhé!");
         window.location.href = "login.html";
         return;
       }
 
-      // 1. Tính toán Hạn trả: Hệ thống ép cứng Hôm nay + 14 Ngày
       const today = new Date();
       today.setDate(today.getDate() + 14);
       const dd = String(today.getDate()).padStart(2, "0");
       const mm = String(today.getMonth() + 1).padStart(2, "0");
       const yyyy = today.getFullYear();
-      const dueDateStr = `${dd}/${mm}/${yyyy}`; // Định dạng chuẩn lưu vào DB
+      const dueDateStr = `${dd}/${mm}/${yyyy}`;
 
       btnCheckout.textContent = "Đang xử lý...";
       btnCheckout.disabled = true;
 
       try {
-        // 2. Nã API gửi Đơn Mượn xuống C++
         const res = await fetch("http://localhost:8080/api/checkout", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            book_id: parseInt(bookId), // ID sách từ URL
-            email: userEmail, // Email của người đang đăng nhập
-            due_date: dueDateStr, // Hạn trả hệ thống ép
+            book_id: currentBookId,
+            email: userEmail,
+            due_date: dueDateStr,
           }),
         });
 
@@ -335,7 +322,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           alert(
             `🎉 KENG! Mượn sách thành công! \n\nHạn trả của cậu là: ${dueDateStr}.`,
           );
-          window.location.reload(); // Tải lại trang để đèn LED tự chuyển sang "Đang mượn màu đỏ"
+          window.location.reload();
         } else {
           alert(
             "❌ Rất tiếc, cuốn sách này vừa bị ai đó nhanh tay mượn mất rồi!",
@@ -346,6 +333,57 @@ document.addEventListener("DOMContentLoaded", async () => {
       } finally {
         btnCheckout.textContent = "Xác Nhận Mượn";
         btnCheckout.disabled = false;
+      }
+    });
+  }
+
+  // =====================================================================
+  // 6. LOGIC THẢ TIM TRONG TRANG CHI TIẾT SÁCH
+  // =====================================================================
+  const btnHeartDetail = document.getElementById("btn-heart-detail");
+  const userEmail = localStorage.getItem("userEmail");
+
+  if (btnHeartDetail && currentBookId) {
+    // Gọi tải tim
+    if (userEmail) {
+      fetch(`http://localhost:8080/api/favorites?email=${userEmail}`)
+        .then((res) => res.json())
+        .then((myFavorites) => {
+          if (myFavorites.includes(currentBookId)) {
+            btnHeartDetail.classList.add("loved");
+          }
+        })
+        .catch((err) => console.error("Lỗi đồng bộ Tim từ C++:", err));
+    }
+
+    // Toggle tim
+    btnHeartDetail.addEventListener("click", async () => {
+      if (!userEmail) {
+        alert("⚠️ Cậu cần đăng nhập để thêm sách vào mục Yêu thích nhé!");
+        window.location.href = "login.html";
+        return;
+      }
+
+      btnHeartDetail.style.transform = "scale(0.8)";
+      try {
+        const res = await fetch("http://localhost:8080/api/favorites/toggle", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: userEmail, book_id: currentBookId }),
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          if (data.is_loved) {
+            btnHeartDetail.classList.add("loved");
+          } else {
+            btnHeartDetail.classList.remove("loved");
+          }
+          setTimeout(() => (btnHeartDetail.style.transform = "scale(1)"), 100);
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Lỗi mất kết nối đến Server C++!");
       }
     });
   }

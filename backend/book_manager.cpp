@@ -70,6 +70,15 @@ public:
             "comment TEXT,"
             "created_at TEXT DEFAULT CURRENT_DATE);";
         sqlite3_exec(db, table_reviews_sql, nullptr, nullptr, nullptr);
+
+        // 🌟 THÊM MỚI: Bảng lưu trữ Sách Yêu Thích của từng User
+        const char* table_fav_sql = 
+            "CREATE TABLE IF NOT EXISTS user_favorites ("
+            "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+            "user_email TEXT NOT NULL,"
+            "book_id INTEGER NOT NULL,"
+            "UNIQUE(user_email, book_id));"; // UNIQUE để mỗi user chỉ được thả 1 tim/1 sách
+        sqlite3_exec(db, table_fav_sql, nullptr, nullptr, nullptr);
         
         // (Mock dữ liệu mẫu giữ nguyên)
         sqlite3_stmt* stmt = nullptr;
@@ -203,7 +212,7 @@ public:
     }
 
     // ========================================================
-    // 🌟 THÊM MỚI: CÁC HÀM XỬ LÝ ĐÁNH GIÁ (REVIEWS)
+    //  THÊM MỚI: CÁC HÀM XỬ LÝ ĐÁNH GIÁ (REVIEWS)
     // ========================================================
     std::vector<BookReview> getReviews(int book_id) {
         std::vector<BookReview> list;
@@ -248,7 +257,7 @@ public:
         if (db) sqlite3_close(db);
         return success;
     }
-    // 🌟 HÀM XUẤT KHO SÁCH (CHECKOUT CHO NGƯỜI DÙNG MƯỢN)
+    //  HÀM XUẤT KHO SÁCH (CHECKOUT CHO NGƯỜI DÙNG MƯỢN)
     bool checkoutBook(int id, std::string email, std::string due_date) {
         sqlite3* db = nullptr;
         if (sqlite3_open(db_name.c_str(), &db) != SQLITE_OK) return false;
@@ -271,5 +280,60 @@ public:
         if (stmt) sqlite3_finalize(stmt);
         if (db) sqlite3_close(db);
         return success;
+    }
+    // ========================================================
+    // CÁC HÀM XỬ LÝ SÁCH YÊU THÍCH (FAVORITES)
+    // ========================================================
+    std::vector<int> getUserFavorites(std::string email) {
+        std::vector<int> favs;
+        sqlite3* db = nullptr;
+        if (sqlite3_open(db_name.c_str(), &db) != SQLITE_OK) return favs;
+        sqlite3_stmt* stmt = nullptr;
+        if (sqlite3_prepare_v2(db, "SELECT book_id FROM user_favorites WHERE user_email = ?;", -1, &stmt, nullptr) == SQLITE_OK) {
+            sqlite3_bind_text(stmt, 1, email.c_str(), -1, SQLITE_TRANSIENT);
+            while (sqlite3_step(stmt) == SQLITE_ROW) {
+                favs.push_back(sqlite3_column_int(stmt, 0));
+            }
+        }
+        if (stmt) sqlite3_finalize(stmt);
+        if (db) sqlite3_close(db);
+        return favs;
+    }
+
+    int toggleFavorite(std::string email, int book_id) {
+        sqlite3* db = nullptr;
+        if (sqlite3_open(db_name.c_str(), &db) != SQLITE_OK) return -1;
+        sqlite3_stmt* stmt = nullptr;
+        int status = 1; // 1 = Vừa thả tim, 0 = Đã hủy tim
+        
+        // Kiểm tra xem User đã thả tim cuốn này chưa
+        bool exists = false;
+        if (sqlite3_prepare_v2(db, "SELECT id FROM user_favorites WHERE user_email = ? AND book_id = ?;", -1, &stmt, nullptr) == SQLITE_OK) {
+            sqlite3_bind_text(stmt, 1, email.c_str(), -1, SQLITE_TRANSIENT);
+            sqlite3_bind_int(stmt, 2, book_id);
+            if (sqlite3_step(stmt) == SQLITE_ROW) exists = true;
+        }
+        if (stmt) sqlite3_finalize(stmt);
+
+        stmt = nullptr;
+        if (exists) {
+            // Đã tim rồi -> Ấn lần nữa là Hủy tim (DELETE)
+            if (sqlite3_prepare_v2(db, "DELETE FROM user_favorites WHERE user_email = ? AND book_id = ?;", -1, &stmt, nullptr) == SQLITE_OK) {
+                sqlite3_bind_text(stmt, 1, email.c_str(), -1, SQLITE_TRANSIENT);
+                sqlite3_bind_int(stmt, 2, book_id);
+                sqlite3_step(stmt);
+            }
+            status = 0;
+        } else {
+            // Chưa tim -> Ghi nhận thả tim (INSERT)
+            if (sqlite3_prepare_v2(db, "INSERT INTO user_favorites (user_email, book_id) VALUES (?, ?);", -1, &stmt, nullptr) == SQLITE_OK) {
+                sqlite3_bind_text(stmt, 1, email.c_str(), -1, SQLITE_TRANSIENT);
+                sqlite3_bind_int(stmt, 2, book_id);
+                sqlite3_step(stmt);
+            }
+        }
+        if (stmt) sqlite3_finalize(stmt);
+        if (db) sqlite3_close(db);
+        return status;
     }
 };

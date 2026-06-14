@@ -249,6 +249,27 @@ int main() {
     });
 
     // ========================================================
+    //  API XỬ LÝ SÁCH YÊU THÍCH (FAVORITES)
+    // ========================================================
+    svr.Get("/api/favorites", [&](const Request& req, Response& res) {
+        cors_middleware(req, res);
+        string email = req.get_param_value("email");
+        auto favs = dbManager.getUserFavorites(email);
+        json j = favs;
+        res.set_content(j.dump(), "application/json");
+    });
+
+    svr.Post("/api/favorites/toggle", [&](const Request& req, Response& res) {
+        cors_middleware(req, res);
+        try {
+            auto body = json::parse(req.body);
+            string email = body["email"];
+            int book_id = body["book_id"];
+            int result = dbManager.toggleFavorite(email, book_id);
+            res.set_content("{\"status\": \"success\", \"is_loved\": " + to_string(result) + "}", "application/json");
+        } catch (...) { res.status = 400; }
+    });
+    // ========================================================
     // API STATS
     // ========================================================
     svr.Get("/api/admin/stats", [&](const Request& req, Response& res) {

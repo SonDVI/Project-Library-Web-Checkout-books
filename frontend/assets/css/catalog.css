@@ -472,3 +472,52 @@ body.light-theme .product-title {
 body.light-theme h2.product-title {
   color: #6e6e73 !important;
 }
+/* NÚT THẢ TIM TRÊN THẺ SÁCH */
+.btn-heart {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  color: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(4px);
+}
+.btn-heart:hover {
+  transform: scale(1.15);
+  background: rgba(0, 0, 0, 0.7);
+}
+.btn-heart.loved {
+  color: #ff4757;
+  border-color: rgba(255, 71, 87, 0.4);
+  background: rgba(255, 71, 87, 0.15);
+  text-shadow: 0 0 10px rgba(255, 71, 87, 0.5);
+}
+.btn-heart:focus {
+  outline: none;
+}
+
+/* Đồng bộ Light Theme cho Tim */
+body.light-theme .btn-heart {
+  background: rgba(255, 255, 255, 0.8);
+  border-color: rgba(0, 0, 0, 0.1);
+  color: rgba(0, 0, 0, 0.3);
+}
+body.light-theme .btn-heart:hover {
+  background: #ffffff;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+body.light-theme .btn-heart.loved {
+  color: #ff4757;
+  background: #fff0f1;
+  border-color: #ff4757;
+}
