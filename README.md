@@ -1,10 +1,12 @@
-#Project được làm bởi hai thành viên thuộc lớp TTS & Kỹ thuật Đa Phương Tiện - 01 :
-##Nguyễn Bảo Sơn                         
-##MSSV : 2025146605                       
+# Project được làm bởi hai thành viên thuộc lớp TTS & Kỹ thuật Đa Phương Tiện - 01 
+---
+## Nguyễn Bảo Sơn                         
+## MSSV : 2025146605                       
 
-##Nguyễn khánh Duy
-##MSSV : 202514569
+## Nguyễn khánh Duy
+## MSSV : 202514569
                                                                                                   
+---
 
 readme_content = """# HUST LBC - Library Book Checkout System
 
