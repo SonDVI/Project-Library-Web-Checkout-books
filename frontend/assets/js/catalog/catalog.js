@@ -228,7 +228,7 @@ document.addEventListener("DOMContentLoaded", () => {
   loadBooksFromDB();
 
   // =====================================================================
-  // 🌟 5. API KÍCH HOẠT THẢ TIM (GLOBAL FUNCTION)
+  //  5. API KÍCH HOẠT THẢ TIM (GLOBAL FUNCTION)
   // =====================================================================
   window.toggleHeart = async (event, bookId) => {
     event.stopPropagation(); // Phanh gấp! Tránh việc lỡ tay click vào chuyển sang trang Chi tiết

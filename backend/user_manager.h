@@ -4,19 +4,20 @@
 #include <string>
 #include <vector>
 
+//cấu trúc lưu trữ người dùng
 struct User{
-    std::string id;
-    std::string name;
-    std::string email;
-    std::string password;
-    std::string role;
-    std::string classname;
+    std::string id;                         //id người dùng
+    std::string name;                       //Tên đăng nhập
+    std::string email;                      //Email
+    std::string password;                   //Mật khẩu đăng nhập
+    std::string role;                       //vai trò Admin(hay người dùng)
+    std::string classname;                  //Ngành đang học
 };
 
 class UserManager {
     private :
-    std::vector<User> users;
-    std::string dbPath; 
+    std::vector<User> users;                //vector lưu trữ struct user
+    std::string dbPath;                     //Đường dẫn tới database
 
     void loadUsers();
 

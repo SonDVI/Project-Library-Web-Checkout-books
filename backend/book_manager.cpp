@@ -4,34 +4,38 @@
 #include <string>
 #include <utility>
 
+
+//cấu trúc lưu trữ của sách
 struct BorrowedBook {
-    int id;
-    std::string book_title;
-    std::string author;
-    std::string category;
-    double borrow_price;
-    std::string image_url;
-    std::string author_image_url;
-    std::string summary;
-    std::string borrower_email;
-    std::string borrow_date;
-    std::string status;
+    int id;                                     //id người mượn
+    std::string book_title;                     //tiêu đề
+    std::string author;                         //tác giả
+    std::string category;                       //thể loại
+    double borrow_price;                        //giá
+    std::string image_url;                      //đường dẫn image của bìa sách
+    std::string author_image_url;               //đường dẫn image của tác giả
+    std::string summary;                        //nội dung cơ bản của sách
+    std::string borrower_email;                 //email của người mượn sách
+    std::string borrow_date;                    //hạn trả
+    std::string status;                         //tình trạng sách
 };
 
+
+//cấu trúc lưu trữ bảng dashboard_admin
 struct DashboardStats {
-    int total_titles;
-    int total_borrowed_transactions;
-    int total_overdue;
+    int total_titles;                               //tổng số sách
+    int total_borrowed_transactions;                //tổng số sách đang được mượn
+    int total_overdue;                              //tổng số sách quá hạn
 };
 
-// 🌟 THÊM MỚI: Cấu trúc lưu trữ Đánh giá sách
+//cấu trúc lưu trữ các đánh giá về sách
 struct BookReview {
-    int id;
-    int book_id;
-    std::string user_name;
-    int rating;
-    std::string comment;
-    std::string created_at;
+    int id;                                         //id người đánh giá
+    int book_id;                                    //id book
+    std::string user_name;                          //tên người đánh giá
+    int rating;                                     //điểm đánh giá
+    std::string comment;                            //comment
+    std::string created_at;                         
 };
 
 class AdminDatabaseManager {
@@ -42,7 +46,10 @@ public:
     AdminDatabaseManager(std::string database_file) : db_name(database_file) {}
 
     bool initDatabase() {
-        sqlite3* db = nullptr;
+        sqlite3* db = nullptr;              //Chuẩn bị con trỏ đại diện cho cánh cửa Database, gán bằng rỗng (nullptr) cho an toàn.
+
+        //ở file Database. Hàm c_str() ép kiểu chuỗi string của C++ thành mảng char của C (chuẩn mà SQLite yêu cầu).
+        //Mở thất bại -->return false (báo lỗi)
         if (sqlite3_open(db_name.c_str(), &db) != SQLITE_OK) return false;
 
         const char* table_borrow_sql = 
@@ -60,18 +67,20 @@ public:
             "status TEXT DEFAULT 'Active');";
         sqlite3_exec(db, table_borrow_sql, nullptr, nullptr, nullptr);
         
-        // 🌟 THÊM MỚI: Tạo bảng lưu trữ Đánh giá Vĩnh viễn
+        //  THÊM MỚI: Tạo bảng lưu trữ Đánh giá sách
         const char* table_reviews_sql = 
-            "CREATE TABLE IF NOT EXISTS book_reviews ("
-            "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-            "book_id INTEGER NOT NULL,"
-            "user_name TEXT NOT NULL,"
-            "rating INTEGER NOT NULL,"
-            "comment TEXT,"
-            "created_at TEXT DEFAULT CURRENT_DATE);";
+            "CREATE TABLE IF NOT EXISTS book_reviews ("     //tạo bảng nếu chưa có
+            "id INTEGER PRIMARY KEY AUTOINCREMENT,"         //tự động cập nhật id người dùng
+            "book_id INTEGER NOT NULL,"                     //id book không được trống dữ liệu
+            "user_name TEXT NOT NULL,"                      //tên người dùng không được trống dữ liệu
+            "rating INTEGER NOT NULL,"                      //rating không được trống dữ liệu
+            "comment TEXT,"                                 //comment có thể trống dữ liệu
+            "created_at TEXT DEFAULT CURRENT_DATE);";       //ngày tạo mặc định theo thời gian hiện tại  
+            
+            //mở sqlite, thực hiện lệnh mấy cái không cần thiết thì gán rỗng
         sqlite3_exec(db, table_reviews_sql, nullptr, nullptr, nullptr);
 
-        // 🌟 THÊM MỚI: Bảng lưu trữ Sách Yêu Thích của từng User
+        //  THÊM MỚI: Bảng lưu trữ Sách Yêu Thích của từng User
         const char* table_fav_sql = 
             "CREATE TABLE IF NOT EXISTS user_favorites ("
             "id INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -81,6 +90,7 @@ public:
         sqlite3_exec(db, table_fav_sql, nullptr, nullptr, nullptr);
         
         // (Mock dữ liệu mẫu giữ nguyên)
+        //nếu chữa có dữ liệu thì tạo 2 sách mẫu để test lệnh
         sqlite3_stmt* stmt = nullptr;
         int count_borrow = 0;
         if (sqlite3_prepare_v2(db, "SELECT COUNT(*) FROM borrowed_books;", -1, &stmt, nullptr) == SQLITE_OK) {
