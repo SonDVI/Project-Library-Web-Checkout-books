@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const urlParams = new URLSearchParams(window.location.search);
   const bookId = urlParams.get("id");
 
-  // 🌟 BẢO VỆ UX: Nếu user mở thẳng trang chi tiết mà không có ID sách, đá về Catalog ngay!
+  //  BẢO VỆ UX: Nếu user mở thẳng trang chi tiết mà không có ID sách, đá về Catalog ngay!
   if (!bookId) {
     alert(
       "⚠️ Cậu chưa chọn cuốn sách nào cả! Đang chuyển hướng về Danh mục...",
@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("cart-total-price").textContent =
           `${Number(currentBookData.price).toLocaleString()}đ/ngày`;
 
-        // 🌟 RENDER SÁCH GỢI Ý
+        // RENDER SÁCH GỢI Ý
         const recommendContainer = document.getElementById(
           "recommend-container",
         );

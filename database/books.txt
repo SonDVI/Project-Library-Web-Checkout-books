@@ -1,0 +1,3 @@
+id,book_title,author,category,borrow_price,image_url,author_image_url,summary,borrower_email,borrow_date,status
+1,Giai tich 1,Toan Hoc Hust,Giao Trinh,15000,,,,dung.nh231234@sis.hust.edu.vn,10/06/2026,Available
+2,C++ for begginer,Son Nguyen,Giao Trinh,15000,,,,admin@sis.hust.edu.vn,01/06/2026,Active

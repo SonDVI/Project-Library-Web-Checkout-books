@@ -1,349 +1,275 @@
-#include <sqlite3.h>
-#include <iostream>
-#include <vector>
-#include <string>
-#include <utility>
+#include "book_manager.h"
+#include <fstream>
+#include <sstream>
+#include <algorithm>
+#include <ctime>
+using namespace std;
 
+AdminDatabaseManager::AdminDatabaseManager(string dummy_parameter) {}
 
-//cấu trúc lưu trữ của sách
-struct BorrowedBook {
-    int id;                                     //id người mượn
-    std::string book_title;                     //tiêu đề
-    std::string author;                         //tác giả
-    std::string category;                       //thể loại
-    double borrow_price;                        //giá
-    std::string image_url;                      //đường dẫn image của bìa sách
-    std::string author_image_url;               //đường dẫn image của tác giả
-    std::string summary;                        //nội dung cơ bản của sách
-    std::string borrower_email;                 //email của người mượn sách
-    std::string borrow_date;                    //hạn trả
-    std::string status;                         //tình trạng sách
-};
+// ==========================================
+// CÁC HÀM LÕI: ĐỌC/GHI FILE TEXT
+// ==========================================
+void AdminDatabaseManager::loadBooks() {
+    books.clear();
+    ifstream file(booksFile);
+    if (!file.is_open()) {
+        file.open("../database/books.txt");
+        if(!file.is_open()) return;
+    }
+    string line;
+    getline(file, line);
 
+    while(getline(file, line)) {
+        if(line.empty()) continue;
+        stringstream ss(line);
+        string temp;
+        BorrowedBook b;
 
-//cấu trúc lưu trữ bảng dashboard_admin
-struct DashboardStats {
-    int total_titles;                               //tổng số sách
-    int total_borrowed_transactions;                //tổng số sách đang được mượn
-    int total_overdue;                              //tổng số sách quá hạn
-};
+        getline(ss, temp, ','); b.id = stoi(temp.empty() ? "0" : temp);
+        getline(ss, b.book_title, ',');
+        getline(ss, b.author, ',');
+        getline(ss, b.category, ',');
+        getline(ss, temp, ','); b.borrow_price = stod(temp.empty() ? "0" : temp);
+        getline(ss, b.image_url, ',');
+        getline(ss, b.author_image_url, ',');
+        getline(ss, b.summary, ',');
+        getline(ss, b.borrower_email, ',');
+        getline(ss, b.borrow_date, ',');
+        getline(ss, b.status, ',');
 
-//cấu trúc lưu trữ các đánh giá về sách
-struct BookReview {
-    int id;                                         //id người đánh giá
-    int book_id;                                    //id book
-    std::string user_name;                          //tên người đánh giá
-    int rating;                                     //điểm đánh giá
-    std::string comment;                            //comment
-    std::string created_at;                         
-};
+        books.push_back(b);
+    }
+    file.close();
+}
 
-class AdminDatabaseManager {
-private:
-    std::string db_name;
+void AdminDatabaseManager::saveBooks() {
+    ofstream file(booksFile, ios::trunc);
+    file << "id,book_title,author,category,borrow_price,image_url,author_image_url,summary,borrower_email,borrow_date,status\n";
+    for(size_t i = 0; i < books.size(); i++) {
+        file << books[i].id << "," << books[i].book_title << "," << books[i].author << "," 
+             << books[i].category << "," << books[i].borrow_price << "," << books[i].image_url << "," 
+             << books[i].author_image_url << "," << books[i].summary << "," << books[i].borrower_email << "," 
+             << books[i].borrow_date << "," << books[i].status;
+        if(i < books.size() - 1) file << "\n";
+    }
+    file.close();
+}
 
-public:
-    AdminDatabaseManager(std::string database_file) : db_name(database_file) {}
+void AdminDatabaseManager::loadReviews() {
+    reviews.clear();
+    ifstream file(reviewsFile);
+    if(!file.is_open()) {
+        file.open("../database/reviews.txt");
+        if(!file.is_open()) return;
+    }
 
-    bool initDatabase() {
-        sqlite3* db = nullptr;              //Chuẩn bị con trỏ đại diện cho cánh cửa Database, gán bằng rỗng (nullptr) cho an toàn.
-
-        //ở file Database. Hàm c_str() ép kiểu chuỗi string của C++ thành mảng char của C (chuẩn mà SQLite yêu cầu).
-        //Mở thất bại -->return false (báo lỗi)
-        if (sqlite3_open(db_name.c_str(), &db) != SQLITE_OK) return false;
-
-        const char* table_borrow_sql = 
-            "CREATE TABLE IF NOT EXISTS borrowed_books ("
-            "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-            "book_title TEXT NOT NULL,"
-            "author TEXT DEFAULT 'Chưa cập nhật',"
-            "category TEXT DEFAULT 'Chưa phân loại',"
-            "borrow_price REAL DEFAULT 0.0,"
-            "image_url TEXT DEFAULT '',"
-            "author_image_url TEXT DEFAULT '',"
-            "summary TEXT DEFAULT '',"
-            "borrower_email TEXT NOT NULL,"
-            "borrow_date TEXT NOT NULL,"
-            "status TEXT DEFAULT 'Active');";
-        sqlite3_exec(db, table_borrow_sql, nullptr, nullptr, nullptr);
+    string line;
+    getline(file, line);
+    while(getline(file, line)) {
+        if(line.empty()) continue;
+        stringstream ss(line);
         
-        //  THÊM MỚI: Tạo bảng lưu trữ Đánh giá sách
-        const char* table_reviews_sql = 
-            "CREATE TABLE IF NOT EXISTS book_reviews ("     //tạo bảng nếu chưa có
-            "id INTEGER PRIMARY KEY AUTOINCREMENT,"         //tự động cập nhật id người dùng
-            "book_id INTEGER NOT NULL,"                     //id book không được trống dữ liệu
-            "user_name TEXT NOT NULL,"                      //tên người dùng không được trống dữ liệu
-            "rating INTEGER NOT NULL,"                      //rating không được trống dữ liệu
-            "comment TEXT,"                                 //comment có thể trống dữ liệu
-            "created_at TEXT DEFAULT CURRENT_DATE);";       //ngày tạo mặc định theo thời gian hiện tại  
-            
-            //mở sqlite, thực hiện lệnh mấy cái không cần thiết thì gán rỗng
-        sqlite3_exec(db, table_reviews_sql, nullptr, nullptr, nullptr);
+        string temp;
+        BookReview a;
 
-        //  THÊM MỚI: Bảng lưu trữ Sách Yêu Thích của từng User
-        const char* table_fav_sql = 
-            "CREATE TABLE IF NOT EXISTS user_favorites ("
-            "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-            "user_email TEXT NOT NULL,"
-            "book_id INTEGER NOT NULL,"
-            "UNIQUE(user_email, book_id));"; // UNIQUE để mỗi user chỉ được thả 1 tim/1 sách
-        sqlite3_exec(db, table_fav_sql, nullptr, nullptr, nullptr);
-        
-        // (Mock dữ liệu mẫu giữ nguyên)
-        //nếu chữa có dữ liệu thì tạo 2 sách mẫu để test lệnh
-        sqlite3_stmt* stmt = nullptr;
-        int count_borrow = 0;
-        if (sqlite3_prepare_v2(db, "SELECT COUNT(*) FROM borrowed_books;", -1, &stmt, nullptr) == SQLITE_OK) {
-            if (sqlite3_step(stmt) == SQLITE_ROW) count_borrow = sqlite3_column_int(stmt, 0);
-        }
-        if (stmt) sqlite3_finalize(stmt);
+        getline(ss, temp, ','); a.id = stoi(temp.empty() ? "0" : temp);
+        getline(ss, temp, ','); a.book_id = stoi(temp.empty() ? "0" : temp);
+        getline(ss, a.user_name, ',');
+        getline(ss, temp, ','); a.rating = stoi(temp.empty() ? "0" : temp);
+        getline(ss, a.comment, ',');
+        getline(ss, a.created_at, ',');
 
-        if (count_borrow == 0) {
-            const char* mock_borrow = 
-                "INSERT INTO borrowed_books (book_title, author, category, borrow_price, image_url, author_image_url, summary, borrower_email, borrow_date, status) VALUES "
-                "('Giai tich 1', 'Toan hoc HUST', 'Giao trinh', 15000, '', '', '', 'dung.nh231234@sis.hust.edu.vn', '10/06/2026', 'Active'),"
-                "('C++ for Backend Systems', 'Tác giả Ẩn danh', 'Truyen thong so', 25000, '', '', '', 'admin@sis.hust.edu.vn', '01/06/2026', 'Active');";
-            sqlite3_exec(db, mock_borrow, nullptr, nullptr, nullptr);
-        }
-        if (db) sqlite3_close(db);
-        return true;
+        reviews.push_back(a);
+    }
+    file.close();
+}
+
+void AdminDatabaseManager::saveReviews() {
+    ofstream file(reviewsFile, ios::trunc);
+    file << "id,book_id,user_name,rating,comment,created_at\n";
+    for(size_t i = 0; i < reviews.size(); i++) {
+        file << reviews[i].id << "," << reviews[i].book_id << "," << reviews[i].user_name << "," 
+             << reviews[i].rating << "," << reviews[i].comment << "," << reviews[i].created_at;
+        if(i < reviews.size() - 1) file << "\n";
+    }
+    file.close();
+}
+
+void AdminDatabaseManager::loadFavorites() {
+    favorites.clear();
+    ifstream file(favsFile);
+    if(!file.is_open()) {
+        file.open("../database/favorites.txt");
+        if(!file.is_open()) return;
     }
 
-    // (Các hàm getDashboardStats, getAllBorrowedBooks, addAvailableBook, deleteBook, updateBook giữ nguyên hoàn toàn)
-    DashboardStats getDashboardStats() {
-        DashboardStats stats = {0, 0, 0};
-        sqlite3* db = nullptr;
-        if (sqlite3_open(db_name.c_str(), &db) != SQLITE_OK) return stats;
-        sqlite3_stmt* stmt = nullptr;
-        if (sqlite3_prepare_v2(db, "SELECT COUNT(*) FROM borrowed_books;", -1, &stmt, nullptr) == SQLITE_OK) {
-            if (sqlite3_step(stmt) == SQLITE_ROW) stats.total_titles = sqlite3_column_int(stmt, 0);
-        }
-        if (stmt) sqlite3_finalize(stmt);
-        stmt = nullptr;
-        if (sqlite3_prepare_v2(db, "SELECT COUNT(*) FROM borrowed_books WHERE status != 'Available';", -1, &stmt, nullptr) == SQLITE_OK) {
-            if (sqlite3_step(stmt) == SQLITE_ROW) stats.total_borrowed_transactions = sqlite3_column_int(stmt, 0);
-        }
-        if (stmt) sqlite3_finalize(stmt);
-        stmt = nullptr;
-        if (sqlite3_prepare_v2(db, "SELECT COUNT(*) FROM borrowed_books WHERE status = 'Overdue';", -1, &stmt, nullptr) == SQLITE_OK) {
-            if (sqlite3_step(stmt) == SQLITE_ROW) stats.total_overdue = sqlite3_column_int(stmt, 0);
-        }
-        if (stmt) sqlite3_finalize(stmt);
-        if (db) sqlite3_close(db);
-        return stats;
-    }
+    string line;
+    getline(file, line);
 
-    std::vector<BorrowedBook> getAllBorrowedBooks() {
-        std::vector<BorrowedBook> list;
-        sqlite3* db = nullptr;
-        if (sqlite3_open(db_name.c_str(), &db) != SQLITE_OK) return list;
-        sqlite3_stmt* stmt = nullptr;
-        const char* sql = "SELECT id, book_title, author, category, borrow_price, image_url, author_image_url, summary, borrower_email, borrow_date, status FROM borrowed_books ORDER BY id DESC;";
-        if (sqlite3_prepare_v2(db, sql, -1, &stmt, nullptr) == SQLITE_OK) {
-            while (sqlite3_step(stmt) == SQLITE_ROW) {
-                BorrowedBook b;
-                b.id = sqlite3_column_int(stmt, 0);
-                b.book_title = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1) ? sqlite3_column_text(stmt, 1) : (const unsigned char*)"");
-                b.author = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 2) ? sqlite3_column_text(stmt, 2) : (const unsigned char*)"");
-                b.category = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 3) ? sqlite3_column_text(stmt, 3) : (const unsigned char*)"");
-                b.borrow_price = sqlite3_column_double(stmt, 4);
-                b.image_url = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 5) ? sqlite3_column_text(stmt, 5) : (const unsigned char*)"");
-                b.author_image_url = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 6) ? sqlite3_column_text(stmt, 6) : (const unsigned char*)"");
-                b.summary = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 7) ? sqlite3_column_text(stmt, 7) : (const unsigned char*)"");
-                b.borrower_email = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 8) ? sqlite3_column_text(stmt, 8) : (const unsigned char*)"");
-                b.borrow_date = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 9) ? sqlite3_column_text(stmt, 9) : (const unsigned char*)"");
-                b.status = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 10) ? sqlite3_column_text(stmt, 10) : (const unsigned char*)"");
-                list.push_back(b);
-            }
-        }
-        if (stmt) sqlite3_finalize(stmt);
-        if (db) sqlite3_close(db);
-        return list;
-    }
+    while(getline(file, line)) {
+        if(line.empty()) continue;
+        stringstream ss(line);
+        string temp;
+        UserFavorite c;
 
-    bool addAvailableBook(std::string title, std::string author, std::string category, double price, std::string img, std::string auth_img, std::string sum) {
-        sqlite3* db = nullptr;
-        if (sqlite3_open(db_name.c_str(), &db) != SQLITE_OK) return false;
-        sqlite3_stmt* stmt = nullptr;
-        const char* sql = "INSERT INTO borrowed_books (book_title, author, category, borrow_price, image_url, author_image_url, summary, borrower_email, borrow_date, status) VALUES (?, ?, ?, ?, ?, ?, ?, '—', '—', 'Available');";
-        bool success = false;
-        if (sqlite3_prepare_v2(db, sql, -1, &stmt, nullptr) == SQLITE_OK) {
-            sqlite3_bind_text(stmt, 1, title.c_str(), -1, SQLITE_TRANSIENT);
-            sqlite3_bind_text(stmt, 2, author.c_str(), -1, SQLITE_TRANSIENT);
-            sqlite3_bind_text(stmt, 3, category.c_str(), -1, SQLITE_TRANSIENT);
-            sqlite3_bind_double(stmt, 4, price);
-            sqlite3_bind_text(stmt, 5, img.c_str(), -1, SQLITE_TRANSIENT);
-            sqlite3_bind_text(stmt, 6, auth_img.c_str(), -1, SQLITE_TRANSIENT);
-            sqlite3_bind_text(stmt, 7, sum.c_str(), -1, SQLITE_TRANSIENT);
-            success = (sqlite3_step(stmt) == SQLITE_DONE);
-        }
-        if (stmt) sqlite3_finalize(stmt);
-        if (db) sqlite3_close(db);
-        return success;
-    }
+        getline(ss, temp, ','); c.id = stoi(temp.empty() ? "0" : temp);
+        getline(ss, c.user_email, ',');
+        getline(ss, temp, ','); c.book_id = stoi(temp.empty() ? "0" : temp);
 
-    bool deleteBook(int id) {
-        sqlite3* db = nullptr;
-        if (sqlite3_open(db_name.c_str(), &db) != SQLITE_OK) return false;
-        sqlite3_stmt* stmt = nullptr;
-        const char* sql = "DELETE FROM borrowed_books WHERE id = ?;";
-        bool success = false;
-        if (sqlite3_prepare_v2(db, sql, -1, &stmt, nullptr) == SQLITE_OK) {
-            sqlite3_bind_int(stmt, 1, id);
-            success = (sqlite3_step(stmt) == SQLITE_DONE);
-        }
-        if (stmt) sqlite3_finalize(stmt);
-        if (db) sqlite3_close(db);
-        return success;
+        favorites.push_back(c);
     }
+    file.close();
+}
 
-    bool updateBook(int id, std::string title, std::string author, std::string category, double price, std::string img, std::string auth_img, std::string sum, std::string status, std::string date) {
-        sqlite3* db = nullptr;
-        if (sqlite3_open(db_name.c_str(), &db) != SQLITE_OK) return false;
-        sqlite3_stmt* stmt = nullptr;
-        const char* sql = "UPDATE borrowed_books SET book_title = ?, author = ?, category = ?, borrow_price = ?, image_url = ?, author_image_url = ?, summary = ?, status = ?, borrow_date = ? WHERE id = ?;";
-        bool success = false;
-        if (sqlite3_prepare_v2(db, sql, -1, &stmt, nullptr) == SQLITE_OK) {
-            sqlite3_bind_text(stmt, 1, title.c_str(), -1, SQLITE_TRANSIENT);
-            sqlite3_bind_text(stmt, 2, author.c_str(), -1, SQLITE_TRANSIENT);
-            sqlite3_bind_text(stmt, 3, category.c_str(), -1, SQLITE_TRANSIENT);
-            sqlite3_bind_double(stmt, 4, price);
-            sqlite3_bind_text(stmt, 5, img.c_str(), -1, SQLITE_TRANSIENT);
-            sqlite3_bind_text(stmt, 6, auth_img.c_str(), -1, SQLITE_TRANSIENT);
-            sqlite3_bind_text(stmt, 7, sum.c_str(), -1, SQLITE_TRANSIENT);
-            sqlite3_bind_text(stmt, 8, status.c_str(), -1, SQLITE_TRANSIENT);
-            sqlite3_bind_text(stmt, 9, date.c_str(), -1, SQLITE_TRANSIENT);
-            sqlite3_bind_int(stmt, 10, id);
-            success = (sqlite3_step(stmt) == SQLITE_DONE);
-        }
-        if (stmt) sqlite3_finalize(stmt);
-        if (db) sqlite3_close(db);
-        return success;
+void AdminDatabaseManager::saveFavorites() {
+    ofstream file(favsFile, ios::trunc);
+    file << "id,user_email,book_id\n";
+    for(size_t i = 0; i < favorites.size(); i++) {
+        file << favorites[i].id << "," << favorites[i].user_email << "," << favorites[i].book_id;
+        if(i < favorites.size() - 1) file << "\n";
     }
+    file.close();
+}
 
-    // ========================================================
-    //  THÊM MỚI: CÁC HÀM XỬ LÝ ĐÁNH GIÁ (REVIEWS)
-    // ========================================================
-    std::vector<BookReview> getReviews(int book_id) {
-        std::vector<BookReview> list;
-        sqlite3* db = nullptr;
-        if (sqlite3_open(db_name.c_str(), &db) != SQLITE_OK) return list;
+// ==========================================
+// CÁC HÀM XỬ LÝ SÁCH API
+// ==========================================
+bool AdminDatabaseManager::initDatabase() {
+    loadBooks();
+    loadReviews();
+    loadFavorites();
+    if(books.empty()) {
+        addAvailableBook("Giai tich 1", "Toan Hoc Hust", "Giao Trinh", 15000, "", "", "");
+        addAvailableBook("C++ for begginer", "Son Nguyen", "Giao Trinh", 15000, "", "", "");
 
-        sqlite3_stmt* stmt = nullptr;
-        const char* sql = "SELECT id, book_id, user_name, rating, comment, created_at FROM book_reviews WHERE book_id = ? ORDER BY id DESC;";
-        if (sqlite3_prepare_v2(db, sql, -1, &stmt, nullptr) == SQLITE_OK) {
-            sqlite3_bind_int(stmt, 1, book_id);
-            while (sqlite3_step(stmt) == SQLITE_ROW) {
-                BookReview r;
-                r.id = sqlite3_column_int(stmt, 0);
-                r.book_id = sqlite3_column_int(stmt, 1);
-                r.user_name = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 2));
-                r.rating = sqlite3_column_int(stmt, 3);
-                r.comment = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 4));
-                r.created_at = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 5));
-                list.push_back(r);
-            }
-        }
-        if (stmt) sqlite3_finalize(stmt);
-        if (db) sqlite3_close(db);
-        return list;
+        books[0].borrower_email = "dung.nh231234@sis.hust.edu.vn"; books[0].borrow_date = "10/06/2026"; books[0].status = "Active";
+        books[1].borrower_email = "admin@sis.hust.edu.vn"; books[1].borrow_date = "01/06/2026"; books[1].status = "Active";
+        saveBooks();
     }
+    return true;
+}
 
-    bool addReview(int book_id, std::string user_name, int rating, std::string comment) {
-        sqlite3* db = nullptr;
-        if (sqlite3_open(db_name.c_str(), &db) != SQLITE_OK) return false;
+DashboardStats AdminDatabaseManager::getDashboardStats() {
+    DashboardStats stats = {0, 0, 0};
+    stats.total_titles = books.size();
+    for(const auto& b : books) {
+        if(b.status != "Available") stats.total_borrowed_transactions++;
+        if(b.status == "Overdue") stats.total_overdue++;
+    }
+    return stats;
+}
 
-        sqlite3_stmt* stmt = nullptr;
-        const char* sql = "INSERT INTO book_reviews (book_id, user_name, rating, comment) VALUES (?, ?, ?, ?);";
-        bool success = false;
-        if (sqlite3_prepare_v2(db, sql, -1, &stmt, nullptr) == SQLITE_OK) {
-            sqlite3_bind_int(stmt, 1, book_id);
-            sqlite3_bind_text(stmt, 2, user_name.c_str(), -1, SQLITE_TRANSIENT);
-            sqlite3_bind_int(stmt, 3, rating);
-            sqlite3_bind_text(stmt, 4, comment.c_str(), -1, SQLITE_TRANSIENT);
-            success = (sqlite3_step(stmt) == SQLITE_DONE);
-        }
-        if (stmt) sqlite3_finalize(stmt);
-        if (db) sqlite3_close(db);
-        return success;
-    }
-    //  HÀM XUẤT KHO SÁCH (CHECKOUT CHO NGƯỜI DÙNG MƯỢN)
-    bool checkoutBook(int id, std::string email, std::string due_date) {
-        sqlite3* db = nullptr;
-        if (sqlite3_open(db_name.c_str(), &db) != SQLITE_OK) return false;
-        
-        sqlite3_stmt* stmt = nullptr;
-        // Lệnh UPDATE: Chỉ cho phép mượn nếu sách đang ở trạng thái 'Available'
-        const char* sql = "UPDATE borrowed_books SET status = 'Active', borrower_email = ?, borrow_date = ? WHERE id = ? AND status = 'Available';";
-        bool success = false;
-        
-        if (sqlite3_prepare_v2(db, sql, -1, &stmt, nullptr) == SQLITE_OK) {
-            sqlite3_bind_text(stmt, 1, email.c_str(), -1, SQLITE_TRANSIENT);
-            sqlite3_bind_text(stmt, 2, due_date.c_str(), -1, SQLITE_TRANSIENT);
-            sqlite3_bind_int(stmt, 3, id);
-            
-            if (sqlite3_step(stmt) == SQLITE_DONE) {
-                // Kiểm tra xem có dòng nào thực sự bị thay đổi không (Tránh trùng đơn)
-                if (sqlite3_changes(db) > 0) success = true;
-            }
-        }
-        if (stmt) sqlite3_finalize(stmt);
-        if (db) sqlite3_close(db);
-        return success;
-    }
-    // ========================================================
-    // CÁC HÀM XỬ LÝ SÁCH YÊU THÍCH (FAVORITES)
-    // ========================================================
-    std::vector<int> getUserFavorites(std::string email) {
-        std::vector<int> favs;
-        sqlite3* db = nullptr;
-        if (sqlite3_open(db_name.c_str(), &db) != SQLITE_OK) return favs;
-        sqlite3_stmt* stmt = nullptr;
-        if (sqlite3_prepare_v2(db, "SELECT book_id FROM user_favorites WHERE user_email = ?;", -1, &stmt, nullptr) == SQLITE_OK) {
-            sqlite3_bind_text(stmt, 1, email.c_str(), -1, SQLITE_TRANSIENT);
-            while (sqlite3_step(stmt) == SQLITE_ROW) {
-                favs.push_back(sqlite3_column_int(stmt, 0));
-            }
-        }
-        if (stmt) sqlite3_finalize(stmt);
-        if (db) sqlite3_close(db);
-        return favs;
-    }
+vector<BorrowedBook> AdminDatabaseManager::getAllBorrowedBooks() {
+    return books;
+}
 
-    int toggleFavorite(std::string email, int book_id) {
-        sqlite3* db = nullptr;
-        if (sqlite3_open(db_name.c_str(), &db) != SQLITE_OK) return -1;
-        sqlite3_stmt* stmt = nullptr;
-        int status = 1; // 1 = Vừa thả tim, 0 = Đã hủy tim
-        
-        // Kiểm tra xem User đã thả tim cuốn này chưa
-        bool exists = false;
-        if (sqlite3_prepare_v2(db, "SELECT id FROM user_favorites WHERE user_email = ? AND book_id = ?;", -1, &stmt, nullptr) == SQLITE_OK) {
-            sqlite3_bind_text(stmt, 1, email.c_str(), -1, SQLITE_TRANSIENT);
-            sqlite3_bind_int(stmt, 2, book_id);
-            if (sqlite3_step(stmt) == SQLITE_ROW) exists = true;
-        }
-        if (stmt) sqlite3_finalize(stmt);
+bool AdminDatabaseManager::addAvailableBook(string title, string author, string category, double price, string img, string auth_img, string sum) {
+    int newId = 1;
+    if(!books.empty()) newId = books.back().id + 1;
+    
+    BorrowedBook b = {newId, title, author, category, price, img, auth_img, sum, "—", "—", "Available"};
+    books.push_back(b);
+    saveBooks();
+    return true;
+}
 
-        stmt = nullptr;
-        if (exists) {
-            // Đã tim rồi -> Ấn lần nữa là Hủy tim (DELETE)
-            if (sqlite3_prepare_v2(db, "DELETE FROM user_favorites WHERE user_email = ? AND book_id = ?;", -1, &stmt, nullptr) == SQLITE_OK) {
-                sqlite3_bind_text(stmt, 1, email.c_str(), -1, SQLITE_TRANSIENT);
-                sqlite3_bind_int(stmt, 2, book_id);
-                sqlite3_step(stmt);
-            }
-            status = 0;
-        } else {
-            // Chưa tim -> Ghi nhận thả tim (INSERT)
-            if (sqlite3_prepare_v2(db, "INSERT INTO user_favorites (user_email, book_id) VALUES (?, ?);", -1, &stmt, nullptr) == SQLITE_OK) {
-                sqlite3_bind_text(stmt, 1, email.c_str(), -1, SQLITE_TRANSIENT);
-                sqlite3_bind_int(stmt, 2, book_id);
-                sqlite3_step(stmt);
-            }
+bool AdminDatabaseManager::deleteBook(int id) {
+    bool found = false;
+    for(auto it = books.begin(); it != books.end(); it++) {
+        if(it->id == id) {
+            books.erase(it);
+            found = true;
+            break;
         }
-        if (stmt) sqlite3_finalize(stmt);
-        if (db) sqlite3_close(db);
-        return status;
     }
-};
+    if(found) saveBooks();
+    return found;
+}
+
+bool AdminDatabaseManager::updateBook(int id, string title, string author, string category, double price, string img, string auth_img, string sum, string status, string date) {
+    for(auto& b : books) {
+        if(b.id == id) {
+            b.book_title = title;
+            b.author = author;
+            b.category = category;
+            b.borrow_price = price;
+            b.image_url = img;
+            b.author_image_url = auth_img;
+            b.summary = sum;
+            b.status = status;
+            b.borrow_date = date;
+            saveBooks();
+            return true;
+        }
+    }
+    return false;
+}
+
+vector<BookReview> AdminDatabaseManager::getReviews(int book_id) {
+    vector<BookReview> list;
+    for(auto it = reviews.rbegin(); it != reviews.rend(); it++) {
+        if(it->book_id == book_id) {
+            list.push_back(*it);
+        }
+    }
+    return list;
+}
+
+bool AdminDatabaseManager::addReview(int book_id, string user_name, int rating, string comment) {
+    int newId = 1;
+    if(!reviews.empty()) newId = reviews.back().id + 1;
+
+    time_t now = time(0);
+    tm *ltm = localtime(&now);
+
+    char buffer[20];
+    strftime(buffer, sizeof(buffer), "%Y-%m-%d", ltm);
+
+    string today(buffer);
+
+    BookReview r  = {newId, book_id, user_name, rating, comment, today};
+    reviews.push_back(r);
+
+    saveReviews();
+    return true;
+}
+
+bool AdminDatabaseManager::checkoutBook(int id, string email, string due_date) {
+    for(auto& b : books) {
+        if(b.id == id && b.status == "Available") {
+            b.status = "Active";
+            b.borrower_email = email;
+            b.borrow_date = due_date;
+            saveBooks();
+            return true;
+        }
+    }
+    return false;
+}
+
+vector<int> AdminDatabaseManager::getUserFavorites(string email) {
+    vector<int> favs;
+    for(const auto& f : favorites) {
+        if(f.user_email == email) {
+            favs.push_back(f.book_id);
+        }
+    }
+    return favs;
+}
+
+int AdminDatabaseManager::toggleFavorite(string email, int book_id) {
+    for(auto it = favorites.begin(); it != favorites.end(); it++) {
+        if(it->user_email == email && it->book_id == book_id) {
+            favorites.erase(it);
+            saveFavorites();
+            return 0;
+        }
+    }
+    int newId = 1;
+    if(!favorites.empty()) newId = favorites.back().id + 1;
+
+    favorites.push_back({newId, email, book_id});
+    saveFavorites();
+    return 1;
+}

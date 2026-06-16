@@ -1,75 +1,53 @@
 #define _WIN32_WINNT 0x0A00 
 #include <iostream>
 #include <string>
-#include "httplib.h"                            //Thư viện để tạo web server
-#include "json.hpp"                             // đọc ghi json            
+#include "httplib.h"                            // Thư viện để tạo web server
+#include "json.hpp"                             // Đọc ghi json            
 #include "user_manager.h" 
-#include "book_manager.cpp" 
+#include "book_manager.h"                       
 
 using namespace httplib;
 using json = nlohmann::json;
 using namespace std;
 
-UserManager userManager("../database/users.txt");               //truyền đường dẫn tới file db
+UserManager userManager("../database/users.txt");               
 
 int main() {
-    Server svr;                                                 //Khởi tạo máy chủ
+    Server svr;                                                 
 
-    AdminDatabaseManager dbManager("hust_library.db");          //khởi tạo quản lí sách, truyền tên databse SQlite
-    dbManager.initDatabase();                                   //lệnh tạo bảng (nếu chưa có)
+    AdminDatabaseManager dbManager("hust_library.db");          
+    dbManager.initDatabase();                                   
 
-
-    //Cấp phép cho lấy dữ liệu (chia sẻ tài nguyên chéo nguồn gốc)
-    //C++ đang ở cổng 8080, trong khi front end chạy ở cổng 5500
     auto cors_middleware = [](const Request& req, Response& res) {
-
-
-        // 1. Cho phép AI CŨNG ĐƯỢC (dấu *) gọi API lấy dữ liệu
         res.set_header("Access-Control-Allow-Origin", "*");
-
-
-        // 2. Cho phép người lạ được dùng các loại hành động này (GET để lấy sách, POST để mượn sách, DELETE để xóa)
         res.set_header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-
-
-        // 3. Cho phép người lạ gửi kèm các thông tin định dạng chữ (Content-Type)
         res.set_header("Access-Control-Allow-Headers", "Content-Type");
     };
+
     // ========================================================
     // API TEST SERVER STATUS
     // ========================================================
-    svr.Get("/api/test", [&](const Request& req, Response& res) {   //mở công api test cho lệnh get
-        cors_middleware(req, res);                                  //cấp phép cors
-
-        // Khởi tạo một đối tượng JSON với 2 trường dữ liệu: trạng thái (status) và tên tác giả (developer).
+    svr.Get("/api/test", [&](const Request& req, Response& res) {   
+        cors_middleware(req, res);                                  
         json responseData = {{"status", "success"}, {"developer", "Nguyen Bao Son"}};
-
-        // .dump() là hàm ép cái đối tượng JSON ở trên thành một chuỗi văn bản (String) để truyền qua mạng.
-        // "application/json" là nhãn dãn báo web đây là json (dùng được)
         res.set_content(responseData.dump(), "application/json");
     });
     
-
     // ========================================================
     // API LOGIN & REGISTER
     // ========================================================
     svr.Post("/api/login", [&](const Request& req, Response& res) {
-        cors_middleware(req, res);                                  //cấp phép cors
-
-        //chạy try_catch để check xem dữ liệu gửi sai định dạng hay hỏng không
-        //tránh sập, nếu try sập thì sang catch
+        cors_middleware(req, res);                                  
         try {
-            // Dịch gói tin văn bản (req.body) thành đối tượng JSON để C++ hiểu được
             auto body = json::parse(req.body);  
-            User loggedInUser;                  //biến lưu thông tin đăng nhập nếu đúng
-            if (userManager.authenticate(body["email"], body["password"], loggedInUser)) {      //check in4
-                // Nếu ĐÚNG: Gói thông tin Tên và Quyền (Role) thành JSON để gửi về cho Web
+            User loggedInUser;                  
+            if (userManager.authenticate(body["email"], body["password"], loggedInUser)) {      
                 json r = {{"status", "success"}, {"name", loggedInUser.name}, {"role", loggedInUser.role}};
                 res.set_content(r.dump(), "application/json");
             } else {
-                res.status = 401;               // Nếu SAI pass/email: Trả về mã lỗi 401 (Unauthorized - Không được phép truy cập)
+                res.status = 401;               
             }
-        } catch (...) { res.status = 400; }         // Nếu có bất kỳ lỗi vặt nào xảy ra (ví dụ: mất mạng, lỗi chuỗi), báo lỗi 400 (Bad Request)
+        } catch (...) { res.status = 400; }         
     });
 
     svr.Post("/api/register", [&](const Request& req, Response& res) {
@@ -147,7 +125,7 @@ int main() {
     });
 
     // ========================================================
-    //  API QUẢN TRỊ TÀI KHOẢN NGƯỜI DÙNG (MỚI XỊN SÒ)
+    //  API QUẢN TRỊ TÀI KHOẢN NGƯỜI DÙNG
     // ========================================================
     svr.Get("/api/admin/users", [&](const Request& req, Response& res) {
         cors_middleware(req, res);
@@ -198,8 +176,9 @@ int main() {
             else res.status = 404;
         } catch (...) { res.status = 400; }
     });
+
     // ========================================================
-    // API CẬP NHẬT THÔNG TIN PROFILE (MỚI)
+    // API CẬP NHẬT THÔNG TIN PROFILE
     // ========================================================
     svr.Put("/api/users/update", [&](const Request& req, Response& res) {
         cors_middleware(req, res);
@@ -218,6 +197,7 @@ int main() {
             }
         } catch (...) { res.status = 400; }
     });
+
     // ========================================================
     //  API ĐÁNH GIÁ SÁCH (REVIEWS)
     // ========================================================
@@ -256,18 +236,18 @@ int main() {
     // ========================================================
     // API NGƯỜI DÙNG XÁC NHẬN MƯỢN SÁCH (CHECKOUT)
     // ========================================================
-    svr.Post("/api/checkout", [&](const Request& req, Response& res) {      //api login
-        cors_middleware(req, res);                                          //
+    svr.Post("/api/checkout", [&](const Request& req, Response& res) {      
+        cors_middleware(req, res);                                          
         try {
             auto body = json::parse(req.body);
             int book_id = body["book_id"];
             string email = body["email"];
-            string due_date = body["due_date"]; // Lấy ngày trả do JS tính toán
+            string due_date = body["due_date"]; 
 
             if (dbManager.checkoutBook(book_id, email, due_date)) {
                 res.set_content("{\"status\": \"success\"}", "application/json");
             } else {
-                res.status = 400; // Sách có thể đã bị ai đó nhanh tay mượn mất
+                res.status = 400; 
                 res.set_content("{\"error\": \"Sach khong kha dung hoac da bi muon!\"}", "application/json");
             }
         } catch (...) { res.status = 400; }
@@ -294,6 +274,7 @@ int main() {
             res.set_content("{\"status\": \"success\", \"is_loved\": " + to_string(result) + "}", "application/json");
         } catch (...) { res.status = 400; }
     });
+
     // ========================================================
     // API STATS
     // ========================================================
@@ -303,15 +284,14 @@ int main() {
         json r = {{"total_books", bookStats.total_titles}, {"borrowed_books", bookStats.total_borrowed_transactions}, {"overdue_books", bookStats.total_overdue}, {"total_users", userManager.getTotalUsers()}};
         res.set_content(r.dump(), "application/json");
     });
-    // Tiền kiểm tra gửi yêu cầu http nếu trả về access-control-allow-origin thì cho phép web gửi yêu cầu chính thức tới server
+
     svr.Options(R"(.*)", [&](const Request& req, Response& res) { cors_middleware(req, res); });
-    // Khởi động server
+
     cout << "-------------------------------------------\n";
     cout << " HUST LBC Backend Server is running...\n";
     cout << " Thu truy cap: http://localhost:8080/api/test\n";
     cout << "-------------------------------------------\n";
     
-    //giữ cho server không tắt, chừng nào tắt terminal
-    svr.listen("0.0.0.0", 8080);        //(Any IPv4 Address)
+    svr.listen("0.0.0.0", 8080);        
     return 0;
 }

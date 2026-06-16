@@ -141,7 +141,7 @@ bool UserManager::updateUser(const string& email, const string& newName, const s
         file << "id,name,email,password,role,classname\n";
         for (size_t i = 0; i < users.size(); ++i) {
             file << users[i].id << "," << users[i].name << "," << users[i].email << "," << users[i].password << "," << users[i].role << "," << users[i].classname;
-            if (i < users.size() - 1) file << "\n";
+            if (i < users.size() - 1) file << "\n";//
         }
         file.close();
         return true;
