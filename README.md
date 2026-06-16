@@ -43,12 +43,14 @@ Hệ thống hoạt động theo mô hình Client-Server độc lập, giao ti�
 Yêu cầu máy máy tính đã cài đặt trình biên dịch `g++` và thư viện SQLite3.
 * **Bước 1:** Di chuyển vào thư mục lưu trữ backend.
 * **Bước 2:** Biên dịch mã nguồn bộ não C++:
-g++ main.cpp book_manager.cpp user_manager.cpp -o server.exe -lws2_32
+  ```bash
+  g++ main.cpp book_manager.cpp user_manager.cpp -o server.exe -lws2_32
   
 * **Bước 3:** Mở Server local host trên máy tính cá nhân :
- ./server
+  
   khi thấy dòng chữ "HUST LBC Backend Server is running..." thì server đã chạy thành công.
-
+  ```bash
+  ./server
   
 ### 3. Khởi chạy Frontend (Giao diện Web)
 Vì Frontend được xây dựng hoàn toàn bằng mã nguồn tĩnh tối ưu (Pure HTML/CSS/JS), việc khởi chạy cực kỳ đơn giản:
@@ -61,7 +63,8 @@ Vì Frontend được xây dựng hoàn toàn bằng mã nguồn tĩnh tối ưu
 
 
 ### DataFlow
+```
   *[Trình duyệt Người dùng] ---> (Bắn yêu cầu API Fetch) ---> [Server C++ Port 8080]
            ^                                                         |
            |                                                         v
-    (Render UI/UX mượt mà) <--- (Trả kết quả JSON) <--- [Cơ sở dữ liệu SQLite]*
+    (Render UI/UX mượt mà) <--- (Trả kết quả JSON) <--- [Cơ sở dữ liệu File text]*
